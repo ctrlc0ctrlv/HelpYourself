@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.examhelper">
+
+    <application>
+        <activity android:name="com.example.examhelper.ButtonsActivity"></activity>
+    </application>
+</manifest>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Задания уровня 1-->
+    <string name="task1">Сколько единиц в двоичной записи числа 1032?</string>
+    <string name="answer1">2</string>
+    <integer name="task1_solved">1</integer>
+
+    <string name="task2">Как представлено число 263 в восьмеричной системе счисления?</string>
+    <string name="answer2">407</string>
+    <integer name="task2_solved">1</integer>
+
+    <string name="task3">Сколько единиц в двоичной записи числа 64?</string>
+    <string name="answer3">1</string>
+    <integer name="task3_solved">1</integer>
+
+    <string name="task4">Сколько единиц в двоичной записи числа 127?</string>
+    <string name="answer4">7</string>
+    <integer name="task4_solved">1</integer>
+
+    <string name="task5">Сколько значащих нулей в двоичной записи числа 48?</string>
+    <string name="answer5">4</string>
+    <integer name="task5_solved">1</integer>
+
+    <string name="task6">Сколько значащих нулей в двоичной записи числа 254?</string>
+    <string name="answer6">7</string>
+    <integer name="task6_solved">1</integer>
+
+
+    <!--Задания уровня 2-->
+    <string name="task7">Укажите наибольшее четырёхзначное шестнадцатеричное число, двоичная запись которого содержит ровно 9 нулей.</string>
+    <string name="answer7">fe00</string>
+
+    <string name="task8">Укажите наименьшее четырёхзначное шестнадцатеричное число, двоичная запись которого содержит ровно 6 нулей.</string>
+    <string name="answer8">103f</string>
+
+    <string name="task9">Укажите наибольшее число, двоичная запись которого содержит ровно три значащих нуля и две единицы, причём единицы не стоят рядом. Ответ запишите в десятичной системе счисления.</string>
+    <string name="answer9">20</string>
+
+    <string name="task10">Сколько единиц в двоичной записи восьмеричного числа 6543?</string>
+    <string name="answer10">7</string>
+
+    <string name="task11">Сколько единиц в двоичной записи восьмеричного числа 1234?</string>
+    <string name="answer11">5</string>
+
+    <string name="task12">Сколько единиц в двоичной записи восьмеричного числа 6123?</string>
+    <string name="answer12">6</string>
+
+    <string name="task13">Сколько значащих нулей в двоичной записи восьмеричного числа 7512?</string>
+    <string name="answer13">5</string>
+
+    <string name="task14">Сколько значащих нулей в двоичной записи восьмеричного числа 1253?</string>
+    <string name="answer14">4</string>
+
+    <string name="task15">Сколько значащих нулей в двоичной записи восьмеричного числа 7715? </string>
+    <string name="answer15">3</string>
+
+    <string name="task16">Сколько единиц в двоичной записи шестнадцатеричного числа 4FA7?</string>
+    <string name="answer16">10</string>
+
+    <string name="task17">Сколько единиц в двоичной записи шестнадцатеричного числа 1234?</string>
+    <string name="answer17">5</string>
+
+    <string name="task18">Сколько единиц в двоичной записи шестнадцатеричного числа 6AB1?</string>
+    <string name="answer18">8</string>
+
+    <string name="task19">Сколько значащих нулей в двоичной записи шестнадцатеричного числа 75BD?</string>
+    <string name="answer19">4</string>
+
+    <string name="task20">Сколько значащих нулей в двоичной записи шестнадцатеричного числа 1253?</string>
+    <string name="answer20">7</string>
+
+    <string name="task21">Сколько значащих нулей в двоичной записи шестнадцатеричного числа 3FC5?</string>
+    <string name="answer21">4</string>
+
+    <!--Задания уровня 3-->
+
+    <string name="task22">Вычислите: 10101010 – 252 + 7. Ответ запишите в десятичной системе счисления.</string>
+    <string name="answer22">7</string>
+
+    <string name="task23">Вычислите: 10101011 – 253 + 6. Ответ запишите в десятичной системе счисления. </string>
+    <string name="answer23">6</string>
+
+    <string name="task24">Определите количество натуральных чисел, удовлетворяющих неравенству: AB16 &amp;lt x &amp;lt 3448.</string>
+    <string name="answer24">56</string>
+
+    <string name="task25">Определите количество натуральных чисел, удовлетворяющих неравенству: 3128 &amp;lt x &amp;lt CD16.</string>
+    <string name="answer25">2</string>
+
+    <string name="task26">Определите количество натуральных чисел, удовлетворяющих неравенству: 2138 ≤ x ≤ AD16.</string>
+    <string name="answer26">35</string>
+
+</resources>

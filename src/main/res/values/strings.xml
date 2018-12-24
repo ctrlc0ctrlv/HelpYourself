@@ -1,0 +1,74 @@
+<resources>
+    <!--Базовые ресурсы приложения-->
+    <string name="app_name">HelpYourself</string>
+    <string name="welcome_to_the_club_buddy">Welcome to the club, buddy!</string>
+    <string name="let_s_start">Начать работу</string>
+
+    <!--Ресурсы для ButtonsActivity-->
+    <string name="_1">Задание 1</string>
+    <string name="_2">Задание 2</string>
+    <string name="_3">Задание 3</string>
+    <string name="_4">Задание 4</string>
+    <string name="_5">Задание 5</string>
+    <string name="_6">Задание 6</string>
+    <string name="_7">Задание 7</string>
+    <string name="_8">Задание 8</string>
+    <string name="_9">Задание 9</string>
+    <string name="_10">Задание 10</string>
+    <string name="_11">Задание 11</string>
+    <string name="_12">Задание 12</string>
+    <string name="_13">Задание 13</string>
+    <string name="_14">Задание 14</string>
+    <string name="_15">Задание 15</string>
+    <string name="_16">Задание 16</string>
+    <string name="_17">Задание 17</string>
+    <string name="_18">Задание 18</string>
+    <string name="_19">Задание 19</string>
+    <string name="_20">Задание 20</string>
+    <string name="_21">Задание 21</string>
+    <string name="_22">Задание 22</string>
+    <string name="_23">Задание 23</string>
+    <string name="_24">Задание 24</string>
+    <string name="_25">Задание 25</string>
+    <string name="_26">Задание 26</string>
+
+    <!--Ресурсы для AnsweringActivity-->
+    <string name="enter">Ответить</string>
+    <string name="uslovie">Введите условие задачи</string>
+    <string name="otvet">Введите ответ</string>
+    <string name="go">Далее</string>
+    <string name="current_level">Уровень: 1</string>
+    <string name="hint">Введите ответ</string>
+
+    <!--Ресурсы для ChooseSubActivity-->
+    <string name="choose_sub">Выберите предмет:</string>
+    <string name="informatics">Информатика</string>
+    <string name="maths">Математика (базовый уровень)</string>
+    <string name="russian">Русский язык</string>
+
+    <!--Ресурсы для ChooseIntentActivity-->
+    <string name="label_question">Чем займемся сегодня?</string>
+    <string name="solving">Решать задания</string>
+    <string name="adding">Добавить задания</string>
+    <string name="create_test">Составить тест</string>
+    <string name="calendar">Изменить режим тренировок</string>
+
+    <!--Ресурсы для SettingsActivity-->
+    <string name="action_settings">Настройки</string>
+    <string name="pref_color">Цвет текста</string>
+    <string name="pref_color_black">Черный цвет</string>
+    <string name="pref_color_red">Красный цвет</string>
+    <string name="pref_color_green">Зеленый цвет</string>
+    <string name="pref_color_blue">Синий цвет</string>
+    <string name="pref_size">Размер текста</string>
+    <string name="pref_style">Стиль текста</string>
+    <string name="pref_style_regular">Нормальный</string>
+    <string name="pref_style_bold">Полужирный</string>
+    <string name="pref_style_italic">Курсив</string>
+    <string name="pref_open_mode">Режим открытия</string>
+
+    <string name="Level1">Level 1</string>
+    <string name="Level2">Level 2</string>
+    <string name="Level3">Level 3</string>
+
+</resources>

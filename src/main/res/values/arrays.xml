@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="text_style">
+        <item>Обычный</item>
+        <item>Полужирный</item>
+        <item>Курсив</item>
+        <item>Полужирный и Курсив</item>
+    </string-array>
+
+    <string-array name="levels">
+        <item>Level1</item>
+        <item>Level2</item>
+        <item>Level3</item>
+    </string-array>
+
+    <string-array name="task1_level1">
+        <item>task1</item>
+        <item>task2</item>
+        <item>task3</item>
+        <item>task4</item>
+        <item>task5</item>
+        <item>task6</item>
+    </string-array>
+
+    <integer-array name="task1_level1_solved">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="task1_level2">
+        <item>task1</item>
+        <item>task2</item>
+        <item>task3</item>
+        <item>task4</item>
+        <item>task5</item>
+        <item>task6</item>
+        <item>task7</item>
+        <item>task8</item>
+        <item>task9</item>
+        <item>task10</item>
+        <item>task11</item>
+        <item>task12</item>
+        <item>task13</item>
+        <item>task14</item>
+        <item>task15</item>
+        <item>task16</item>
+        <item>task17</item>
+        <item>task18</item>
+        <item>task19</item>
+        <item>task20</item>
+        <item>task21</item>
+    </string-array>
+
+    <string-array name="task1_level3">
+        <item>task1</item>
+        <item>task2</item>
+        <item>task3</item>
+        <item>task4</item>
+        <item>task5</item>
+        <item>task6</item>
+        <item>task7</item>
+        <item>task8</item>
+        <item>task9</item>
+        <item>task10</item>
+        <item>task11</item>
+        <item>task12</item>
+        <item>task13</item>
+        <item>task14</item>
+        <item>task15</item>
+        <item>task16</item>
+        <item>task17</item>
+        <item>task18</item>
+        <item>task19</item>
+        <item>task20</item>
+        <item>task21</item>
+        <item>task22</item>
+        <item>task23</item>
+    </string-array>
+</resources>
