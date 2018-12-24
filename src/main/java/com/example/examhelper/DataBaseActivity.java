@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.example.examhelper.data.DataContract;
+
 public class DataBaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Spinner spinner;
@@ -49,11 +51,11 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                         if (selection.equals(getString(R.string.Level1))) {
-                            Level = 1;
+                            Level = DataContract.CustomTasks.LEVEL_1;
                         } else if (selection.equals(getString(R.string.Level2))) {
-                            Level = 2;
+                            Level = DataContract.CustomTasks.LEVEL_2;
                         } else if (selection.equals(getString(R.string.Level3))){
-                            Level = 3;
+                            Level = DataContract.CustomTasks.LEVEL_3;
                         }
                 }
             }

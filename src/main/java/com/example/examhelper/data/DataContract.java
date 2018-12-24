@@ -12,6 +12,7 @@ public class DataContract {
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_LEVEL = "level";
+        public final static String COLUMN_NUMBER = "number";
         public final static String COLUMN_USLOVIE = "uslovie";
         public final static String COLUMN_ANSWER = "answer";
 
