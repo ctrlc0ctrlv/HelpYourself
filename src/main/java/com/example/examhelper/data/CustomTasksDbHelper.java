@@ -35,7 +35,7 @@ public class CustomTasksDbHelper extends SQLiteOpenHelper {
                 + DataContract.CustomTasks.COLUMN_USLOVIE + " TEXT NOT NULL, "
                 + DataContract.CustomTasks.COLUMN_ANSWER + " TEXT NOT NULL, "
                 + DataContract.CustomTasks.COLUMN_LEVEL + " INTEGER NOT NULL DEFAULT 1, "
-                + DataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 0);";
+                + DataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 0)";
 
         // Запускаем создание таблицы
         db.execSQL(SQL_CREATE_TASKS_TABLE);
@@ -45,12 +45,16 @@ public class CustomTasksDbHelper extends SQLiteOpenHelper {
     /*Вызывается при обновлении базы данных*/
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-// Запишем в журнал
+        // Запишем в журнал
         Log.w("SQLite", "Обновляемся с версии " + oldVersion + " на версию " + newVersion);
-
         // Удаляем старую таблицу и создаём новую
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_NAME);
         // Создаём новую таблицу
         onCreate(db);
+    }
+
+    /*Вызывается при удалении базы данных*/
+    public void onDelete (SQLiteDatabase db){
+        db.delete(DataContract.CustomTasks.TABLE_NAME, null, null);
     }
 }

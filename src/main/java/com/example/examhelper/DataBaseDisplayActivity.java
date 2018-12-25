@@ -20,7 +20,6 @@ import com.example.examhelper.data.DataContract;
 
 
 public class DataBaseDisplayActivity extends AppCompatActivity {
-
         private CustomTasksDbHelper mDbHelper;
 
         @Override
@@ -62,14 +61,13 @@ public class DataBaseDisplayActivity extends AppCompatActivity {
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.action_insert_new_data:
-                    // Пока ничего не делаем
-                    return true;
                 case R.id.action_delete_all_entries:
-                    // Пока ничего не делаем
+                    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                    mDbHelper.onDelete(db);
+                    TextView text_view_info = findViewById(R.id.text_view_info);
+                    text_view_info.setText("");
                     return true;
             }
-
             return super.onOptionsItemSelected(item);
         }
 
@@ -95,11 +93,11 @@ public class DataBaseDisplayActivity extends AppCompatActivity {
                     null,                  // Don't filter by row groups
                     null);                   // порядок сортировки
 
-            TextView displayTextView = (TextView) findViewById(R.id.text_view_info);
+            TextView text_view_info = (TextView) findViewById(R.id.text_view_info);
 
             try {
-                displayTextView.setText("Таблица содержит " + cursor.getCount() + " заданий.\n\n");
-                displayTextView.append(DataContract.CustomTasks._ID + " - " +
+                text_view_info.setText("Таблица содержит " + cursor.getCount() + " заданий.\n\n");
+                text_view_info.append(DataContract.CustomTasks._ID + " - " +
                         DataContract.CustomTasks.COLUMN_USLOVIE + " - " +
                         DataContract.CustomTasks.COLUMN_ANSWER + " - " +
                         DataContract.CustomTasks.COLUMN_LEVEL + " - " +
@@ -121,7 +119,7 @@ public class DataBaseDisplayActivity extends AppCompatActivity {
                     int currentGender = cursor.getInt(genderColumnIndex);
                     int currentAge = cursor.getInt(ageColumnIndex);
                     // Выводим значения каждого столбца
-                    displayTextView.append(("\n" + currentID + " - " +
+                    text_view_info.append(("\n" + currentID + " - " +
                             currentName + " - " +
                             currentCity + " - " +
                             currentGender + " - " +
