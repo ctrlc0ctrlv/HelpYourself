@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.logging.Level;
+
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
 
     @SuppressLint("SetTextI18n")
@@ -87,7 +89,6 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 buttonObjectChoice26.setEnabled(false);
                 break;
             case 26:
-
                 break;
         }
     }
@@ -102,8 +103,93 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         if (chosen_solve) {
             intent = new Intent(this, AnsweringActivity.class);
         } else {
-            intent = new Intent (this,AddTask.class);
+            intent = new Intent (this,DataBaseDisplayActivity.class);
         }
+
+        Integer Number = 0;
+
+        switch (view.getId()){
+            case R.id.buttonChoice1:
+                Number = 1;
+                break;
+            case R.id.buttonChoice2:
+                Number = 2;
+                break;
+            case R.id.buttonChoice3:
+                Number = 3;
+                break;
+            case R.id.buttonChoice4:
+                Number = 4;
+                break;
+            case R.id.buttonChoice5:
+                Number = 5;
+                break;
+            case R.id.buttonChoice6:
+                Number = 6;
+                break;
+            case R.id.buttonChoice7:
+                Number = 7;
+                break;
+            case R.id.buttonChoice8:
+                Number = 8;
+                break;
+            case R.id.buttonChoice9:
+                Number = 9;
+                break;
+            case R.id.buttonChoice10:
+                Number = 10;
+                break;
+            case R.id.buttonChoice11:
+                Number = 11;
+                break;
+            case R.id.buttonChoice12:
+                Number = 12;
+                break;
+            case R.id.buttonChoice13:
+                Number = 13;
+                break;
+            case R.id.buttonChoice14:
+                Number = 14;
+                break;
+            case R.id.buttonChoice15:
+                Number = 15;
+                break;
+            case R.id.buttonChoice16:
+                Number = 16;
+                break;
+            case R.id.buttonChoice17:
+                Number = 17;
+                break;
+            case R.id.buttonChoice18:
+                Number = 18;
+                break;
+            case R.id.buttonChoice19:
+                Number = 19;
+                break;
+            case R.id.buttonChoice20:
+                Number = 20;
+                break;
+            case R.id.buttonChoice21:
+                Number = 21;
+                break;
+            case R.id.buttonChoice22:
+                Number = 22;
+                break;
+            case R.id.buttonChoice23:
+                Number = 23;
+                break;
+            case R.id.buttonChoice24:
+                Number = 24;
+                break;
+            case R.id.buttonChoice25:
+                Number = 25;
+                break;
+            case R.id.buttonChoice26:
+                Number = 26;
+                break;
+        }
+
+        intent.putExtra("number",Number);
         startActivity(intent);
     }
 }

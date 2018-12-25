@@ -4,7 +4,8 @@
     <EditTextPreference
         android:defaultValue="14"
         android:dialogTitle="Введите размер шрифта (от 10 до 32)"
-        android:key="@string/pref_size"
+        android:inputType="number"
+        android:key="@integer/pref_size"
         android:summary="Устанавливает новый размер шрифта"
         android:title="Размер шрифта" />
 
