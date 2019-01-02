@@ -1,5 +1,7 @@
 package com.example.examhelper;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
@@ -9,21 +11,140 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.examhelper.data.CustomTasksDbHelper;
+import com.example.examhelper.data.DataContract;
+
 import java.util.Objects;
 import java.util.Random;
 
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
+    private CustomTasksDbHelper mDbHelper;
+    Task Task1 = new Task();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
+
         Button enterBtn = findViewById(R.id.enterBtn);
         Button goBtn = findViewById(R.id.goBtn);
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
+
+        mDbHelper = new CustomTasksDbHelper(this);
+        setUp();
         // Обработчики нажатия кнопок
     }
 
+    public String giveUsl(int n){
+        SQLiteDatabase db;
+        db = mDbHelper.getReadableDatabase();
+        String[] projection = {
+                DataContract.CustomTasks._ID,
+                DataContract.CustomTasks.COLUMN_USLOVIE};
+        Cursor cursor = db.query(
+                DataContract.CustomTasks.TABLE_NAME,     // таблица
+                projection,                              // столбцы
+                null,                           // столбцы для условия WHERE
+                null,                        // значения для условия WHERE
+                null,                           // Don't group the rows
+                null,                            // Don't filter by row groups
+                null);
+        cursor.moveToPosition(n);
+        String st = cursor.getString(cursor.getColumnIndex(DataContract.CustomTasks.COLUMN_USLOVIE));
+        cursor.close();
+        return st;
+    }
+
+    public String giveAns(int n){
+        SQLiteDatabase db;
+        db = mDbHelper.getReadableDatabase();
+        String[] projection = {
+                DataContract.CustomTasks._ID,
+                DataContract.CustomTasks.COLUMN_ANSWER};
+        Cursor cursor = db.query(
+                DataContract.CustomTasks.TABLE_NAME,     // таблица
+                projection,                              // столбцы
+                null,                           // столбцы для условия WHERE
+                null,                        // значения для условия WHERE
+                null,                           // Don't group the rows
+                null,                            // Don't filter by row groups
+                null);
+        cursor.moveToPosition(n);
+        String ans = cursor.getString(cursor.getColumnIndex(DataContract.CustomTasks.COLUMN_ANSWER));
+        cursor.close();
+        return ans;
+    }
+
+    void setUp(){
+        TextView textView = findViewById(R.id.textView);
+        TextView textView4 = findViewById(R.id.textView4);
+        textView.setText(giveUsl(0));
+        textView4.setText(getResources().getString(R.string.current_num) + "1");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onClick(View view) {
+        Button enterBtn = findViewById(R.id.enterBtn);
+        Button goBtn = findViewById(R.id.goBtn);
+        TextView textView = findViewById(R.id.textView);
+        TextView textView2 = findViewById(R.id.textView2);
+
+        switch (view.getId()) {
+            case R.id.goBtn:
+                int n = Task1.getNum();
+
+
+                enterBtn.setEnabled(true);
+                textView.setBackground(textView2.getBackground());
+                break;
+
+            case R.id.enterBtn:
+                Task1.Check(Task1.getNum());
+                break;
+        }
+    }
+
+    public class Task {
+        private int num;
+
+
+        int getNum() {
+            //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
+            return num;
+        }
+        void setNum() {
+            this.num =1;
+        }
+
+        int getNewNum (){
+            int x = 0;
+
+
+            return x;
+        }
+
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        void Check(int n){
+            TextInputEditText TextInputLayout1 = findViewById(R.id.TextInputLayout1);
+            TextView textView = findViewById(R.id.textView);
+
+            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(TextInputLayout1.getText()).toString())){
+                textView.setBackgroundResource(R.color.colorAccept);
+            } else {
+                textView.setBackgroundResource(R.color.colorDeny);
+            }
+        }
+
+        Task() {
+            this.setNum();
+        }
+    }
+}
+
+/*
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
@@ -131,8 +252,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             //обнуляем значение TextInputLayout1
             TextInputEditText TextInputLayout1 = findViewById(R.id.TextInputLayout1);
             TextInputLayout1.setText("");
-
-
         }
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         boolean Check(String number) {
@@ -160,7 +279,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             }
             return (LevelEquals);
         }
-        /*
+
         //пока не определились с этой процедурой, но на всякий случай пока оставлю
         public void LevelDown() {
             int LevelEquals = getResources().getInteger(R.integer.LevelEquals);
@@ -168,5 +287,3 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 LevelEquals -= 1;
             }
         }*/
-    }
-}

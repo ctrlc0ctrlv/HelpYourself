@@ -16,6 +16,7 @@ public class DataContract {
         public final static String COLUMN_USLOVIE = "uslovie";
         public final static String COLUMN_ANSWER = "answer";
 
+
         public static final int LEVEL_1 = 1;
         public static final int LEVEL_2 = 2;
         public static final int LEVEL_3 = 3;

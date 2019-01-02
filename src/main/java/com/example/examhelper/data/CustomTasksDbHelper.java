@@ -1,10 +1,11 @@
 package com.example.examhelper.data;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.example.examhelper.AnsweringActivity;
 
 public class CustomTasksDbHelper extends SQLiteOpenHelper {
 
@@ -24,7 +25,6 @@ public class CustomTasksDbHelper extends SQLiteOpenHelper {
     public CustomTasksDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     /*Вызывается при создании базы данных*/
     @Override

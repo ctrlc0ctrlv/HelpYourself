@@ -27,8 +27,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     private Spinner spinner;
     private int Level = 1;
 
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_base_set);

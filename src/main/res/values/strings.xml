@@ -39,7 +39,7 @@
     <string name="go">Далее</string>
     <string name="current_level">Уровень: 1</string>
     <string name="hint">Введите ответ</string>
-
+    <string name="current_num">Номер задания:</string>
     <!--Ресурсы для ChooseSubActivity-->
     <string name="choose_sub">Выберите предмет:</string>
     <string name="informatics">Информатика</string>
@@ -70,5 +70,6 @@
     <string name="Level1">Level 1</string>
     <string name="Level2">Level 2</string>
     <string name="Level3">Level 3</string>
+
 
 </resources>

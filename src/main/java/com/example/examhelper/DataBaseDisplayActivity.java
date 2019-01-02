@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import com.example.examhelper.data.DataContract;
 
 
 public class DataBaseDisplayActivity extends AppCompatActivity {
-        private CustomTasksDbHelper mDbHelper;
+        public CustomTasksDbHelper mDbHelper = new CustomTasksDbHelper(this);
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class DataBaseDisplayActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
             mDbHelper = new CustomTasksDbHelper(this);
         }
 
