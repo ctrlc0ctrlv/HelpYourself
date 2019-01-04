@@ -19,14 +19,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.examhelper.data.CustomTasksDbHelper;
-import com.example.examhelper.data.DataContract;
-
 import java.util.Objects;
 import java.util.Random;
 
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
-    private CustomTasksDbHelper mDbHelper;
+    private DatabaseHelper mDbHelper;
+    private SQLiteDatabase mDb;
     Task Task1 = new Task();
 
     @Override
@@ -39,47 +37,25 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
 
-        mDbHelper = new CustomTasksDbHelper(this);
+        mDbHelper = new DatabaseHelper(this);
         setUp();
         // Обработчики нажатия кнопок
     }
 
     public String giveUsl(int n){
-        SQLiteDatabase db;
-        db = mDbHelper.getReadableDatabase();
-        String[] projection = {
-                DataContract.CustomTasks._ID,
-                DataContract.CustomTasks.COLUMN_USLOVIE};
-        Cursor cursor = db.query(
-                DataContract.CustomTasks.TABLE_NAME,     // таблица
-                projection,                              // столбцы
-                null,                           // столбцы для условия WHERE
-                null,                        // значения для условия WHERE
-                null,                           // Don't group the rows
-                null,                            // Don't filter by row groups
-                null);
+        mDb = mDbHelper.getReadableDatabase();
+        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
         cursor.moveToPosition(n);
-        String st = cursor.getString(cursor.getColumnIndex(DataContract.CustomTasks.COLUMN_USLOVIE));
+        String st = cursor.getString(1);
         cursor.close();
         return st;
     }
 
     public String giveAns(int n){
-        SQLiteDatabase db;
-        db = mDbHelper.getReadableDatabase();
-        String[] projection = {
-                DataContract.CustomTasks._ID,
-                DataContract.CustomTasks.COLUMN_ANSWER};
-        Cursor cursor = db.query(
-                DataContract.CustomTasks.TABLE_NAME,     // таблица
-                projection,                              // столбцы
-                null,                           // столбцы для условия WHERE
-                null,                        // значения для условия WHERE
-                null,                           // Don't group the rows
-                null,                            // Don't filter by row groups
-                null);
+        mDb = mDbHelper.getReadableDatabase();
+        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
         cursor.moveToPosition(n);
-        String ans = cursor.getString(cursor.getColumnIndex(DataContract.CustomTasks.COLUMN_ANSWER));
+        String ans = cursor.getString(2);
         cursor.close();
         return ans;
     }
@@ -89,7 +65,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         TextView textView = findViewById(R.id.textView);
         TextView textView4 = findViewById(R.id.textView4);
         textView.setText(giveUsl(n));
-        textView4.setText(getResources().getString(R.string.current_num) + Integer.toString(n+1));
+        textView4.setText(getResources().getString(R.string.current_num) +" "+ Integer.toString(n+1));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -110,15 +86,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         switch (view.getId()) {
             case R.id.goBtn:
-                int n = Task1.getNum();
-
                 enterBtn.setEnabled(true);
                 textView.setBackground(textView2.getBackground());
                 textInputEditText.setText("");
+                setUp();
                 break;
 
             case R.id.enterBtn:
-                boolean rez=Task1.Check(0);
+                boolean rez=Task1.Check(Task1.getNum());
                 if (rez){
                     //если задание решено верно
                     int_solluted+=1;
@@ -144,13 +119,20 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         int getNum() {
             return num;
         }
-        void setNum() {
-            this.num =getNewNum();
+        void setNum(int x) {
+            this.num = x;
         }
 
         int getNewNum (){
             //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
-            int x = 0;
+
+            int min = 1;
+            int max = 5;
+            int diff = max - min;
+
+            Random random = new Random();
+            int x = random.nextInt(diff+1)+min;
+            this.setNum(x);
             return x;
         }
 
@@ -187,11 +169,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             return (LevelEquals);
         }
 
-
-
-        Task() {
-            this.setNum();
-        }
     }
 
     //настроечки размера и стиля шрифта
