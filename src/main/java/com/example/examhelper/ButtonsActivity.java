@@ -103,7 +103,8 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         if (chosen_solve) {
             intent = new Intent(this, AnsweringActivity.class);
         } else {
-            intent = new Intent (this,DataBaseDisplayActivity.class);
+            intent = new Intent (this, Show_DB_Activity.class);
+            //intent = new Intent (this, DataBaseDisplayActivity.class);
         }
 
         Integer Number = 0;

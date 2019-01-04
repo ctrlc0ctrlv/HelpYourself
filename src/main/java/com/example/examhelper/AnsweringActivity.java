@@ -1,12 +1,20 @@
 package com.example.examhelper;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -77,10 +85,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUp(){
+        int n = Task1.getNewNum();
         TextView textView = findViewById(R.id.textView);
         TextView textView4 = findViewById(R.id.textView4);
-        textView.setText(giveUsl(0));
-        textView4.setText(getResources().getString(R.string.current_num) + "1");
+        textView.setText(giveUsl(n));
+        textView4.setText(getResources().getString(R.string.current_num) + Integer.toString(n+1));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -90,18 +99,40 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         Button goBtn = findViewById(R.id.goBtn);
         TextView textView = findViewById(R.id.textView);
         TextView textView2 = findViewById(R.id.textView2);
+        TextView textView3 = findViewById(R.id.textView3);
+        TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
+
+
+        String sol = textView3.getText().toString();
+        String sollutions = sol.replace("/10","");
+        int int_solluted = Integer.parseInt(sollutions);
+        int int_need_solluted = Integer.parseInt(sol.replace(sollutions+"/",""));
 
         switch (view.getId()) {
             case R.id.goBtn:
                 int n = Task1.getNum();
 
-
                 enterBtn.setEnabled(true);
                 textView.setBackground(textView2.getBackground());
+                textInputEditText.setText("");
                 break;
 
             case R.id.enterBtn:
-                Task1.Check(Task1.getNum());
+                boolean rez=Task1.Check(0);
+                if (rez){
+                    //если задание решено верно
+                    int_solluted+=1;
+                    sol = int_solluted+"/"+int_need_solluted;
+                    if (int_solluted==int_need_solluted){
+                        //если решено необходимое количество для текущего уровня, то повышаем уровень пользователя в этом задании
+                        int Level = Task1.getLevel();
+                        String newLevel = ("Уровень: "+Task1.LevelUp(Level));
+                        textView2.setText(newLevel);
+                        sol = "0/"+int_need_solluted;
+                    }
+                    textView3.setText(sol);
+                    enterBtn.setEnabled(false);
+                }
                 break;
         }
     }
@@ -111,38 +142,101 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
 
         int getNum() {
-            //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
             return num;
         }
         void setNum() {
-            this.num =1;
+            this.num =getNewNum();
         }
 
         int getNewNum (){
+            //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
             int x = 0;
-
-
             return x;
         }
 
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        void Check(int n){
-            TextInputEditText TextInputLayout1 = findViewById(R.id.TextInputLayout1);
+        boolean Check(int n){
+            TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
             TextView textView = findViewById(R.id.textView);
+            boolean rez;
 
-            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(TextInputLayout1.getText()).toString())){
+            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(textInputEditText.getText()).toString())){
                 textView.setBackgroundResource(R.color.colorAccept);
+                rez = true;
             } else {
                 textView.setBackgroundResource(R.color.colorDeny);
+                rez = false;
             }
+            return rez;
         }
+
+
+        int getLevel (){
+            //возвращает текущий уровень
+            int Level;
+            TextView textView2 = findViewById(R.id.textView2);
+            Level = Integer.parseInt(textView2.getText().toString().replace("Уровень: ",""));
+            return (Level) ;
+        }
+        int LevelUp(int Level) {
+            int LevelEquals = Level;
+            if (LevelEquals <= 2) {
+                LevelEquals += 1;
+            }
+            return (LevelEquals);
+        }
+
+
 
         Task() {
             this.setNum();
         }
     }
+
+    //настроечки размера и стиля шрифта
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Intent intent = new Intent();
+                intent.setClass(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return true;
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // читаем размер шрифта из EditTextPreference
+        Integer fSize = Integer.parseInt(Objects.requireNonNull(prefs.getString(getString(R.integer.pref_size), "14")));
+        // применяем настройки в текстовом поле
+        TextView textView = findViewById(R.id.textView);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);
+        TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
+        textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);
+
+        String regular = prefs.getString(getString(R.string.pref_style), "");
+        int typeface = Typeface.NORMAL;
+
+        assert regular != null;
+        if (regular.contains("Полужирный"))
+            typeface += Typeface.BOLD;
+
+        if (regular.contains("Курсив"))
+            typeface += Typeface.ITALIC;
+        // меняем настройки в TextView
+        textView.setTypeface(null, typeface);
+    }
 }
+
 
 /*
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

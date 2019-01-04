@@ -31,6 +31,7 @@
             android:label="@string/app_name">
         </activity>
         <activity android:name=".DataBaseDisplayActivity"></activity>
+        <activity android:name=".Show_DB_Activity" />
     </application>
 
 </manifest>
