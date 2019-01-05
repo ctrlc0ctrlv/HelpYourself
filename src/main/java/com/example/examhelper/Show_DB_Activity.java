@@ -1,8 +1,10 @@
 package com.example.examhelper;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,45 +13,41 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
-public class Show_DB_Activity extends AppCompatActivity {
-
-        //Объявим переменные компонентов
-        Button button;
-        TextView textView;
-
+public class Show_DB_Activity extends AppCompatActivity implements View.OnClickListener{
         //Переменная для работы с БД
-        private DatabaseHelper mDBHelper;
+        private DefaultTasksDBHelper mDBHelper;
         private SQLiteDatabase mDb;
 
-        @Override
         protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_show_db);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_db);
 
-            mDBHelper = new DatabaseHelper(this);
+        //Найдем компоненты в XML разметке
+        Button button6 = findViewById(R.id.button6);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        button6.setOnClickListener(this);
+        fab.setOnClickListener(this);
 
-            try {
-                mDBHelper.updateDataBase();
-            } catch (IOException mIOException) {
-                throw new Error("UnableToUpdateDatabase");
+        mDBHelper = new DefaultTasksDBHelper(this);
+
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
             }
 
-            try {
-                mDb = mDBHelper.getWritableDatabase();
-            } catch (SQLException mSQLException) {
-                throw mSQLException;
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw mSQLException;
             }
+        }
 
-            //Найдем компоненты в XML разметке
-            button = (Button) findViewById(R.id.button);
-            textView = (TextView) findViewById(R.id.textView);
-
-            //Пропишем обработчик клика кнопки
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.button6:
                     String product = "";
-
                     Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
@@ -57,9 +55,34 @@ public class Show_DB_Activity extends AppCompatActivity {
                         cursor.moveToNext();
                     }
                     cursor.close();
+                    TextView text_view_info = findViewById(R.id.text_view_info);
+                    text_view_info.setText(product);
+                    break;
+                case R.id.fab:
+                    Intent intent = new Intent(Show_DB_Activity.this, DataBaseActivity.class);
+                    Bundle arguments = getIntent().getExtras();
+                    assert arguments != null;
+                    Integer Number  = arguments.getInt("number");
+                    intent.putExtra("number",Number);
 
-                    textView.setText(product);
-                }
-            });
+                    startActivity(intent);
+                    break;
+            }
         }
-    }
+}
+
+//Пропишем обработчик клика кнопки
+/*button.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+        String product = "";
+        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+        product += cursor.getString(1) + "\n";
+        cursor.moveToNext();
+        }
+        cursor.close();
+        textView.setText(product);
+        }
+        });*/
