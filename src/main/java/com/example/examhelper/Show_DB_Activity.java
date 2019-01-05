@@ -70,19 +70,3 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
             }
         }
 }
-
-//Пропишем обработчик клика кнопки
-/*button.setOnClickListener(new View.OnClickListener() {
-@Override
-public void onClick(View v) {
-        String product = "";
-        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-        product += cursor.getString(1) + "\n";
-        cursor.moveToNext();
-        }
-        cursor.close();
-        textView.setText(product);
-        }
-        });*/

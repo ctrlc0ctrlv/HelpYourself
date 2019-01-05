@@ -11,16 +11,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "default_tasks.db";
+public class DefaultTasksDBHelper extends SQLiteOpenHelper {
+    private static String DB_NAME = "default.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 5;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;
     private boolean mNeedUpdate = false;
 
-    public DatabaseHelper(Context context) {
+    public DefaultTasksDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         if (android.os.Build.VERSION.SDK_INT >= 17)
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void copyDataBase() {
-        if (!checkDataBase()) {
+        if (checkDataBase()) {
             this.getReadableDatabase();
             this.close();
             try {
