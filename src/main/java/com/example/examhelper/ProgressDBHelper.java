@@ -11,16 +11,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class DefaultTasksDBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "default.db";
+public class ProgressDBHelper extends SQLiteOpenHelper {
+    private static String DB_NAME = "progress.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;
     private boolean mNeedUpdate = false;
 
-    public DefaultTasksDBHelper(Context context) {
+    public ProgressDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         if (android.os.Build.VERSION.SDK_INT >= 17)
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
