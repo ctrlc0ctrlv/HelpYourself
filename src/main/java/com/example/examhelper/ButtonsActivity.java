@@ -49,7 +49,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
 
         buttonObjectChoice1.setOnClickListener(this);
         buttonObjectChoice2.setOnClickListener(this);
-        buttonObjectChoice3.setOnClickListener(this);
+        /*buttonObjectChoice3.setOnClickListener(this);
         buttonObjectChoice4.setOnClickListener(this);
         buttonObjectChoice5.setOnClickListener(this);
         buttonObjectChoice6.setOnClickListener(this);
@@ -72,7 +72,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         buttonObjectChoice23.setOnClickListener(this);
         buttonObjectChoice24.setOnClickListener(this);
         buttonObjectChoice25.setOnClickListener(this);
-        buttonObjectChoice26.setOnClickListener(this);
+        buttonObjectChoice26.setOnClickListener(this);*/
 
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
@@ -113,7 +113,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 //intent = new Intent (this, DataBaseDisplayActivity.class);
             }
         }
-        Integer Number = 0;
+        int Number = 0;
         switch (view.getId()){
             case R.id.buttonChoice1:
                 Number = 1;
