@@ -1,5 +1,8 @@
 package com.example.examhelper;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,7 +12,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -17,34 +19,79 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 import java.util.Random;
 
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
-    private DatabaseHelper mDbHelper;
+    private DefaultTasksDBHelper mDbHelper;
     private SQLiteDatabase mDb;
     Task Task1 = new Task();
+    AlertDialog.Builder ad;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
-
+        // Обработчики нажатия кнопок
         Button enterBtn = findViewById(R.id.enterBtn);
         Button goBtn = findViewById(R.id.goBtn);
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
-
-        mDbHelper = new DatabaseHelper(this);
+        //прописываем уведомление
+        final Context context;
+        context = AnsweringActivity.this;
+        String title = "Вы прошли все уровни в этом задании!";
+        String message = "Перейти к следующему заданию или больше практики в этом задании?";
+        String yesString = "Дальше";
+        String noString = "Больше практики";
+        ad = new AlertDialog.Builder(context);
+        ad.setTitle(title);  // заголовок
+        ad.setMessage(message); // сообщение
+        ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                Toast.makeText(context, "Вы сделали правильный выбор", Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                intent.putExtra("number", GetTaskNum()+1);
+                finish();
+                startActivity(intent);
+            }
+        });
+        ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                Toast.makeText(context, "Повторение - мать учения", Toast.LENGTH_LONG).show();
+            }
+        });
+        ad.setCancelable(false);
+        //Оформляем задания
+        mDbHelper = new DefaultTasksDBHelper(this);
         setUp();
-        // Обработчики нажатия кнопок
     }
 
     public String giveUsl(int n){
         mDb = mDbHelper.getReadableDatabase();
-        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
+        String raw = "SELECT * FROM informatics WHERE number =="+GetTaskNum();
+        
+        switch (Task1.getLevel()){
+            case 1:
+                raw += " AND level ==1";
+                break;
+            case 2:
+                ad.show();
+                //raw += " AND (level ==1 OR level ==2)";
+                break;
+            case 3:
+                raw += " AND (level ==1 OR level ==2 OR level ==3)";
+                break;
+            case 4:
+                ad.show();
+                break;
+        }
+        
+        Cursor cursor = mDb.rawQuery(raw, null);
         cursor.moveToPosition(n);
         String st = cursor.getString(1);
         cursor.close();
@@ -67,6 +114,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView.setText(giveUsl(n));
         textView4.setText(getResources().getString(R.string.current_num) +" "+ Integer.toString(n+1));
     }
+
+    Integer GetTaskNum(){
+        Bundle arguments = getIntent().getExtras();
+        assert arguments != null;
+        return arguments.getInt("number");
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -125,9 +179,20 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         int getNewNum (){
             //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
-
+            int curr_level = Task1.getLevel();
             int min = 1;
             int max = 5;
+            switch (curr_level){
+                case 1:
+                    max = 5;
+                    break;
+                case 2:
+                    max = 20;
+                    break;
+                case 3:
+                    max = 25;
+                    break;
+            }
             int diff = max - min;
 
             Random random = new Random();
@@ -163,7 +228,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         int LevelUp(int Level) {
             int LevelEquals = Level;
-            if (LevelEquals <= 2) {
+            if (LevelEquals <= 3) {
                 LevelEquals += 1;
             }
             return (LevelEquals);
@@ -193,7 +258,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Integer fSize = Integer.parseInt(Objects.requireNonNull(prefs.getString(getString(R.integer.pref_size), "14")));
+        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
         // применяем настройки в текстовом поле
         TextView textView = findViewById(R.id.textView);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);

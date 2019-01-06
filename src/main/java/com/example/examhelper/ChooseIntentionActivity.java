@@ -23,15 +23,19 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
             Intent intent;
             intent = new Intent(this,ChooseSubjectActivity.class);
             boolean chosen_solve = true;
+            boolean chosen_my = false;
             switch (view.getId()){
                 case R.id.button:
                     chosen_solve = true;
+                    chosen_my = false;
                     break;
                 case R.id.button2:
                     chosen_solve = false;
+                    chosen_my = true;
                     break;
             }
             intent.putExtra("chosen_solve",chosen_solve);
+            intent.putExtra("chosen_my", chosen_my);
             startActivity(intent);
         }
     }

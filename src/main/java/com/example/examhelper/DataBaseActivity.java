@@ -4,6 +4,7 @@ package com.example.examhelper;
 import android.content.ContentValues;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -57,13 +58,13 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
 
                 if (!(TextUtils.isEmpty(selection))) {
                         if (selection.equals(Level1)) {
-                            Level = DataContract.CustomTasks.LEVEL_1;
+                            Level = 1;
                         }
                         if (selection.equals(Level2)) {
-                            Level = DataContract.CustomTasks.LEVEL_2;
+                            Level = 2;
                         }
                         if (selection.equals(Level3)) {
-                            Level = DataContract.CustomTasks.LEVEL_3;
+                            Level = 3;
                         }
                 }
             }
@@ -86,17 +87,17 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         assert arguments != null;
         Integer Number  = arguments.getInt("number");
 
-        CustomTasksDbHelper mDbHelper = new CustomTasksDbHelper(this);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        CustomTasksDBHelper cDbHelper = new CustomTasksDBHelper(this);
+        SQLiteDatabase cDb = cDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DataContract.CustomTasks.COLUMN_USLOVIE, Uslovie);
-        values.put(DataContract.CustomTasks.COLUMN_ANSWER, Answer);
-        values.put(DataContract.CustomTasks.COLUMN_LEVEL, Level);
-        values.put(DataContract.CustomTasks.COLUMN_NUMBER, Number);
+        values.put("uslovie", Uslovie);
+        values.put("answer", Answer);
+        values.put("level", Level);
+        values.put("number", Number);
 
         // Вставляем новый ряд в базу данных и запоминаем его идентификатор
-        long newRowId = db.insert(DataContract.CustomTasks.TABLE_NAME, null, values);
+        long newRowId = cDb.insert("informatics", null, values);
 
         // Выводим сообщение в успешном случае или при ошибке
         if (newRowId == -1) {
@@ -105,6 +106,8 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         } else {
             Toast.makeText(this, "Задание добавлено под номером: " + newRowId, Toast.LENGTH_SHORT).show();
         }
+
+        cDb.update("informatics",values,null,null);
     }
 
 

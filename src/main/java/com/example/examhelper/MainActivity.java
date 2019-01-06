@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Integer fSize = Integer.parseInt(Objects.requireNonNull(prefs.getString(getString(R.integer.pref_size), "14")));
+        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
         // применяем настройки в текстовом поле
         TextView text_view = findViewById(R.id.text_view);
         text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);

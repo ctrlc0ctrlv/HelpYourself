@@ -2,11 +2,14 @@ package com.example.examhelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -93,22 +96,24 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
         Intent intent = null;
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         boolean chosen_solve = arguments.getBoolean("chosen_solve");
+        boolean chosen_my = arguments.getBoolean("chosen_my");
 
         if (chosen_solve) {
             intent = new Intent(this, AnsweringActivity.class);
         } else {
-            intent = new Intent (this, Show_DB_Activity.class);
-            //intent = new Intent (this, DataBaseDisplayActivity.class);
+            if (chosen_my) {
+                intent = new Intent(this, Show_DB_Activity.class);
+                //intent = new Intent (this, DataBaseDisplayActivity.class);
+            }
         }
-
         Integer Number = 0;
-
         switch (view.getId()){
             case R.id.buttonChoice1:
                 Number = 1;
@@ -189,8 +194,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 Number = 26;
                 break;
         }
-
-        intent.putExtra("number",Number);
+        Objects.requireNonNull(intent).putExtra("number",Number);
         startActivity(intent);
     }
 }

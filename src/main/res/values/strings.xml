@@ -40,6 +40,10 @@
     <string name="current_level">Уровень: 1</string>
     <string name="hint">Введите ответ</string>
     <string name="current_num">Номер задания:</string>
+
+    <!--Ресурсы для Show_DB_Activity-->
+    <string name="level"><b>Уровень</b></string>
+
     <!--Ресурсы для ChooseSubActivity-->
     <string name="choose_sub">Выберите предмет:</string>
     <string name="informatics">Информатика</string>
@@ -50,9 +54,9 @@
     <string name="label_question">Чем займемся сегодня?</string>
     <string name="solving">Решать задания</string>
     <string name="adding">Добавить задания</string>
+    <string name="my_tasks">Список заданий</string>
     <string name="create_test">Составить тест</string>
     <string name="calendar">Изменить режим тренировок</string>
-
     <!--Ресурсы для SettingsActivity-->
     <string name="action_settings">Настройки</string>
     <string name="pref_color">Цвет текста</string>
@@ -60,7 +64,7 @@
     <string name="pref_color_red">Красный цвет</string>
     <string name="pref_color_green">Зеленый цвет</string>
     <string name="pref_color_blue">Синий цвет</string>
-    <integer name="pref_size">14</integer>
+    <string name="pref_size">14</string>
     <string name="pref_style">Стиль текста</string>
     <string name="pref_style_regular">Нормальный</string>
     <string name="pref_style_bold">Полужирный</string>

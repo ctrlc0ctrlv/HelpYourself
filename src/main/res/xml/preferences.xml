@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
     <EditTextPreference
         android:defaultValue="14"
         android:dialogTitle="Введите размер шрифта (от 10 до 32)"
         android:inputType="number"
-        android:key="@integer/pref_size"
+        android:key="@string/pref_size"
         android:summary="Устанавливает новый размер шрифта"
         android:title="Размер шрифта" />
 
@@ -17,4 +16,10 @@
         android:entries="@array/text_style"
         android:entryValues="@array/text_style"
         android:dialogTitle="Выберите стиль для шрифта" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="save_progress"
+        android:summary="Возможность сохранять прогресс после выхода из приложения"
+        android:title="Сохранение прогресса" />
 </PreferenceScreen>

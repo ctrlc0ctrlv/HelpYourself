@@ -44,7 +44,9 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         boolean chosen_solve = arguments.getBoolean("chosen_solve");
+        boolean chosen_my = arguments.getBoolean("chosen_my");
         intent.putExtra("chosen_solve",chosen_solve);
+        intent.putExtra("chosen_my", chosen_my);
 
         startActivity(intent);
     }
