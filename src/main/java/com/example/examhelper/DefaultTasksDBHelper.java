@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DefaultTasksDBHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "default.db";
+    private static String DB_NAME = "default_tasks.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 5;
 

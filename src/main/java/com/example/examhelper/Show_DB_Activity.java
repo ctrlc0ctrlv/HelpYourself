@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,15 +48,21 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.button6:
-                    String product = "";
-                    Cursor cursor = mDb.rawQuery("SELECT * FROM informatics", null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        product += cursor.getString(1) + "\n";
-                        cursor.moveToNext();
-                    }
-                    cursor.close();
                     TextView text_view_info = findViewById(R.id.text_view_info);
+                    String product = "";
+                    for (int i=1; i<4; i++){
+                        product += getString(R.string.level)+i+":\n";
+                        Cursor cursor = mDb.rawQuery("SELECT * FROM informatics WHERE level =="+i, null);
+                        cursor.moveToFirst();
+                        while (!cursor.isAfterLast()) {
+                            product += cursor.getInt(0) + ". ";
+                            product += cursor.getString(1) + "\n";
+                            cursor.moveToNext();
+                        }
+                        product += "\n";
+                        cursor.close();
+                }
+
                     text_view_info.setText(product);
                     break;
                 case R.id.fab:
