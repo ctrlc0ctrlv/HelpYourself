@@ -22,4 +22,13 @@
         android:key="save_progress"
         android:summary="Возможность сохранять прогресс после выхода из приложения"
         android:title="Сохранение прогресса" />
+
+    <ListPreference
+        android:key="night_mode"
+        android:summary="Изменение цветовой схемы для лучшего отображения в темноте"
+        android:title="Ночной режим"
+        android:defaultValue="auto"
+        android:entries="@array/night_modes"
+        android:entryValues="@array/night_modes"
+        android:dialogTitle="Включить ночной режим?" />
 </PreferenceScreen>

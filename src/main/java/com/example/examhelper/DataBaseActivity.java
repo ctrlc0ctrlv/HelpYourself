@@ -2,15 +2,14 @@ package com.example.examhelper;
 
 
 import android.content.ContentValues;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,24 +17,25 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.examhelper.data.CustomTasksDbHelper;
-import com.example.examhelper.data.DataContract;
+import com.example.examhelper.data.CustomDbHelper;
 
 import java.util.Objects;
 
 public class DataBaseActivity extends AppCompatActivity implements View.OnClickListener {
-
     private Spinner spinner;
     private int Level = 1;
+    CustomDbHelper cDbHelper;
+    SQLiteDatabase cDb;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_base_set);
         spinner = findViewById(R.id.spinner);
         setupSpinner();
-
         Button button = findViewById(R.id.button);
         button.setOnClickListener(this);
+        cDbHelper = new CustomDbHelper(this);
+        cDb = cDbHelper.getWritableDatabase();
     }
 
     private void setupSpinner() {
@@ -55,7 +55,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
                 final String Level1 = getResources().getString(R.string.Level1);
                 final String Level2 = getResources().getString(R.string.Level2);
                 final String Level3 = getResources().getString(R.string.Level3);
-
                 if (!(TextUtils.isEmpty(selection))) {
                         if (selection.equals(Level1)) {
                             Level = 1;
@@ -85,10 +84,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
 
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
-        Integer Number  = arguments.getInt("number");
-
-        CustomTasksDBHelper cDbHelper = new CustomTasksDBHelper(this);
-        SQLiteDatabase cDb = cDbHelper.getWritableDatabase();
+        int Number  = arguments.getInt("number");
 
         ContentValues values = new ContentValues();
         values.put("uslovie", Uslovie);
@@ -96,8 +92,15 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         values.put("level", Level);
         values.put("number", Number);
 
+        Log.d("myLogs",Uslovie);
+        Log.d("myLogs",Answer);
+        Log.d("myLogs", String.valueOf(Level));
+        Log.d("myLogs", String.valueOf(Number));
+
+        String TABLE_SUBJECT_NAME = arguments.getString("subject");
+        Log.d("myLogs", TABLE_SUBJECT_NAME);
         // Вставляем новый ряд в базу данных и запоминаем его идентификатор
-        long newRowId = cDb.insert("informatics", null, values);
+        long newRowId = cDb.insert(TABLE_SUBJECT_NAME, null, values);
 
         // Выводим сообщение в успешном случае или при ошибке
         if (newRowId == -1) {
@@ -106,8 +109,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         } else {
             Toast.makeText(this, "Задание добавлено под номером: " + newRowId, Toast.LENGTH_SHORT).show();
         }
-
-        cDb.update("informatics",values,null,null);
     }
 
 

@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,13 +22,9 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static {
-        //подключаем возможность изменения цветовой схемы на ночной режим автоматически
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-    }
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("myLogs","OnCreate");
         setContentView(R.layout.activity_main);
         Button button = findViewById(R.id.button);
         button.setOnClickListener(this); // Обработчик нажатия кнопки
@@ -59,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("myLogs","OnResume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
         Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
@@ -68,14 +66,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String regular = prefs.getString(getString(R.string.pref_style), "");
         int typeface = Typeface.NORMAL;
-
         assert regular != null;
         if (regular.contains("Полужирный"))
             typeface += Typeface.BOLD;
-
         if (regular.contains("Курсив"))
             typeface += Typeface.ITALIC;
         // меняем настройки в TextView
         text_view.setTypeface(null, typeface);
+
+        String night_mode = prefs.getString("night_mode","Включать автоматически");
+        assert night_mode != null;
+        int modeNight = 0;
+        switch (night_mode){
+            case ("Включать автоматически"):
+
+                break;
+            case ("Да"):
+                modeNight = AppCompatDelegate.MODE_NIGHT_YES;
+                break;
+            case ("Нет"):
+                modeNight = AppCompatDelegate.MODE_NIGHT_NO;
+                break;
+        }
+        AppCompatDelegate.setDefaultNightMode(modeNight);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.d("myLogs","onStop");
     }
     }

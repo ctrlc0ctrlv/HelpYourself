@@ -30,12 +30,15 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()){
             case R.id.button:
                 num_of_tasks=23;
+                intent.putExtra("subject","informatics");
                 break;
             case R.id.button2:
                 num_of_tasks=20;
+                intent.putExtra("subject", "maths_base");
                 break;
             case R.id.button3:
                 num_of_tasks=26;
+                intent.putExtra("subject", "russian");
                 break;
         }
         intent.putExtra("num_of_tasks",num_of_tasks);

@@ -49,8 +49,8 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
 
         buttonObjectChoice1.setOnClickListener(this);
         buttonObjectChoice2.setOnClickListener(this);
-        /*buttonObjectChoice3.setOnClickListener(this);
-        buttonObjectChoice4.setOnClickListener(this);
+        buttonObjectChoice3.setOnClickListener(this);
+        /*buttonObjectChoice4.setOnClickListener(this);
         buttonObjectChoice5.setOnClickListener(this);
         buttonObjectChoice6.setOnClickListener(this);
         buttonObjectChoice7.setOnClickListener(this);
@@ -194,6 +194,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 Number = 26;
                 break;
         }
+        Objects.requireNonNull(intent).putExtra("subject",arguments.getString("subject"));
         Objects.requireNonNull(intent).putExtra("number",Number);
         startActivity(intent);
     }
