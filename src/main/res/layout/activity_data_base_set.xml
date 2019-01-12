@@ -21,6 +21,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text='Подсказка: номер задания для изменения или удаления можно посмотреть нажав на кнопку "Мои задания"' />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
@@ -61,6 +70,7 @@
                 android:id="@+id/TextInputEditText3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Введите номер задания, которое хотите изменить или удалить."
                 android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
@@ -73,7 +83,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Редактировать задание"
@@ -81,7 +91,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Удалить задание"

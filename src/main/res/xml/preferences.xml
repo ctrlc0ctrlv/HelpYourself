@@ -23,6 +23,7 @@
         android:summary="Возможность сохранять прогресс после выхода из приложения"
         android:title="Сохранение прогресса" />
 
+
     <ListPreference
         android:key="night_mode"
         android:summary="Изменение цветовой схемы для лучшего отображения в темноте"

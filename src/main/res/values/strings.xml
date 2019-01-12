@@ -57,8 +57,10 @@
     <string name="my_tasks">Список заданий</string>
     <string name="create_test">Составить тест</string>
     <string name="calendar">Изменить режим тренировок</string>
+
     <!--Ресурсы для SettingsActivity-->
     <string name="action_settings">Настройки</string>
+    <string name="action_delete_progress">Сбросить прогресс</string>
     <string name="pref_color">Цвет текста</string>
     <string name="pref_color_black">Черный цвет</string>
     <string name="pref_color_red">Красный цвет</string>

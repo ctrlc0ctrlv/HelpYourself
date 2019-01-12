@@ -1,5 +1,8 @@
 package com.example.examhelper;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
+import static com.example.examhelper.AnsweringActivity.APP_PROGRRESS;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +43,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem action_delete_progress = menu.findItem(R.id.action_delete_progress);
+        MenuItem action_reload_task = menu.findItem(R.id.action_reload_task);
+        MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
+
+        action_reload_task.setVisible(false);
+        action_delete_progress.setVisible(false);
+        action_clear_database.setVisible(false);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent();
                 intent.setClass(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            /*case R.id.action_delete_progress:
+                final Context context;
+                context = MainActivity.this;
+                AlertDialog.Builder ad;
+                String title = "Вы уверены?";
+                String message = "Вы не сможете отменить это действие";
+                String yesString = "Да";
+                String noString = "Отмена";
+                ad = new AlertDialog.Builder(context);
+                ad.setTitle(title);  // заголовок
+                ad.setMessage(message); // сообщение
+                ad.setCancelable(false);
+                ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+                        SharedPreferences.Editor editor = activityPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                    }
+                });
+                ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+
+                    }
+                });
+                ad.create();
+                ad.show();
+                return true;*/
             default:
                 return true;
         }

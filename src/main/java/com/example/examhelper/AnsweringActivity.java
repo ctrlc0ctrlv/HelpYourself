@@ -1,5 +1,6 @@
 package com.example.examhelper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,14 +36,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     //для работы с базами данных
     private DefaultTasksDBHelper mDbHelper;
     private SQLiteDatabase mDb;
-    private ProgressDbHelper progHelper;
-    private SQLiteDatabase progDB;
 
     Task Task1 = new Task();
     AlertDialog.Builder ad;
+    AlertDialog.Builder ad_delete;
+    AlertDialog.Builder ad_reload_task;
     //настройки
     public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
     public static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
+    public static final String APP_PROGRRESS = "my_progress";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,22 +91,71 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                     setUp();
                 }
             });
-        progHelper = new ProgressDbHelper(this);
-        progDB = progHelper.getWritableDatabase();
+          //второе уведомление
+            String title_delete = "Вы уверены? Это действие невозможно отменить";
+            String message_delete = "Ваш прогресс во всех заданиях обнулится";
+            String yesString_delete = "Да";
+            String noString_delete = "Отмена";
+            ad_delete = new AlertDialog.Builder(context);
+            ad_delete.setTitle(title_delete);  // заголовок
+            ad_delete.setMessage(message_delete); // сообщение
+            ad_delete.setCancelable(false);
+            ad_delete.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+                    SharedPreferences.Editor editor = activityPreferences.edit();
+                    editor.clear();
+                    editor.apply();
 
-        /*Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE _id == ?";
-        Cursor cursor = progDB.rawQuery(raw, new String[]{String.valueOf(GetTaskNum())});
-        try{
-            cursor.moveToPosition(GetTaskNum());
-        } catch (CursorIndexOutOfBoundsException e){
-            ContentValues values = new ContentValues();
-            values.put("curr_lvl", GetTaskNum());
-            values.put("curr_solved",);
-            long newRowId = progDB.insert(SUBJECT_TABLE_NAME, null, values);
-            cursor.close();
-        }*/
+                    Bundle arguments =getIntent().getExtras();
+                    String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
+                    int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+
+                    TextView textView3 = findViewById(R.id.textView3);
+                    textView3.setText(COUNTER+"/10");
+                    TextView textView2 = findViewById(R.id.textView2);
+                    textView2.setText("Уровень: "+LVL);
+                    TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
+                    textInputEditText.setText("");
+                }
+            });
+            ad_delete.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) { }
+            });
+
+            //третье уведомление
+            String message_reload = "Ваш прогресс в этом задании обнулится";
+            ad_reload_task = new AlertDialog.Builder(context);
+            ad_reload_task.setTitle(title_delete);  // заголовок
+            ad_reload_task.setMessage(message_reload); // сообщение
+            ad_reload_task.setCancelable(false);
+            ad_reload_task.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+                    SharedPreferences.Editor editor = activityPreferences.edit();
+                    Bundle arguments =getIntent().getExtras();
+                    String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+
+                    editor.remove(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum());
+                    editor.remove(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum());
+                    editor.apply();
+
+                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
+                    int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+
+                    TextView textView3 = findViewById(R.id.textView3);
+                    textView3.setText(COUNTER+"/10");
+                    TextView textView2 = findViewById(R.id.textView2);
+                    textView2.setText("Уровень: "+LVL);
+                    TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
+                    textInputEditText.setText("");
+                }
+            });
+            ad_reload_task.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) { }
+            });
+
 
         //Оформляем задания
         mDbHelper = new DefaultTasksDBHelper(this);
@@ -342,6 +393,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d("myLogs","Создано меню");
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
+        action_clear_database.setVisible(false);
         return true;
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -351,6 +404,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 intent.setClass(this, SettingsActivity.class);
                 startActivity(intent);
                 Log.d("myLogs","Выбран пункт меню Настройки");
+                return true;
+            case R.id.action_delete_progress:
+                ad_delete.create();
+                ad_delete.show();
+                return true;
+            case R.id.action_reload_task:
+                ad_reload_task.create();
+                ad_reload_task.show();
                 return true;
             default:
                 return true;
@@ -381,6 +442,19 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView.setTypeface(null, typeface);
 
         boolean saving_progress = prefs.getBoolean("save_progress",true);
+        if (saving_progress){
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+            Bundle arguments =getIntent().getExtras();
+            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+            int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
+            int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+
+            TextView textView3 = findViewById(R.id.textView3);
+            textView3.setText(COUNTER+"/10");
+            TextView textView2 = findViewById(R.id.textView2);
+            textView2.setText("Уровень: "+LVL);
+        }
+
         /*if (saving_progress){
             Bundle arguments =getIntent().getExtras();
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
@@ -408,7 +482,19 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         boolean saving_progress = prefs.getBoolean("save_progress",true);
 
         if (saving_progress){
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+            Bundle arguments =getIntent().getExtras();
+            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
 
+            TextView textView3 = findViewById(R.id.textView3);
+            String sol = textView3.getText().toString();
+            String sollutions = sol.replace("/10","");
+            int int_solluted = Integer.parseInt(sollutions);
+
+            SharedPreferences.Editor ed = activityPreferences.edit();
+            ed.putInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),Task1.getLevel());
+            ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),int_solluted);
+            ed.apply();
         }
 
         /*if (saving_progress){
@@ -427,6 +513,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             values.put("curr_solved", progress_counter);
             progDB.update(SUBJECT_TABLE_NAME,values,"_id == ?",new String[]{String.valueOf(GetTaskNum())});
             Log.d("myLogs","Таблица с прогрессом обновлена");*/
+
             /*//получаем доступ к настройкам
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
             editor.putInt(APP_PREFERENCES_PROGRESS_COUNTER, progress_counter);
