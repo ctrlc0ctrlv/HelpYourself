@@ -14,7 +14,7 @@ import java.io.OutputStream;
 public class DefaultTasksDBHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "default.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 12;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;
