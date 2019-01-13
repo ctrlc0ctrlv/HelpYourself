@@ -25,10 +25,9 @@
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/advise"
             android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text='Подсказка: номер задания для изменения или удаления можно посмотреть нажав на кнопку "Мои задания"' />
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/spinner"

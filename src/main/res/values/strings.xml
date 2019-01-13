@@ -44,6 +44,9 @@
     <!--Ресурсы для Show_DB_Activity-->
     <string name="level"><b>Уровень</b></string>
 
+    <!--Ресурсы для DataBaseActivity-->
+    <string name="advise">Подсказка: номер задания для изменения или удаления можно посмотреть нажав на кнопку \"Мои задания\"</string>
+
     <!--Ресурсы для ChooseSubActivity-->
     <string name="choose_sub">Выберите предмет:</string>
     <string name="informatics">Информатика</string>

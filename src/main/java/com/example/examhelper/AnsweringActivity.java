@@ -1,15 +1,13 @@
 package com.example.examhelper;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -26,25 +24,32 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.examhelper.data.ProgressDbHelper;
-
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
     //для работы с базами данных
     private DefaultTasksDBHelper mDbHelper;
     private SQLiteDatabase mDb;
-
+    //экземпляр класса Task
     Task Task1 = new Task();
+    //уведомления
     AlertDialog.Builder ad;
     AlertDialog.Builder ad_delete;
     AlertDialog.Builder ad_reload_task;
-    //настройки
+    AlertDialog.Builder ad_exception;
+    //настройки (в частности, прогресса)
     public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
     public static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
+    public static final String APP_PREFERENCES_PROGRESS_BASE_NUM = "progress_base_num";
     public static final String APP_PROGRRESS = "my_progress";
+    public int BASE_NUM = 0;
+    public Set<Integer> TASKS = new HashSet<>();
+    public Set<Integer> MISTAKES = new HashSet<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,11 +160,39 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ad_reload_task.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) { }
             });
+            //уведомление об ошибке с базой
+            String title_exception = "Ошибка при поиске в базе данных";
+            String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ";
+            String yesString_exception = "ОК";
+            String noString_exception = "OK";
+            ad_exception = new AlertDialog.Builder(context);
+            ad_exception.setTitle(title_exception);  // заголовок
+            ad_exception.setMessage(message_exception); // сообщение
+            ad_exception.setCancelable(false);
+            ad_exception.setPositiveButton(yesString_exception, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    finish();
+                }
+            });
 
 
         //Оформляем задания
         mDbHelper = new DefaultTasksDBHelper(this);
-        setUp();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean saving_progress = prefs.getBoolean("save_progress",true);
+        if (saving_progress) {
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_WORLD_WRITEABLE);
+            Bundle arguments = getIntent().getExtras();
+            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+            BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+        }
+        if (BASE_NUM<=0){
+            setUp();
+            Log.d("myLogs",String.valueOf(BASE_NUM));
+        } else{
+            setUp(BASE_NUM);
+            Log.d("myLogs",String.valueOf(BASE_NUM));
+        }
     }
 
     @Override
@@ -204,10 +237,16 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 ad.show();
                 break;
         }
-        Cursor cursor = mDb.rawQuery(raw, null);
-        cursor.moveToPosition(n-1);
-        String st = cursor.getString(1);
-        cursor.close();
+        String st = "";
+        try {
+            Cursor cursor = mDb.rawQuery(raw, null);
+            cursor.moveToPosition(n-1);
+             st= cursor.getString(1);
+            cursor.close();
+        }catch (SQLiteException e){
+            ad_exception.create();
+            ad_exception.show();
+        }
         return st;
     }
 
@@ -230,13 +269,54 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
         int n=0;
-        Cursor cursor = mDb.rawQuery(raw, null);
-        while (!cursor.isAfterLast()){
-            n+=1;
-            cursor.moveToNext();
+        try {
+            Cursor cursor = mDb.rawQuery(raw, null);
+            while (!cursor.isAfterLast()){
+                n+=1;
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (SQLiteException e){
+            ad_exception.create();
         }
-        cursor.close();
+        getArray();
         return n-1;
+    }
+
+    public Integer[]getArray(){
+        mDb = mDbHelper.getReadableDatabase();
+        Bundle arguments =getIntent().getExtras();
+        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
+        switch (Task1.getLevel()){
+            case 1:
+                raw += " AND level ==1";
+                break;
+            case 2:
+                raw += " AND (level ==1 OR level ==2)";
+                break;
+            case 3:
+                raw += " AND (level ==1 OR level ==2 OR level ==3)";
+                break;
+            case 4:
+                break;
+        }
+        int n=0;
+        try {
+            Cursor cursor = mDb.rawQuery(raw, null);
+            while (!cursor.isAfterLast()){
+                TASKS.add(n);
+                n+=1;
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (SQLiteException e){
+            ad_exception.create();
+        }
+        Integer[] myArray = {};
+        myArray = TASKS.toArray(new Integer[0]);
+        Log.d("myLogs","Current array="+Arrays.toString(myArray));
+        return myArray;
     }
 
     public String giveAns(int n){
@@ -258,10 +338,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             case 4:
                 break;
         }
-        Cursor cursor = mDb.rawQuery(raw, null);
-        cursor.moveToPosition(n-1);
-        String ans = cursor.getString(2);
-        cursor.close();
+        String ans = "";
+        try {
+            Cursor cursor = mDb.rawQuery(raw, null);
+            cursor.moveToPosition(n-1);
+            ans = cursor.getString(2);
+            cursor.close();
+        } catch (SQLiteException e){
+            ad_exception.create();
+        }
         return ans;
     }
 
@@ -270,7 +355,25 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         TextView textView = findViewById(R.id.textView);
         TextView textView4 = findViewById(R.id.textView4);
         textView.setText(giveUsl(n));
-        textView4.setText(getResources().getString(R.string.current_num) +" "+ Integer.toString(n));
+        textView4.setText(getResources().getString(R.string.current_num) + " " + Integer.toString(n));
+        if (n>0){
+            BASE_NUM = n;
+        } else {
+            finish();
+        }
+    }
+
+    void setUp (int num){
+        TextView textView = findViewById(R.id.textView);
+        TextView textView4 = findViewById(R.id.textView4);
+        textView.setText(giveUsl(num));
+        textView4.setText(getResources().getString(R.string.current_num) +" "+ Integer.toString(num));
+        Task1.setNum(num);
+        BASE_NUM = num;
+        Log.d("myLogs", String.valueOf(BASE_NUM)+"setUp(num)");
+        if (num<=0){
+            setUp();
+        }
     }
 
     int GetTaskNum(){
@@ -340,10 +443,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             int min = 1;
             int max = getLength();
             int diff = max - min;
+            int x = 0;
 
             Random random = new Random();
-            int x = random.nextInt(diff+1)+min;
-            this.setNum(x);
+            try{
+                x = random.nextInt(diff+1)+min;
+                this.setNum(x);
+            }catch (IllegalArgumentException e){
+                ad_exception.create();
+            }
             return x;
         }
 
@@ -386,7 +494,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             }
             return (LevelEquals);
         }
-
     }
 
     //настроечки размера и стиля шрифта
@@ -448,29 +555,17 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
             int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
             int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+            int BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),1);
 
             TextView textView3 = findViewById(R.id.textView3);
             textView3.setText(COUNTER+"/10");
             TextView textView2 = findViewById(R.id.textView2);
             textView2.setText("Уровень: "+LVL);
+            if (BASE_NUM<=0){
+                TextView textView4 = findViewById(R.id.textView4);
+                textView4.setText("Номер задания: "+BASE_NUM);
+            }
         }
-
-        /*if (saving_progress){
-            Bundle arguments =getIntent().getExtras();
-            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-
-            String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE _id == ?";
-            Cursor cursor = progDB.rawQuery(raw, new String[]{String.valueOf(arguments.getInt("number"))});
-            Log.d("myLogs",String.valueOf(cursor.getColumnIndex("curr_lvl")));
-            cursor.moveToPosition(0);
-            int lvl = cursor.getInt(cursor.getColumnIndex("curr_lvl"));
-            int counter = cursor.getInt(cursor.getColumnIndex("curr_solved"));
-            cursor.close();
-            TextView textView2 = findViewById(R.id.textView2);
-            textView2.setText("Уровень: "+lvl);
-            TextView textView3 = findViewById(R.id.textView3);
-            textView3.setText(counter+"/10");
-        }*/
     }
 
     @Override
@@ -491,33 +586,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             String sollutions = sol.replace("/10","");
             int int_solluted = Integer.parseInt(sollutions);
 
+            TextView textView4 = findViewById(R.id.textView4);
+            BASE_NUM = Integer.parseInt(textView4.getText().toString().replace("Номер задания: ",""));
+
             SharedPreferences.Editor ed = activityPreferences.edit();
             ed.putInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),Task1.getLevel());
             ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),int_solluted);
+            ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), BASE_NUM);
             ed.apply();
         }
-
-        /*if (saving_progress){
-            Bundle arguments =getIntent().getExtras();
-            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-            // Запоминаем данные
-            int progress_lvl = Task1.getLevel();
-            TextView textView3 = findViewById(R.id.textView3);
-            String sol = textView3.getText().toString();
-            String sollutions = sol.replace("/10","");
-            int progress_counter = Integer.parseInt(sollutions);
-            //получаем доступ к базе с прогрессом;
-            ContentValues values = new ContentValues();
-            values.put("curr_num", arguments.getInt("number"));
-            values.put("curr_level",progress_lvl);
-            values.put("curr_solved", progress_counter);
-            progDB.update(SUBJECT_TABLE_NAME,values,"_id == ?",new String[]{String.valueOf(GetTaskNum())});
-            Log.d("myLogs","Таблица с прогрессом обновлена");*/
-
-            /*//получаем доступ к настройкам
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            editor.putInt(APP_PREFERENCES_PROGRESS_COUNTER, progress_counter);
-            editor.putInt(APP_PREFERENCES_PROGRESS_LVL, progress_lvl);
-            editor.apply();*/
         }
     }
