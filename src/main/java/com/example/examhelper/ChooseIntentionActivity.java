@@ -11,10 +11,16 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_choose_intent);
+
             Button button = findViewById(R.id.button);
             Button button2 = findViewById(R.id.button2);
+
+            Button button4 = findViewById(R.id.button4);
+
             button.setOnClickListener(this);
             button2.setOnClickListener(this);
+
+            button4.setOnClickListener(this);
             // Обработчик нажатия кнопки
         }
 
@@ -26,16 +32,19 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
             boolean chosen_my = false;
             switch (view.getId()){
                 case R.id.button:
-                    chosen_solve = true;
-                    chosen_my = false;
+                    intent.putExtra("chosen_solve", true);
+                    intent.putExtra("chosen_my", false);
+                    startActivity(intent);
                     break;
                 case R.id.button2:
-                    chosen_solve = false;
-                    chosen_my = true;
+                    intent.putExtra("chosen_solve", false);
+                    intent.putExtra("chosen_my", true);
+                    startActivity(intent);
+                    break;
+                case R.id.button4:
+                    Intent i = new Intent(this,TimeActivity.class);
+                    startActivity(i);
                     break;
             }
-            intent.putExtra("chosen_solve",chosen_solve);
-            intent.putExtra("chosen_my", chosen_my);
-            startActivity(intent);
         }
     }

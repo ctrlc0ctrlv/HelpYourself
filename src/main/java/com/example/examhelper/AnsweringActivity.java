@@ -35,6 +35,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     //для работы с базами данных
     private DefaultTasksDBHelper mDbHelper;
     private SQLiteDatabase mDb;
+
+    private TryingDBHelper tryDBHelper;
+    private SQLiteDatabase tryDB;
     //экземпляр класса Task
     Task Task1 = new Task();
     //уведомления
@@ -107,7 +110,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ad_delete.setCancelable(false);
             ad_delete.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) {
-                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = activityPreferences.edit();
                     editor.clear();
                     editor.apply();
@@ -137,7 +140,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ad_reload_task.setCancelable(false);
             ad_reload_task.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) {
-                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = activityPreferences.edit();
                     Bundle arguments =getIntent().getExtras();
                     String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
@@ -178,10 +181,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Оформляем задания
         mDbHelper = new DefaultTasksDBHelper(this);
+        tryDBHelper = new TryingDBHelper(this);
+
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress",true);
         if (saving_progress) {
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_WORLD_WRITEABLE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
             Bundle arguments = getIntent().getExtras();
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
             BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
@@ -218,8 +224,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView3.setText(solved+"/10");
     }
 
-    public String giveUsl(int n){
+    public String giveUsl(final int n){
         mDb = mDbHelper.getReadableDatabase();
+        tryDB= tryDBHelper.getReadableDatabase();
+
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
@@ -236,22 +244,31 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             case 4:
                 ad.show();
                 break;
-        }
-        String st = "";
-        try {
+            }
+
+        Cursor cursor = tryDB.rawQuery(raw, null);
+            cursor.moveToPosition(n-1);
+            String st = "";
+            st= cursor.getString(1);
+            cursor.close();
+            //Cursor cursor = mDb.rawQuery(raw, null);
+
+        /*try {
             Cursor cursor = mDb.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
-             st= cursor.getString(1);
+            st= cursor.getString(1);
             cursor.close();
         }catch (SQLiteException e){
             ad_exception.create();
             ad_exception.show();
-        }
+        }*/
         return st;
     }
 
     public int getLength(){
         mDb = mDbHelper.getReadableDatabase();
+        tryDB = tryDBHelper.getReadableDatabase();
+
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
@@ -270,7 +287,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         int n=0;
         try {
-            Cursor cursor = mDb.rawQuery(raw, null);
+            //Cursor cursor = mDb.rawQuery(raw, null);
+            Cursor cursor = tryDB.rawQuery(raw, null);
+
             while (!cursor.isAfterLast()){
                 n+=1;
                 cursor.moveToNext();
@@ -285,6 +304,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     public Integer[]getArray(){
         mDb = mDbHelper.getReadableDatabase();
+        tryDB = tryDBHelper.getReadableDatabase();
+
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
@@ -303,7 +324,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         int n=0;
         try {
-            Cursor cursor = mDb.rawQuery(raw, null);
+            //Cursor cursor = mDb.rawQuery(raw, null);
+            Cursor cursor = tryDB.rawQuery(raw, null);
+
             while (!cursor.isAfterLast()){
                 TASKS.add(n);
                 n+=1;
@@ -321,6 +344,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     public String giveAns(int n){
         mDb = mDbHelper.getReadableDatabase();
+        tryDB = tryDBHelper.getReadableDatabase();
+
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
@@ -340,7 +365,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         String ans = "";
         try {
-            Cursor cursor = mDb.rawQuery(raw, null);
+            //Cursor cursor = mDb.rawQuery(raw, null);
+            Cursor cursor = tryDB.rawQuery(raw, null);
+
             cursor.moveToPosition(n-1);
             ans = cursor.getString(2);
             cursor.close();
@@ -359,7 +386,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         if (n>0){
             BASE_NUM = n;
         } else {
-            finish();
+            //finish();
         }
     }
 
@@ -550,7 +577,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         boolean saving_progress = prefs.getBoolean("save_progress",true);
         if (saving_progress){
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
             Bundle arguments =getIntent().getExtras();
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
             int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
@@ -577,7 +604,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         boolean saving_progress = prefs.getBoolean("save_progress",true);
 
         if (saving_progress){
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_WORLD_WRITEABLE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
             Bundle arguments =getIntent().getExtras();
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
 
