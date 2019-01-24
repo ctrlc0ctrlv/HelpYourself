@@ -322,23 +322,25 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             case 4:
                 break;
         }
-        int n=0;
-        try {
-            //Cursor cursor = mDb.rawQuery(raw, null);
-            Cursor cursor = tryDB.rawQuery(raw, null);
-
-            while (!cursor.isAfterLast()){
-                TASKS.add(n);
-                n+=1;
-                cursor.moveToNext();
-            }
-            cursor.close();
-        } catch (SQLiteException e){
-            ad_exception.create();
-        }
         Integer[] myArray = {};
-        myArray = TASKS.toArray(new Integer[0]);
-        Log.d("myLogs","Current array="+Arrays.toString(myArray));
+            int n=1;
+            try {
+                //Cursor cursor = mDb.rawQuery(raw, null);
+                Cursor cursor = tryDB.rawQuery(raw, null);
+                while (!cursor.isAfterLast()){
+                    TASKS.add(n);
+                    n+=1;
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            } catch (SQLiteException e){
+                ad_exception.create();
+            }
+            myArray = TASKS.toArray(new Integer[0]);
+            Log.d("myLogs","Current array="+Arrays.toString(myArray));
+
+            Integer [] myMistakes = MISTAKES.toArray(new Integer [0]);
+            Log.d ("myLogs", "Current mistakes = "+Arrays.toString(myMistakes));
         return myArray;
     }
 
@@ -492,9 +494,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(textInputEditText.getText()).toString())){
                 textView.setBackgroundResource(R.color.colorAccept);
                 rez = true;
+                MISTAKES.remove(n);
             } else {
                 textView.setBackgroundResource(R.color.colorDeny);
                 rez = false;
+                MISTAKES.add(n);
             }
             return rez;
         }

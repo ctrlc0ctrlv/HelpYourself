@@ -14,12 +14,12 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
 
             Button button = findViewById(R.id.button);
             Button button2 = findViewById(R.id.button2);
-
+            Button button3 = findViewById(R.id.button3);
             Button button4 = findViewById(R.id.button4);
 
             button.setOnClickListener(this);
             button2.setOnClickListener(this);
-
+            button3.setOnClickListener(this);
             button4.setOnClickListener(this);
             // Обработчик нажатия кнопки
         }
@@ -40,6 +40,10 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
                     intent.putExtra("chosen_solve", false);
                     intent.putExtra("chosen_my", true);
                     startActivity(intent);
+                    break;
+                case R.id.button3:
+                    Intent in_ = new Intent(this, TableAnsweringActivity.class);
+                    startActivity (in_);
                     break;
                 case R.id.button4:
                     Intent i = new Intent(this,TimeActivity.class);

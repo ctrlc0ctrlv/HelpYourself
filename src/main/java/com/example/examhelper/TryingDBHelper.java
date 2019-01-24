@@ -18,7 +18,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         private final Context fContext;
 
         public TryingDBHelper(Context context) {
-            super(context, DB_NAME, null, 12);
+            super(context, DB_NAME, null, 14);
             this.fContext = context;
         }
         public void createDataBase() throws IOException {
