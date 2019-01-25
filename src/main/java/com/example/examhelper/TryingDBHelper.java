@@ -17,15 +17,13 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         private SQLiteDatabase dataBase;
         private final Context fContext;
 
-        public TryingDBHelper(Context context) {
+        TryingDBHelper(Context context) {
             super(context, DB_NAME, null, 14);
             this.fContext = context;
         }
         public void createDataBase() throws IOException {
             boolean dbExist = checkDataBase();
-            if (dbExist) {
-                //ничего не делаем – файл базы данных уже есть
-            } else {
+            if (!dbExist) {
                 this.getReadableDatabase();
                 try {
                     copyDataBase();

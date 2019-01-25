@@ -23,7 +23,7 @@ public class TimeNotification extends BroadcastReceiver{
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             NotificationChannel mChannel = new NotificationChannel("my_channel_01", "HelpYourself", NotificationManager.IMPORTANCE_DEFAULT);
             // Configure the notification channel.
-            mChannel.setDescription("description");
+            mChannel.setDescription("Описание канала уведомлений");
             mChannel.enableLights(true);
 
             mChannel.setLightColor(Color.RED);
@@ -32,16 +32,16 @@ public class TimeNotification extends BroadcastReceiver{
             nm.createNotificationChannel(mChannel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentIntent(contentIntent);
-                // обязательные настройки
-                builder.setSmallIcon(R.drawable.i_have_done)
-                .setContentTitle("Напоминание")
-                .setContentText("Пора заняться чем-то полезным") // Текст уведомления
-                .setTicker("А ну работать!")
-                .setWhen(System.currentTimeMillis())
-                        .setChannelId("my_channel_01")
-                .setAutoCancel(true); // автоматически закрыть уведомление после нажатия
 
+        builder.setContentIntent(contentIntent);
+        // обязательные настройки
+        builder.setSmallIcon(R.mipmap.logo_3);
+        builder.setContentTitle("Напоминание");
+        builder.setContentText("Пора заняться чем-то полезным. Например зайти в приложение HelpYourself и начать готовиться к ЕГЭ =)");// Текст уведомления
+        builder.setTicker("ЕГЭ уже не за горами!");
+        builder.setWhen(System.currentTimeMillis());
+        builder.setChannelId("my_channel_01");
+        builder.setAutoCancel(true);//автоматически закрыть уведомление после нажатия
         nm.notify(1, builder.build());
         Log.d("myLogs", "Уведомление отправлено");
     }
