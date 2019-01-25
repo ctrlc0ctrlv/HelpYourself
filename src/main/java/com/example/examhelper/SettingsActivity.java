@@ -1,13 +1,13 @@
 package com.example.examhelper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
@@ -42,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         modeNight = AppCompatDelegate.MODE_NIGHT_NO;
                         break;
                 }
+                Toast.makeText(this,"Данная функция может работать не совсем корректно", Toast.LENGTH_LONG).show();
                 AppCompatDelegate.setDefaultNightMode(modeNight);
                 finish();
                 break;

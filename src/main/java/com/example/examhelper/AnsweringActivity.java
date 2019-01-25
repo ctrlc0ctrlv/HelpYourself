@@ -35,7 +35,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     //для работы с базами данных
     private DefaultTasksDBHelper mDbHelper;
     private SQLiteDatabase mDb;
-
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
     //экземпляр класса Task
@@ -165,7 +164,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             });
             //уведомление об ошибке с базой
             String title_exception = "Ошибка при поиске в базе данных";
-            String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ";
+            String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ. Попробуйте еще раз";
             String yesString_exception = "ОК";
             String noString_exception = "OK";
             ad_exception = new AlertDialog.Builder(context);

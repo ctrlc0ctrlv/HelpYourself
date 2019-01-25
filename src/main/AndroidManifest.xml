@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
 
     <application
         android:allowBackup="true"
@@ -15,9 +17,9 @@
 
         <activity android:name=".MainActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".ChooseSubjectActivity"></activity>
@@ -35,7 +37,15 @@
         <activity android:name="TimeActivity"/>
         <activity android:name=".TableAnsweringActivity" />
 
-        <receiver android:name=".TimeNotification" />
+        <receiver android:name=".TimeNotification"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.REBOOT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
