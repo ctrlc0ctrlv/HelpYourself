@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foregroundGravity="bottom">
@@ -79,18 +78,20 @@
 
         <Button
             android:id="@+id/button6"
+            style="@style/AppTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Вывести список предустановленных заданий"
+            android:text="@string/show_tasks"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/button5"
+            style="@style/AppTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Мои задания"
+            android:text="@string/my_tasks"
             android:textAllCaps="false"
             android:textSize="14sp" />
     </LinearLayout>

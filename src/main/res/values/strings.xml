@@ -40,12 +40,22 @@
     <string name="current_level">Уровень: 1</string>
     <string name="hint">Введите ответ</string>
     <string name="current_num">Номер задания:</string>
+    <string name="zero_progress">0/10</string>
 
     <!--Ресурсы для Show_DB_Activity-->
     <string name="level"><b>Уровень</b></string>
+    <string name="show_tasks">Вывести список предустановленных заданий</string>
+    <string name="my_tasks">Мои задания</string>
 
     <!--Ресурсы для DataBaseActivity-->
     <string name="advise">Подсказка: номер задания для изменения или удаления можно посмотреть нажав на кнопку \"Мои задания\"</string>
+    <string name="data_hint">Введите номер задания, которое хотите изменить или удалить.</string>
+    <string name="create_task">Создать задание</string>
+    <string name="remake_task">Редактировать задание</string>
+    <string name="delete_task">Удалить задание</string>
+    <string name="Level1">Level 1</string>
+    <string name="Level2">Level 2</string>
+    <string name="Level3">Level 3</string>
 
     <!--Ресурсы для ChooseSubActivity-->
     <string name="choose_sub">Выберите предмет:</string>
@@ -57,7 +67,7 @@
     <string name="label_question">Чем займемся сегодня?</string>
     <string name="solving">Решать задания</string>
     <string name="adding">Добавить задания</string>
-    <string name="my_tasks">Список заданий</string>
+    <string name="list_of_tasks">Список заданий</string>
     <string name="create_test">Составить тест</string>
     <string name="calendar">Изменить режим тренировок</string>
 
@@ -76,9 +86,7 @@
     <string name="pref_style_italic">Курсив</string>
     <string name="pref_open_mode">Режим открытия</string>
 
-    <string name="Level1">Level 1</string>
-    <string name="Level2">Level 2</string>
-    <string name="Level3">Level 3</string>
-
+    <!--Ресурсы для TimeActivity-->
+    <string name="set_notification">Настроить уведомление</string>
 
 </resources>

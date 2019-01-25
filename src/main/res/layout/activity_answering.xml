@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="top|end"
-                android:text="0/10"
+                android:text="@string/zero_progress"
                 android:textAllCaps="false"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -65,7 +65,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/task1"
+                android:text=""
                 android:textSize="20sp"
                 android:visibility="visible" />
 

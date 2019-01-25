@@ -7,8 +7,6 @@ import android.util.Log;
 
 public class CustomDbHelper extends SQLiteOpenHelper {
 
-    public static final String LOG_TAG = ProgressDbHelper.class.getSimpleName();
-
     /*Имя файла базы данных*/
     private static final String DATABASE_NAME = "custom1.db";
 
@@ -69,6 +67,6 @@ public class CustomDbHelper extends SQLiteOpenHelper {
 
     /*Вызывается при удалении базы данных*/
     public void onDelete (SQLiteDatabase db){
-        db.delete(ProgressDataContract.ProgressInTasks.TABLE_INFORMATICS_NAME, null, null);
+        db.delete(CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME, null, null);
     }
 }

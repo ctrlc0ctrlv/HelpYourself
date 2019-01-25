@@ -12,26 +12,11 @@
         android:layout_height="wrap_content"
         android:headerBackground="@color/colorPrimary" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|center"
-        android:text="Время"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Настроить уведомление"
-        android:textAllCaps="false" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Который час?"
+        android:text="@string/set_notification"
         android:textAllCaps="false" />
 
 </LinearLayout>
