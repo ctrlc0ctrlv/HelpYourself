@@ -42,8 +42,6 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
                     startActivity(intent);
                     break;
                 case R.id.button3:
-                    Intent in_ = new Intent(this, TableAnsweringActivity.class);
-                    startActivity (in_);
                     break;
                 case R.id.button4:
                     Intent i = new Intent(this,TimeActivity.class);

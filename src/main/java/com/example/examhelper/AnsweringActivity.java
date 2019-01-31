@@ -21,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +35,6 @@ import java.util.Set;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
     //для работы с базами данных
-    private DefaultTasksDBHelper mDbHelper;
-    private SQLiteDatabase mDb;
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
     //экземпляр класса Task
@@ -58,6 +58,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
         Log.d("myLogs","Create");
+        createTable(10,2);
         // Обработчики нажатия кнопок
         Button enterBtn = findViewById(R.id.enterBtn);
         Button goBtn = findViewById(R.id.goBtn);
@@ -120,9 +121,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                     int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
 
                     TextView textView3 = findViewById(R.id.textView3);
-                    textView3.setText(COUNTER+"/10");
+                    textView3.setText("");
+                    textView3.append(Integer.toString(COUNTER));
+                    textView3.append("/10");
                     TextView textView2 = findViewById(R.id.textView2);
-                    textView2.setText("Уровень: "+LVL);
+                    textView2.setText("");
+                    textView2.append("Уровень: ");
+                    textView2.append(Integer.toString(LVL));
                     TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
                     textInputEditText.setText("");
                 }
@@ -152,9 +157,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                     int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
 
                     TextView textView3 = findViewById(R.id.textView3);
-                    textView3.setText(COUNTER+"/10");
+                    textView3.setText("");
+                    textView3.append(Integer.toString(COUNTER));
+                    textView3.append("/10");
                     TextView textView2 = findViewById(R.id.textView2);
-                    textView2.setText("Уровень: "+LVL);
+                    textView2.setText("");
+                    textView2.append("Уровень: ");
+                    textView2.append(Integer.toString(LVL));
                     TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
                     textInputEditText.setText("");
                 }
@@ -166,7 +175,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             String title_exception = "Ошибка при поиске в базе данных";
             String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ. Попробуйте еще раз";
             String yesString_exception = "ОК";
-            String noString_exception = "OK";
             ad_exception = new AlertDialog.Builder(context);
             ad_exception.setTitle(title_exception);  // заголовок
             ad_exception.setMessage(message_exception); // сообщение
@@ -177,11 +185,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 }
             });
 
-
         //Оформляем задания
-        mDbHelper = new DefaultTasksDBHelper(this);
         tryDBHelper = new TryingDBHelper(this);
-
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress",true);
@@ -218,13 +223,17 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         int lvl = savedInstanceState.getInt("curr_lvl");
         int solved = savedInstanceState.getInt("curr_solved");
         TextView textView2 = findViewById(R.id.textView2);
-        textView2.setText("Уровень: "+lvl);
+        textView2.setText("");
+        textView2.append("Уровень: ");
+        textView2.append(Integer.toString(lvl));
         TextView textView3 = findViewById(R.id.textView3);
-        textView3.setText(solved+"/10");
+        textView3.setText("");
+        textView3.append(Integer.toString(solved));
+        textView3.append("/10");
     }
 
     public String giveUsl(final int n){
-        mDb = mDbHelper.getReadableDatabase();
+        //достает из базы данных условие задания с указанным номером
         tryDB= tryDBHelper.getReadableDatabase();
 
         Bundle arguments =getIntent().getExtras();
@@ -247,7 +256,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
-            String st = "";
+            String st;
             st= cursor.getString(1);
             cursor.close();
             //Cursor cursor = mDb.rawQuery(raw, null);
@@ -265,7 +274,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     public int getLength(){
-        mDb = mDbHelper.getReadableDatabase();
+        //возвращает длину текущей выборки заданий
         tryDB = tryDBHelper.getReadableDatabase();
 
         Bundle arguments =getIntent().getExtras();
@@ -302,9 +311,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     public Integer[]getArray(){
-        mDb = mDbHelper.getReadableDatabase();
+        //возвращет массив уникальных номеров заданий
         tryDB = tryDBHelper.getReadableDatabase();
-
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
@@ -321,7 +329,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             case 4:
                 break;
         }
-        Integer[] myArray = {};
+        Integer[] myArray;
             int n=1;
             try {
                 //Cursor cursor = mDb.rawQuery(raw, null);
@@ -344,7 +352,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     public String giveAns(int n){
-        mDb = mDbHelper.getReadableDatabase();
+        //возвращает ответ из базы данных по номеру задания
         tryDB = tryDBHelper.getReadableDatabase();
 
         Bundle arguments =getIntent().getExtras();
@@ -379,23 +387,31 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUp(){
+        //устанавливает условие на экран пользователя
         int n = Task1.getNewNum();
         TextView textView = findViewById(R.id.textView);
         TextView textView4 = findViewById(R.id.textView4);
         textView.setText(giveUsl(n));
-        textView4.setText(getResources().getString(R.string.current_num) + " " + Integer.toString(n));
+        textView4.setText("");
+        textView4.append(getResources().getString(R.string.current_num));
+        textView4.append(" ");
+        textView4.append(Integer.toString(n));
         if (n>0){
             BASE_NUM = n;
         } else {
-            //finish();
+            ad_exception.show();
         }
     }
 
     void setUp (int num){
+        //устанавливает условие на экран пользователя
         TextView textView = findViewById(R.id.textView);
         TextView textView4 = findViewById(R.id.textView4);
         textView.setText(giveUsl(num));
-        textView4.setText(getResources().getString(R.string.current_num) +" "+ Integer.toString(num));
+        textView4.setText("");
+        textView4.append(getResources().getString(R.string.current_num));
+        textView4.append(" ");
+        textView4.append(Integer.toString(num));
         Task1.setNum(num);
         BASE_NUM = num;
         Log.d("myLogs", String.valueOf(BASE_NUM)+"setUp(num)");
@@ -405,6 +421,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     int GetTaskNum(){
+        //возвращает номер задания, сохраненный в SharedPreferences
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         return arguments.getInt("number");
@@ -415,7 +432,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         Button enterBtn = findViewById(R.id.enterBtn);
-        Button goBtn = findViewById(R.id.goBtn);
         TextView textView = findViewById(R.id.textView);
         TextView textView2 = findViewById(R.id.textView2);
         TextView textView3 = findViewById(R.id.textView3);
@@ -455,19 +471,20 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     public class Task {
+        //переменная для хранения номера задания
         private int num;
 
-
         int getNum() {
+            //возвращает номер текущего задания
             return num;
         }
         void setNum(int x) {
+            //устанавливает номер текущего задания
             this.num = x;
         }
 
         int getNewNum (){
             //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
-            int curr_level = Task1.getLevel();
             int min = 1;
             int max = getLength();
             int diff = max - min;
@@ -486,6 +503,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         boolean Check(int n){
+            //проверка текущего задания
             TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
             TextView textView = findViewById(R.id.textView);
             boolean rez;
@@ -511,6 +529,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             return (Level) ;
         }
         int LevelUp(int Level) {
+            //увеличивает уровень на 1 (если возможно)
             int LevelEquals = Level;
             if (LevelEquals <= 3) {
                 LevelEquals += 1;
@@ -518,6 +537,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             return (LevelEquals);
         }
         int LevelDown(int Level) {
+            //уменьшает уровень на 1 (если возможно)
             int LevelEquals = Level;
             if (LevelEquals >= 2) {
                 LevelEquals -= 1;
@@ -588,12 +608,18 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             int BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),1);
 
             TextView textView3 = findViewById(R.id.textView3);
-            textView3.setText(COUNTER+"/10");
+            textView3.setText("");
+            textView3.append(Integer.toString(COUNTER));
+            textView3.append("/10");
             TextView textView2 = findViewById(R.id.textView2);
-            textView2.setText("Уровень: "+LVL);
+            textView2.setText("");
+            textView2.append("Уровень: ");
+            textView2.append(Integer.toString(LVL));
             if (BASE_NUM<=0){
                 TextView textView4 = findViewById(R.id.textView4);
-                textView4.setText("Номер задания: "+BASE_NUM);
+                textView4.setText("");
+                textView4.append("Номер задания: ");
+                textView4.append(Integer.toString(BASE_NUM));
             }
         }
     }
@@ -625,5 +651,96 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), BASE_NUM);
             ed.apply();
         }
-        }
     }
+
+    void createTable(int height, int width){
+        //общая инициализация
+        TableLayout tableLayout = findViewById(R.id.prices);
+        tableLayout.bringToFront();
+
+        TableRow tableRow = new TableRow(this);
+        TableRow tableRow1 = new TableRow(this);
+        TableRow tableRow2 = new TableRow(this);
+        TableRow tableRow3 = new TableRow(this);
+        TableRow tableRow4 = new TableRow(this);
+        TableRow tableRow5 = new TableRow(this);
+        TableRow tableRow6 = new TableRow(this);
+        TableRow tableRow7 = new TableRow(this);
+        TableRow tableRow8 = new TableRow(this);
+        TableRow tableRow9 = new TableRow(this);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.setMargins(1, 1, 1, 1);
+
+        boolean END_OF_STRING = false;
+
+        String ids[] = new String[]{"#", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "#", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "#","c17","c18"};
+        int a = 0;
+
+        for (int i = 1; i<=height; i++){
+            while (a<i*width){
+                if (a>=ids.length){
+                    END_OF_STRING = true;
+                    break;
+                }
+                TextView tableElement = new TextView(this);
+                tableElement.setTextSize(20);
+                tableElement.setLayoutParams(params);
+                tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                if (ids[a].equalsIgnoreCase("#")) {
+                    tableElement.setText(" ");
+                }else{
+                    tableElement.setText(ids[a]);
+                }
+                switch (i){
+                    case 1:
+                        tableRow.addView(tableElement);
+                        break;
+                    case 2:
+                        tableRow1.addView(tableElement);
+                        break;
+                    case 3:
+                        tableRow2.addView(tableElement);
+                        break;
+                    case 4:
+                        tableRow3.addView(tableElement);
+                        break;
+                    case 5:
+                        tableRow4.addView(tableElement);
+                        break;
+                    case 6:
+                        tableRow5.addView(tableElement);
+                        break;
+                    case 7:
+                        tableRow6.addView(tableElement);
+                        break;
+                    case 8:
+                        tableRow7.addView(tableElement);
+                        break;
+                    case 9:
+                        tableRow8.addView(tableElement);
+                        break;
+                    case 10:
+                        tableRow9.addView(tableElement);
+                        break;
+                }
+                a++;
+            }
+            //проверка достижения конца строки
+            if (END_OF_STRING){
+                break;
+            }
+        }
+        //вставка строк в таблицу
+        tableLayout.addView(tableRow);
+        tableLayout.addView(tableRow1);
+        tableLayout.addView(tableRow2);
+        tableLayout.addView(tableRow3);
+        tableLayout.addView(tableRow4);
+        tableLayout.addView(tableRow5);
+        tableLayout.addView(tableRow6);
+        tableLayout.addView(tableRow7);
+        tableLayout.addView(tableRow8);
+        tableLayout.addView(tableRow9);
+    }
+}

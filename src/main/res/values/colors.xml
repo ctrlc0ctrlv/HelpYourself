@@ -6,4 +6,5 @@
     <color name="colorAccept">#7a66ff00</color>
     <color name="colorDeny">#7aff0000</color>
     <color name="colorDefault">#eeeeee</color>
+    <color name="colorBlack">#000000</color>
 </resources>
