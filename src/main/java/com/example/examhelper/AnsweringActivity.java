@@ -26,6 +26,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -58,7 +59,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
         Log.d("myLogs","Create");
-        createTable(10,2);
         // Обработчики нажатия кнопок
         Button enterBtn = findViewById(R.id.enterBtn);
         Button goBtn = findViewById(R.id.goBtn);
@@ -187,6 +187,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
+        Log.d("myLogs",giveTable(1));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress",true);
@@ -254,22 +255,22 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
 
-        Cursor cursor = tryDB.rawQuery(raw, null);
+        /*Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
             String st;
             st= cursor.getString(1);
-            cursor.close();
+            cursor.close();*/
             //Cursor cursor = mDb.rawQuery(raw, null);
-
-        /*try {
-            Cursor cursor = mDb.rawQuery(raw, null);
+        String st = "";
+        try {
+            Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
             st= cursor.getString(1);
             cursor.close();
         }catch (SQLiteException e){
             ad_exception.create();
             ad_exception.show();
-        }*/
+        }
         return st;
     }
 
@@ -418,6 +419,49 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         if (num<=0){
             setUp();
         }
+    }
+
+    void setUpTable (int n){
+        String raw_table = giveTable(n);
+
+
+
+        String ids[] = new String[]{"#", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "#", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "#","c17","c18"};
+        createTable(10,2, ids);
+    }
+
+    String giveTable (int n){
+        tryDB = tryDBHelper.getReadableDatabase();
+
+        Bundle arguments =getIntent().getExtras();
+        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
+
+        switch (Task1.getLevel()){
+            case 1:
+                raw += " AND level ==1";
+                break;
+            case 2:
+                raw += " AND (level ==1 OR level ==2)";
+                break;
+            case 3:
+                raw += " AND (level ==1 OR level ==2 OR level ==3)";
+                break;
+            case 4:
+                break;
+        }
+
+        String raw_elements = "";
+
+        try {
+            Cursor cursor = tryDB.rawQuery(raw, null);
+            cursor.moveToPosition(n-1);
+            raw_elements = cursor.getString(5);
+            cursor.close();
+        } catch (SQLiteException e){
+            ad_exception.create();
+        }
+        return raw_elements;
     }
 
     int GetTaskNum(){
@@ -653,7 +697,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void createTable(int height, int width){
+    void createTable(int height, int width, String[] ids){
         //общая инициализация
         TableLayout tableLayout = findViewById(R.id.prices);
         tableLayout.bringToFront();
@@ -674,7 +718,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         boolean END_OF_STRING = false;
 
-        String ids[] = new String[]{"#", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "#", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "#","c17","c18"};
         int a = 0;
 
         for (int i = 1; i<=height; i++){
