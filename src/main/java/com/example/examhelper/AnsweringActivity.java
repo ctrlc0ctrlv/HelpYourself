@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -187,7 +188,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
-        Log.d("myLogs",giveTable(1));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress",true);
@@ -199,10 +199,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         if (BASE_NUM<=0){
             setUp();
-            Log.d("myLogs",String.valueOf(BASE_NUM));
         } else{
             setUp(BASE_NUM);
-            Log.d("myLogs",String.valueOf(BASE_NUM));
         }
     }
 
@@ -235,7 +233,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     public String giveUsl(final int n){
         //достает из базы данных условие задания с указанным номером
-        tryDB= tryDBHelper.getReadableDatabase();
+        tryDB = tryDBHelper.getReadableDatabase();
+        try {
+            tryDBHelper.copyDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
@@ -255,13 +258,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
 
-        /*Cursor cursor = tryDB.rawQuery(raw, null);
+            assert (tryDB!=null);
+
+        Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
             String st;
             st= cursor.getString(1);
-            cursor.close();*/
+            cursor.close();
             //Cursor cursor = mDb.rawQuery(raw, null);
-        String st = "";
+        /*String st = "";
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToPosition(n-1);
@@ -270,7 +275,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }catch (SQLiteException e){
             ad_exception.create();
             ad_exception.show();
-        }
+        }*/
         return st;
     }
 
@@ -331,14 +336,16 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
         Integer[] myArray;
-            int n=1;
             try {
                 //Cursor cursor = mDb.rawQuery(raw, null);
                 Cursor cursor = tryDB.rawQuery(raw, null);
                 while (!cursor.isAfterLast()){
-                    TASKS.add(n);
-                    n+=1;
-                    cursor.moveToNext();
+                    try {
+                        cursor.moveToNext();
+                        TASKS.add(cursor.getInt(0));
+                    }catch (CursorIndexOutOfBoundsException e){
+                        break;
+                    }
                 }
                 cursor.close();
             } catch (SQLiteException e){
@@ -397,6 +404,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
         textView4.append(Integer.toString(n));
+
+        setUpTable(n);
+
         if (n>0){
             BASE_NUM = n;
         } else {
@@ -413,9 +423,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
         textView4.append(Integer.toString(num));
+
+        setUpTable(num);
+
         Task1.setNum(num);
         BASE_NUM = num;
-        Log.d("myLogs", String.valueOf(BASE_NUM)+"setUp(num)");
         if (num<=0){
             setUp();
         }
@@ -423,11 +435,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     void setUpTable (int n){
         String raw_table = giveTable(n);
-
-
-
-        String ids[] = new String[]{"#", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "#", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "#","c17","c18"};
-        createTable(10,2, ids);
+        if (raw_table!=null){
+            char height = raw_table.charAt(0);
+            char width = raw_table.charAt(2);
+            String ids[];
+            ids = raw_table.substring(4).split(",");
+            createTable(Integer.parseInt(Character.toString(height)),Integer.parseInt(Character.toString(width)), ids);
+        }
     }
 
     String giveTable (int n){
