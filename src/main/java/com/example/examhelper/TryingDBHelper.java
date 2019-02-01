@@ -12,13 +12,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class TryingDBHelper extends SQLiteOpenHelper {
-        private static String DB_PATH = "/data/data/com.example.dbreadytest/databases/";
-        private static String DB_NAME = "default.db";
+        private static String DB_PATH = "/data/data/com.example.examhelper/databases/";
+        private static String DB_NAME = "default (1).db";
         private SQLiteDatabase dataBase;
         private final Context fContext;
 
         TryingDBHelper(Context context) {
-            super(context, DB_NAME, null, 17);
+            super(context, DB_NAME, null, 24);
             this.fContext = context;
         }
         public void createDataBase() throws IOException {
@@ -47,7 +47,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             }
             return checkDB != null;
         }
-        private void copyDataBase() throws IOException {
+        public void copyDataBase() throws IOException {
             Log.d("myLogs", "Coping database...");
             InputStream input = fContext.getAssets().open(DB_NAME);
             String outFileName = DB_PATH + DB_NAME;
@@ -74,6 +74,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
+            Log.d("myLogs","onCreate TryingDBHelper");
         }
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
