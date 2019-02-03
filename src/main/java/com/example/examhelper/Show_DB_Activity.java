@@ -32,7 +32,7 @@ import java.util.Objects;
 
 public class Show_DB_Activity extends AppCompatActivity implements View.OnClickListener{
         //Переменная для работы с БД
-        private DefaultTasksDBHelper mDBHelper;
+        private TryingDBHelper mDBHelper;
         private SQLiteDatabase mDb;
         private CustomDbHelper cDBHelper;
         private SQLiteDatabase cDb;
@@ -51,11 +51,11 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         button5.setOnClickListener(this);
         fab.setOnClickListener(this);
 
-        mDBHelper = new DefaultTasksDBHelper(this);
+        mDBHelper = new TryingDBHelper(this);
         cDBHelper = new CustomDbHelper(this);
 
         try {
-            mDBHelper.updateDataBase();
+            mDBHelper.copyDataBase();
         } catch (IOException mIOException) {
             throw new Error("UnableToUpdateDatabase");
             }
