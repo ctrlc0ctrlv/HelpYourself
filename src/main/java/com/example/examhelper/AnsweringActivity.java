@@ -18,9 +18,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -197,7 +199,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
             BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
         }
-        if (BASE_NUM<=0){
+        if (BASE_NUM==0){
             setUp();
         } else{
             setUp(BASE_NUM);
@@ -434,13 +436,19 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUpTable (int n){
-        String raw_table = giveTable(n);
-        if (raw_table!=null){
-            char height = raw_table.charAt(0);
-            char width = raw_table.charAt(2);
-            String ids[];
-            ids = raw_table.substring(4).split(",");
-            createTable(Integer.parseInt(Character.toString(height)),Integer.parseInt(Character.toString(width)), ids);
+        Bundle arguments =getIntent().getExtras();
+        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+
+        assert SUBJECT_TABLE_NAME != null;
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+            String raw_table = giveTable(n);
+            if (raw_table != null) {
+                char height = raw_table.charAt(0);
+                char width = raw_table.charAt(2);
+                String ids[];
+                ids = raw_table.substring(4).split(",");
+                createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
+            }
         }
     }
 
@@ -715,6 +723,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         //общая инициализация
         TableLayout tableLayout = findViewById(R.id.prices);
         tableLayout.bringToFront();
+        tableLayout.removeAllViews();
 
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);
@@ -727,7 +736,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         TableRow tableRow8 = new TableRow(this);
         TableRow tableRow9 = new TableRow(this);
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,1);
         params.setMargins(1, 1, 1, 1);
 
         boolean END_OF_STRING = false;
@@ -744,6 +753,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                tableElement.setGravity(Gravity.CENTER);
                 if (ids[a].equalsIgnoreCase("#")) {
                     tableElement.setText(" ");
                 }else{
@@ -752,33 +762,43 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 switch (i){
                     case 1:
                         tableRow.addView(tableElement);
+                        tableRow.setGravity(Gravity.CENTER);
                         break;
                     case 2:
                         tableRow1.addView(tableElement);
+                        tableRow1.setGravity(Gravity.CENTER);
                         break;
                     case 3:
                         tableRow2.addView(tableElement);
+                        tableRow2.setGravity(Gravity.CENTER);
                         break;
                     case 4:
                         tableRow3.addView(tableElement);
+                        tableRow3.setGravity(Gravity.CENTER);
                         break;
                     case 5:
                         tableRow4.addView(tableElement);
+                        tableRow4.setGravity(Gravity.CENTER);
                         break;
                     case 6:
                         tableRow5.addView(tableElement);
+                        tableRow5.setGravity(Gravity.CENTER);
                         break;
                     case 7:
                         tableRow6.addView(tableElement);
+                        tableRow6.setGravity(Gravity.CENTER);
                         break;
                     case 8:
                         tableRow7.addView(tableElement);
+                        tableRow7.setGravity(Gravity.CENTER);
                         break;
                     case 9:
                         tableRow8.addView(tableElement);
+                        tableRow8.setGravity(Gravity.CENTER);
                         break;
                     case 10:
                         tableRow9.addView(tableElement);
+                        tableRow9.setGravity(Gravity.CENTER);
                         break;
                 }
                 a++;
