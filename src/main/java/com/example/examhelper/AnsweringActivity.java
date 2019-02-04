@@ -81,7 +81,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) {
                     Intent intent = getIntent();
-                    if (GetTaskNum()+1<=3/*тут потом поменять на количество заданий (чтоб в зависимости от выбранного предмета было)*/){
+
+                    int NUM_OF_TASKS = Objects.requireNonNull(getIntent().getExtras()).getInt("num_of_tasks");
+
+                    if (GetTaskNum()+1<=NUM_OF_TASKS){
                         Toast.makeText(context, "Вы сделали правильный выбор", Toast.LENGTH_LONG).show();
                         intent.putExtra("number", GetTaskNum()+1);
                         finish();
@@ -318,7 +321,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         return n-1;
     }
 
-    public Integer[]getArray(){
+    public Integer[] getArray(){
         //возвращет массив уникальных номеров заданий
         tryDB = tryDBHelper.getReadableDatabase();
         Bundle arguments =getIntent().getExtras();
@@ -438,7 +441,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     void setUpTable (int n){
         Bundle arguments =getIntent().getExtras();
         String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-
         assert SUBJECT_TABLE_NAME != null;
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
             String raw_table = giveTable(n);
@@ -446,7 +448,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 char height = raw_table.charAt(0);
                 char width = raw_table.charAt(2);
                 String ids[];
-                ids = raw_table.substring(4).split(",");
+                ids = raw_table.substring(4).split("\\$");
                 createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
             }
         }
@@ -563,6 +565,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             }catch (IllegalArgumentException e){
                 ad_exception.create();
             }
+            return x;
+        }
+
+        int getHashNum (){
+            int x = 0;
+            getArray();
+
             return x;
         }
 
@@ -688,6 +697,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 textView4.append(Integer.toString(BASE_NUM));
             }
         }
+        //перерисуем таблицу (в основном ориентировано на изменение цветовой схемы/ночного режима)
+        if (BASE_NUM==0){
+            setUp();
+        } else{
+            setUp(BASE_NUM);
+        }
     }
 
     @Override
@@ -721,10 +736,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     void createTable(int height, int width, String[] ids){
         //общая инициализация
-        TableLayout tableLayout = findViewById(R.id.prices);
-        tableLayout.bringToFront();
-        tableLayout.removeAllViews();
-
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);
         TableRow tableRow2 = new TableRow(this);
@@ -736,12 +747,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         TableRow tableRow8 = new TableRow(this);
         TableRow tableRow9 = new TableRow(this);
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,1);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT,1);
         params.setMargins(1, 1, 1, 1);
 
         boolean END_OF_STRING = false;
-
         int a = 0;
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","Включать автоматически");
+        assert night_mode != null;
 
         for (int i = 1; i<=height; i++){
             while (a<i*width){
@@ -752,8 +764,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 TextView tableElement = new TextView(this);
                 tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
-                tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
-                tableElement.setGravity(Gravity.CENTER);
+                tableElement.setGravity(Gravity.START);
+
+                if (night_mode.equalsIgnoreCase("Да")){
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                } else if (night_mode.equalsIgnoreCase("Нет")) {
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                }
+
                 if (ids[a].equalsIgnoreCase("#")) {
                     tableElement.setText(" ");
                 }else{
@@ -766,7 +784,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                         break;
                     case 2:
                         tableRow1.addView(tableElement);
-                        tableRow1.setGravity(Gravity.CENTER);
+                        tableRow1.setGravity(Gravity.START);
                         break;
                     case 3:
                         tableRow2.addView(tableElement);
@@ -808,16 +826,58 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
         }
-        //вставка строк в таблицу
-        tableLayout.addView(tableRow);
-        tableLayout.addView(tableRow1);
-        tableLayout.addView(tableRow2);
-        tableLayout.addView(tableRow3);
-        tableLayout.addView(tableRow4);
-        tableLayout.addView(tableRow5);
-        tableLayout.addView(tableRow6);
-        tableLayout.addView(tableRow7);
-        tableLayout.addView(tableRow8);
-        tableLayout.addView(tableRow9);
+        //разное оформление и разные таблицы для разных значений "ночного режима"
+        switch (night_mode){
+            case ("Включать автоматически"):
+                TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
+                tableLayout_auto.removeAllViews();
+                tableLayout_auto.bringToFront();
+
+                tableLayout_auto.addView(tableRow);
+                tableLayout_auto.addView(tableRow1);
+                tableLayout_auto.addView(tableRow2);
+                tableLayout_auto.addView(tableRow3);
+                tableLayout_auto.addView(tableRow4);
+                tableLayout_auto.addView(tableRow5);
+                tableLayout_auto.addView(tableRow6);
+                tableLayout_auto.addView(tableRow7);
+                tableLayout_auto.addView(tableRow8);
+                tableLayout_auto.addView(tableRow9);
+                break;
+            case ("Да"):
+                //вставка строк в таблицу
+                TableLayout tableLayout_black = findViewById(R.id.prices_black);
+                tableLayout_black.removeAllViews();
+                tableLayout_black.bringToFront();
+
+                tableLayout_black.addView(tableRow);
+                tableLayout_black.addView(tableRow1);
+                tableLayout_black.addView(tableRow2);
+                tableLayout_black.addView(tableRow3);
+                tableLayout_black.addView(tableRow4);
+                tableLayout_black.addView(tableRow5);
+                tableLayout_black.addView(tableRow6);
+                tableLayout_black.addView(tableRow7);
+                tableLayout_black.addView(tableRow8);
+                tableLayout_black.addView(tableRow9);
+                break;
+            case ("Нет"):
+                //вставка строк в таблицу
+                TableLayout tableLayout = findViewById(R.id.prices);
+                tableLayout.removeAllViews();
+                tableLayout.bringToFront();
+
+                tableLayout.addView(tableRow);
+                tableLayout.addView(tableRow1);
+                tableLayout.addView(tableRow2);
+                tableLayout.addView(tableRow3);
+                tableLayout.addView(tableRow4);
+                tableLayout.addView(tableRow5);
+                tableLayout.addView(tableRow6);
+                tableLayout.addView(tableRow7);
+                tableLayout.addView(tableRow8);
+                tableLayout.addView(tableRow9);
+                break;
+        }
     }
 }

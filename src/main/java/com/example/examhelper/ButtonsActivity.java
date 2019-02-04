@@ -1,6 +1,5 @@
 package com.example.examhelper;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -10,11 +9,10 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.Objects;
-import java.util.logging.Level;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
+    int NUM;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +74,8 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
 
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
-        int num = arguments.getInt("num_of_tasks");
-        switch (num){
+        NUM = arguments.getInt("num_of_tasks");
+        switch (NUM){
             case 23:
                 buttonObjectChoice24.setEnabled(false);
                 buttonObjectChoice25.setEnabled(false);
@@ -196,6 +194,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         }
         Objects.requireNonNull(intent).putExtra("subject",arguments.getString("subject"));
         Objects.requireNonNull(intent).putExtra("number",Number);
+        Objects.requireNonNull(intent).putExtra("num_of_tasks",NUM);
         startActivity(intent);
     }
 }
