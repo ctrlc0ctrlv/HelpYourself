@@ -1,4 +1,5 @@
 package com.example.examhelper;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class TryingDBHelper extends SQLiteOpenHelper {
+        @SuppressLint("SdCardPath")
         private static String DB_PATH = "/data/data/com.example.examhelper/databases/";
         private static String DB_NAME = "default (1).db";
         private SQLiteDatabase dataBase;
@@ -47,7 +49,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             }
             return checkDB != null;
         }
-        public void copyDataBase() throws IOException {
+        void copyDataBase() throws IOException {
             Log.d("myLogs", "Coping database...");
             InputStream input = fContext.getAssets().open(DB_NAME);
             String outFileName = DB_PATH + DB_NAME;

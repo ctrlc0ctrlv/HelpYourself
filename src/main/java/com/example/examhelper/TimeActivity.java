@@ -50,11 +50,6 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
         TextView textView = findViewById(R.id.textView);
         textView.append("Ближайшее уведомление: ");
         textView.append(activityPreferences.getString(NEXT_NOTIFICATION_TIME, ""));
-        /*AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, TimeNotification.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT );
-        manager.cancel(pendingIntent);
-        manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pendingIntent);*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -62,7 +57,6 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button:
-
                 showDialog(IDD_THREE_BUTTONS);
                 break;
 
@@ -124,7 +118,6 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
                                 }
 
                                 Calendar calendar = Calendar.getInstance();
-                                Calendar cal = Calendar.getInstance();
                                 calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
                                 calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
                                 calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
@@ -142,7 +135,9 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
 
 
                                 TextView textView = findViewById(R.id.textView);
-                                textView.setText("Ближайшее уведомление: "+calendar.getTime());
+                                textView.setText("");
+                                textView.append("Ближайшее уведомление: ");
+                                textView.append(calendar.getTime().toString());
                                 Toast.makeText(TimeActivity.this,"Уведомление сработает: "+calendar.getTime(),Toast.LENGTH_LONG).show();
 
                                 SharedPreferences activityPreferences = getSharedPreferences(NEXT_NOTIFICATION,Context.MODE_PRIVATE);

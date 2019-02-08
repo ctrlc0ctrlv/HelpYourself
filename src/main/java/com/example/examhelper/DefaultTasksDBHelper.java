@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,12 +12,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DefaultTasksDBHelper extends SQLiteOpenHelper {
+    private static final int DB_VERSION = 14;
     private static String DB_NAME = "default.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 14;
-
-    private SQLiteDatabase mDataBase;
     private final Context mContext;
+    private SQLiteDatabase mDataBase;
     private boolean mNeedUpdate = false;
 
     public DefaultTasksDBHelper(Context context) {
