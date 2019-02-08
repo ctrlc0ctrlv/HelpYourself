@@ -5,17 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -38,16 +38,6 @@ import java.util.Set;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
-    //для работы с базами данных
-    private TryingDBHelper tryDBHelper;
-    private SQLiteDatabase tryDB;
-    //экземпляр класса Task
-    Task Task1 = new Task();
-    //уведомления
-    AlertDialog.Builder ad;
-    AlertDialog.Builder ad_delete;
-    AlertDialog.Builder ad_reload_task;
-    AlertDialog.Builder ad_exception;
     //настройки (в частности, прогресса)
     public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
     public static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
@@ -56,167 +46,207 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public int BASE_NUM = 0;
     public Set<Integer> TASKS = new HashSet<>();
     public Set<Integer> MISTAKES = new HashSet<>();
+    //экземпляр класса Task
+    Task Task1 = new Task();
+    //уведомления
+    AlertDialog.Builder ad;
+    AlertDialog.Builder ad_delete;
+    AlertDialog.Builder ad_reload_task;
+    AlertDialog.Builder ad_exception;
+    //компоненты разметки экрана
+    TextView textView;
+    TextView textView2;
+    TextView textView3;
+    TextView textView4;
+    TextInputEditText textInputEditText;
+    Button enterBtn;
+    Button goBtn;
+    //другие часто используемые переменные
+    Bundle arguments;
+    String SUBJECT_TABLE_NAME;
+    //для работы с базами данных
+    private TryingDBHelper tryDBHelper;
+    private SQLiteDatabase tryDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
-        Log.d("myLogs","Create");
+        Log.d("myLogs", "Create");
+        //инициализация всех компонентов
+        textView = findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textView2);
+        textView3 = findViewById(R.id.textView3);
+        textView4 = findViewById(R.id.textView4);
+        textInputEditText = findViewById(R.id.textInputEditText);
+        enterBtn = findViewById(R.id.enterBtn);
+        goBtn = findViewById(R.id.goBtn);
+        //инициализация переменных
+        arguments = getIntent().getExtras();
+        SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
         // Обработчики нажатия кнопок
-        Button enterBtn = findViewById(R.id.enterBtn);
-        Button goBtn = findViewById(R.id.goBtn);
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
         //прописываем уведомление
-            final Context context;
-            context = AnsweringActivity.this;
-            String title = "Вы прошли все уровни в этом задании!";
-            String message = "Перейти к следующему заданию или больше практики в этом задании?";
-            String yesString = "Дальше";
-            String noString = "Больше практики";
-            ad = new AlertDialog.Builder(context);
-            ad.setTitle(title);  // заголовок
-            ad.setMessage(message); // сообщение
-            ad.setCancelable(false);
-            ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    Intent intent = getIntent();
+        final Context context;
+        context = AnsweringActivity.this;
+        String title = "Вы прошли все уровни в этом задании!";
+        String message = "Перейти к следующему заданию или больше практики в этом задании?";
+        String yesString = "Дальше";
+        String noString = "Больше практики";
+        ad = new AlertDialog.Builder(context);
+        ad.setTitle(title);  // заголовок
+        ad.setMessage(message); // сообщение
+        ad.setCancelable(false);
+        ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                Intent intent = getIntent();
+                int NUM_OF_TASKS = Objects.requireNonNull(getIntent().getExtras()).getInt("num_of_tasks");
 
-                    int NUM_OF_TASKS = Objects.requireNonNull(getIntent().getExtras()).getInt("num_of_tasks");
+                int Level = Task1.getLevel();
+                String newLevel = ("Уровень: " + Task1.LevelDown(Level));
+                textView2.setText(newLevel);
 
-                    if (GetTaskNum()+1<=NUM_OF_TASKS){
-                        Toast.makeText(context, "Вы сделали правильный выбор", Toast.LENGTH_LONG).show();
-                        intent.putExtra("number", GetTaskNum()+1);
-                        finish();
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(context, "Увы, это последнее задание. Можете выбрать другое =)", Toast.LENGTH_LONG).show();
-                        finish();
+                if (GetTaskNum() + 1 <= NUM_OF_TASKS) {
+                    Toast.makeText(context, "Вы сделали правильный выбор", Toast.LENGTH_LONG).show();
+                    intent.putExtra("number", GetTaskNum() + 1);
+                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum() + 1, 1);
+
+                    SharedPreferences.Editor editor = activityPreferences.edit();
+                    editor.putInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 3);
+                    editor.apply();
+
+                    textView2.setText("");
+                    textView2.append("Уровень: ");
+                    textView2.append(Integer.toString(LVL));
+                    enterBtn.setEnabled(true);
+                    textView.setBackground(textView2.getBackground());
+                    textInputEditText.setText("");
+                    BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
+                    if (BASE_NUM == 0) {
+                        setUp();
+                    } else {
+                        setUp(BASE_NUM);
                     }
-                }
-            });
-            ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    Toast.makeText(context, "Повторение - мать учения", Toast.LENGTH_LONG).show();
-                    TextView textView2 = findViewById(R.id.textView2);
-                    int Level = Task1.getLevel();
-                    String newLevel = ("Уровень: "+Task1.LevelDown(Level));
-                    textView2.setText(newLevel);
-                    setUp();
-                }
-            });
-          //второе уведомление
-            String title_delete = "Вы уверены? Это действие невозможно отменить";
-            String message_delete = "Ваш прогресс во всех заданиях обнулится";
-            String yesString_delete = "Да";
-            String noString_delete = "Отмена";
-            ad_delete = new AlertDialog.Builder(context);
-            ad_delete.setTitle(title_delete);  // заголовок
-            ad_delete.setMessage(message_delete); // сообщение
-            ad_delete.setCancelable(false);
-            ad_delete.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = activityPreferences.edit();
-                    editor.clear();
-                    editor.apply();
-
-                    Bundle arguments =getIntent().getExtras();
-                    String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
-                    int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
-
-                    TextView textView3 = findViewById(R.id.textView3);
-                    textView3.setText("");
-                    textView3.append(Integer.toString(COUNTER));
-                    textView3.append("/10");
-                    TextView textView2 = findViewById(R.id.textView2);
-                    textView2.setText("");
-                    textView2.append("Уровень: ");
-                    textView2.append(Integer.toString(LVL));
-                    TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
-                    textInputEditText.setText("");
-                }
-            });
-            ad_delete.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) { }
-            });
-
-            //третье уведомление
-            String message_reload = "Ваш прогресс в этом задании обнулится";
-            ad_reload_task = new AlertDialog.Builder(context);
-            ad_reload_task.setTitle(title_delete);  // заголовок
-            ad_reload_task.setMessage(message_reload); // сообщение
-            ad_reload_task.setCancelable(false);
-            ad_reload_task.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = activityPreferences.edit();
-                    Bundle arguments =getIntent().getExtras();
-                    String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-
-                    editor.remove(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum());
-                    editor.remove(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum());
-                    editor.apply();
-
-                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
-                    int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
-
-                    TextView textView3 = findViewById(R.id.textView3);
-                    textView3.setText("");
-                    textView3.append(Integer.toString(COUNTER));
-                    textView3.append("/10");
-                    TextView textView2 = findViewById(R.id.textView2);
-                    textView2.setText("");
-                    textView2.append("Уровень: ");
-                    textView2.append(Integer.toString(LVL));
-                    TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
-                    textInputEditText.setText("");
-                }
-            });
-            ad_reload_task.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) { }
-            });
-            //уведомление об ошибке с базой
-            String title_exception = "Ошибка при поиске в базе данных";
-            String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ. Попробуйте еще раз";
-            String yesString_exception = "ОК";
-            ad_exception = new AlertDialog.Builder(context);
-            ad_exception.setTitle(title_exception);  // заголовок
-            ad_exception.setMessage(message_exception); // сообщение
-            ad_exception.setCancelable(false);
-            ad_exception.setPositiveButton(yesString_exception, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
+                } else {
+                    Toast.makeText(context, "Увы, это последнее задание. Можете выбрать другое =)", Toast.LENGTH_LONG).show();
                     finish();
                 }
-            });
+            }
+        });
+        ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                Toast.makeText(context, "Повторение - мать учения", Toast.LENGTH_LONG).show();
+                int Level = Task1.getLevel();
+                String newLevel = ("Уровень: " + Task1.LevelDown(Level));
+                textView2.setText(newLevel);
+                setUp();
+            }
+        });
+        //второе уведомление
+        String title_delete = "Вы уверены? Это действие невозможно отменить";
+        String message_delete = "Ваш прогресс во всех заданиях обнулится";
+        String yesString_delete = "Да";
+        String noString_delete = "Отмена";
+        ad_delete = new AlertDialog.Builder(context);
+        ad_delete.setTitle(title_delete);  // заголовок
+        ad_delete.setMessage(message_delete); // сообщение
+        ad_delete.setCancelable(false);
+        ad_delete.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = activityPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
+                int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
+
+                textView3.setText("");
+                textView3.append(Integer.toString(COUNTER));
+                textView3.append("/10");
+                textView2.setText("");
+                textView2.append("Уровень: ");
+                textView2.append(Integer.toString(LVL));
+                textInputEditText.setText("");
+            }
+        });
+        ad_delete.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+            }
+        });
+
+        //третье уведомление
+        String message_reload = "Ваш прогресс в этом задании обнулится";
+        ad_reload_task = new AlertDialog.Builder(context);
+        ad_reload_task.setTitle(title_delete);  // заголовок
+        ad_reload_task.setMessage(message_reload); // сообщение
+        ad_reload_task.setCancelable(false);
+        ad_reload_task.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = activityPreferences.edit();
+
+                editor.remove(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum());
+                editor.remove(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum());
+                editor.apply();
+
+                int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
+                int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
+
+                textView3.setText("");
+                textView3.append(Integer.toString(COUNTER));
+                textView3.append("/10");
+                textView2.setText("");
+                textView2.append("Уровень: ");
+                textView2.append(Integer.toString(LVL));
+                textInputEditText.setText("");
+            }
+        });
+        ad_reload_task.setNegativeButton(noString_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+            }
+        });
+        //уведомление об ошибке с базой
+        String title_exception = "Ошибка при поиске в базе данных";
+        String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ. Попробуйте еще раз";
+        String yesString_exception = "ОК";
+        ad_exception = new AlertDialog.Builder(context);
+        ad_exception.setTitle(title_exception);  // заголовок
+        ad_exception.setMessage(message_exception); // сообщение
+        ad_exception.setCancelable(false);
+        ad_exception.setPositiveButton(yesString_exception, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
 
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean saving_progress = prefs.getBoolean("save_progress",true);
+        boolean saving_progress = prefs.getBoolean("save_progress", true);
         if (saving_progress) {
             SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
-            Bundle arguments = getIntent().getExtras();
-            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-            BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
+            BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
         }
-        if (BASE_NUM==0){
+        if (BASE_NUM == 0) {
             setUp();
-        } else{
+        } else {
             setUp(BASE_NUM);
         }
+
+        initArrays();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         int progress_lvl = Task1.getLevel();
-        TextView textView3 = findViewById(R.id.textView3);
         String sol = textView3.getText().toString();
-        String sollutions = sol.replace("/10","");
+        String sollutions = sol.replace("/10", "");
         int progress_counter = Integer.parseInt(sollutions);
-        outState.putInt("curr_lvl",progress_lvl);
+        outState.putInt("curr_lvl", progress_lvl);
         outState.putInt("curr_solved", progress_counter);
         super.onSaveInstanceState(outState);
     }
@@ -226,17 +256,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         super.onRestoreInstanceState(savedInstanceState);
         int lvl = savedInstanceState.getInt("curr_lvl");
         int solved = savedInstanceState.getInt("curr_solved");
-        TextView textView2 = findViewById(R.id.textView2);
         textView2.setText("");
         textView2.append("Уровень: ");
         textView2.append(Integer.toString(lvl));
-        TextView textView3 = findViewById(R.id.textView3);
         textView3.setText("");
         textView3.append(Integer.toString(solved));
         textView3.append("/10");
     }
 
-    public String giveUsl(final int n){
+    public String giveUsl(final int n) {
         //достает из базы данных условие задания с указанным номером
         tryDB = tryDBHelper.getReadableDatabase();
         try {
@@ -244,90 +272,22 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
-        switch (Task1.getLevel()){
-            case 1:
-                raw += " AND level ==1";
-                break;
-            case 2:
-                raw += " AND (level ==1 OR level ==2)";
-                break;
-            case 3:
-                raw += " AND (level ==1 OR level ==2 OR level ==3)";
-                break;
-            case 4:
-                ad.show();
-                break;
-            }
-
-            assert (tryDB!=null);
+        String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
+        assert (tryDB != null);
 
         Cursor cursor = tryDB.rawQuery(raw, null);
-            cursor.moveToPosition(n-1);
-            String st;
-            st= cursor.getString(1);
-            cursor.close();
-            //Cursor cursor = mDb.rawQuery(raw, null);
-        /*String st = "";
-        try {
-            Cursor cursor = tryDB.rawQuery(raw, null);
-            cursor.moveToPosition(n-1);
-            st= cursor.getString(1);
-            cursor.close();
-        }catch (SQLiteException e){
-            ad_exception.create();
-            ad_exception.show();
-        }*/
+        cursor.moveToFirst();
+        String st;
+        st = cursor.getString(1);
+        cursor.close();
         return st;
     }
 
-    public int getLength(){
-        //возвращает длину текущей выборки заданий
-        tryDB = tryDBHelper.getReadableDatabase();
-
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
-        switch (Task1.getLevel()){
-            case 1:
-                raw += " AND level ==1";
-                break;
-            case 2:
-                raw += " AND (level ==1 OR level ==2)";
-                break;
-            case 3:
-                raw += " AND (level ==1 OR level ==2 OR level ==3)";
-                break;
-            case 4:
-                break;
-        }
-        int n=0;
-        try {
-            //Cursor cursor = mDb.rawQuery(raw, null);
-            Cursor cursor = tryDB.rawQuery(raw, null);
-
-            while (!cursor.isAfterLast()){
-                n+=1;
-                cursor.moveToNext();
-            }
-            cursor.close();
-        } catch (SQLiteException e){
-            ad_exception.create();
-        }
-        getArray();
-        return n-1;
-    }
-
-    public Integer[] getArray(){
+    public void initArrays() {
         //возвращет массив уникальных номеров заданий
         tryDB = tryDBHelper.getReadableDatabase();
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
-        switch (Task1.getLevel()){
+        String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE number ==" + GetTaskNum();
+        switch (Task1.getLevel()) {
             case 1:
                 raw += " AND level ==1";
                 break;
@@ -341,107 +301,76 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
         Integer[] myArray;
-            try {
-                //Cursor cursor = mDb.rawQuery(raw, null);
-                Cursor cursor = tryDB.rawQuery(raw, null);
-                while (!cursor.isAfterLast()){
-                    try {
-                        cursor.moveToNext();
-                        TASKS.add(cursor.getInt(0));
-                    }catch (CursorIndexOutOfBoundsException e){
-                        break;
-                    }
+        try {
+            Cursor cursor = tryDB.rawQuery(raw, null);
+            while (!cursor.isAfterLast()) {
+                try {
+                    cursor.moveToNext();
+                    TASKS.add(cursor.getInt(0));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    break;
                 }
-                cursor.close();
-            } catch (SQLiteException e){
-                ad_exception.create();
             }
-            myArray = TASKS.toArray(new Integer[0]);
-            Log.d("myLogs","Current array="+Arrays.toString(myArray));
+            cursor.close();
+        } catch (SQLiteException e) {
+            ad_exception.create();
+        }
+        myArray = TASKS.toArray(new Integer[0]);
+        Log.d("myLogs", "Current array=" + Arrays.toString(myArray));
 
-            Integer [] myMistakes = MISTAKES.toArray(new Integer [0]);
-            Log.d ("myLogs", "Current mistakes = "+Arrays.toString(myMistakes));
-        return myArray;
+        Integer[] myMistakes = MISTAKES.toArray(new Integer[0]);
+        Log.d("myLogs", "Current mistakes = " + Arrays.toString(myMistakes));
     }
 
-    public String giveAns(int n){
+    public String giveAns(int n) {
         //возвращает ответ из базы данных по номеру задания
         tryDB = tryDBHelper.getReadableDatabase();
-
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
-
-        switch (Task1.getLevel()){
-            case 1:
-                raw += " AND level ==1";
-                break;
-            case 2:
-                raw += " AND (level ==1 OR level ==2)";
-                break;
-            case 3:
-                raw += " AND (level ==1 OR level ==2 OR level ==3)";
-                break;
-            case 4:
-                break;
-        }
+        String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
         String ans = "";
         try {
-            //Cursor cursor = mDb.rawQuery(raw, null);
             Cursor cursor = tryDB.rawQuery(raw, null);
-
-            cursor.moveToPosition(n-1);
+            cursor.moveToFirst();
             ans = cursor.getString(2);
             cursor.close();
-        } catch (SQLiteException e){
+        } catch (SQLiteException e) {
             ad_exception.create();
         }
         return ans;
     }
 
-    void setUp(){
+    void setUp() {
         //устанавливает условие на экран пользователя
-        int n = Task1.getNewNum();
-        TextView textView = findViewById(R.id.textView);
-        TextView textView4 = findViewById(R.id.textView4);
+        int n = Task1.getHashNum();
         textView.setText(giveUsl(n));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
         textView4.append(Integer.toString(n));
-
         setUpTable(n);
-
-        if (n>0){
+        if (n > 0) {
             BASE_NUM = n;
         } else {
             ad_exception.show();
         }
+        Log.d("myLogs", "new task num is " + n);
     }
 
-    void setUp (int num){
+    void setUp(int num) {
         //устанавливает условие на экран пользователя
-        TextView textView = findViewById(R.id.textView);
-        TextView textView4 = findViewById(R.id.textView4);
         textView.setText(giveUsl(num));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
         textView4.append(Integer.toString(num));
-
         setUpTable(num);
-
         Task1.setNum(num);
         BASE_NUM = num;
-        if (num<=0){
+        if (num <= 0) {
             setUp();
         }
     }
 
-    void setUpTable (int n){
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        assert SUBJECT_TABLE_NAME != null;
+    void setUpTable(int n) {
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
             String raw_table = giveTable(n);
             if (raw_table != null) {
@@ -454,14 +383,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    String giveTable (int n){
+    String giveTable(int n) {
         tryDB = tryDBHelper.getReadableDatabase();
-
-        Bundle arguments =getIntent().getExtras();
-        String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-        String raw = "SELECT * FROM "+SUBJECT_TABLE_NAME+" WHERE number =="+GetTaskNum();
-
-        switch (Task1.getLevel()){
+        String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
+        switch (Task1.getLevel()) {
             case 1:
                 raw += " AND level ==1";
                 break;
@@ -479,36 +404,29 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
-            cursor.moveToPosition(n-1);
+            //cursor.moveToPosition(n-1);
+            cursor.moveToFirst();
             raw_elements = cursor.getString(5);
             cursor.close();
-        } catch (SQLiteException e){
+        } catch (SQLiteException e) {
             ad_exception.create();
         }
         return raw_elements;
     }
 
-    int GetTaskNum(){
+    int GetTaskNum() {
         //возвращает номер задания, сохраненный в SharedPreferences
-        Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         return arguments.getInt("number");
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
-        Button enterBtn = findViewById(R.id.enterBtn);
-        TextView textView = findViewById(R.id.textView);
-        TextView textView2 = findViewById(R.id.textView2);
-        TextView textView3 = findViewById(R.id.textView3);
-        TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
-
         String sol = textView3.getText().toString();
-        String sollutions = sol.replace("/10","");
+        String sollutions = sol.replace("/10", "");
         int int_solluted = Integer.parseInt(sollutions);
-        int int_need_solluted = Integer.parseInt(sol.replace(sollutions+"/",""));
+        int int_need_solluted = Integer.parseInt(sol.replace(sollutions + "/", ""));
 
         switch (view.getId()) {
             case R.id.goBtn:
@@ -517,19 +435,18 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 textInputEditText.setText("");
                 setUp();
                 break;
-
             case R.id.enterBtn:
-                boolean rez=Task1.Check(Task1.getNum());
-                if (rez){
+                boolean rez = Task1.Check(Task1.getNum());
+                if (rez) {
                     //если задание решено верно
-                    int_solluted+=1;
-                    sol = int_solluted+"/"+int_need_solluted;
-                    if (int_solluted==int_need_solluted){
+                    int_solluted += 1;
+                    sol = int_solluted + "/" + int_need_solluted;
+                    if (int_solluted == int_need_solluted) {
                         //если решено необходимое количество для текущего уровня, то повышаем уровень пользователя в этом задании
                         int Level = Task1.getLevel();
-                        String newLevel = ("Уровень: "+Task1.LevelUp(Level));
+                        String newLevel = ("Уровень: " + Task1.LevelUp(Level));
                         textView2.setText(newLevel);
-                        sol = "0/"+int_need_solluted;
+                        sol = "0/" + int_need_solluted;
                     }
                     textView3.setText(sol);
                     enterBtn.setEnabled(false);
@@ -538,104 +455,22 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public class Task {
-        //переменная для хранения номера задания
-        private int num;
-
-        int getNum() {
-            //возвращает номер текущего задания
-            return num;
-        }
-        void setNum(int x) {
-            //устанавливает номер текущего задания
-            this.num = x;
-        }
-
-        int getNewNum (){
-            //АЛГОРИТМ ПОЛУЧЕНИЯ НОМЕРА НОВОГО ЗАДАНИЯ НА ОСНОВАНИИ ПРИОРИТЕТОВ
-            int min = 1;
-            int max = getLength();
-            int diff = max - min;
-            int x = 0;
-
-            Random random = new Random();
-            try{
-                x = random.nextInt(diff+1)+min;
-                this.setNum(x);
-            }catch (IllegalArgumentException e){
-                ad_exception.create();
-            }
-            return x;
-        }
-
-        int getHashNum (){
-            int x = 0;
-            getArray();
-
-            return x;
-        }
-
-
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        boolean Check(int n){
-            //проверка текущего задания
-            TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
-            TextView textView = findViewById(R.id.textView);
-            boolean rez;
-
-            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(textInputEditText.getText()).toString())){
-                textView.setBackgroundResource(R.color.colorAccept);
-                rez = true;
-                MISTAKES.remove(n);
-            } else {
-                textView.setBackgroundResource(R.color.colorDeny);
-                rez = false;
-                MISTAKES.add(n);
-            }
-            return rez;
-        }
-
-
-        int getLevel (){
-            //возвращает текущий уровень
-            int Level;
-            TextView textView2 = findViewById(R.id.textView2);
-            Level = Integer.parseInt(textView2.getText().toString().replace("Уровень: ",""));
-            return (Level) ;
-        }
-        int LevelUp(int Level) {
-            //увеличивает уровень на 1 (если возможно)
-            int LevelEquals = Level;
-            if (LevelEquals <= 3) {
-                LevelEquals += 1;
-            }
-            return (LevelEquals);
-        }
-        int LevelDown(int Level) {
-            //уменьшает уровень на 1 (если возможно)
-            int LevelEquals = Level;
-            if (LevelEquals >= 2) {
-                LevelEquals -= 1;
-            }
-            return (LevelEquals);
-        }
-    }
-
     //настроечки размера и стиля шрифта
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("myLogs","Создано меню");
+        Log.d("myLogs", "Создано меню");
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
         action_clear_database.setVisible(false);
         return true;
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent();
                 intent.setClass(this, SettingsActivity.class);
                 startActivity(intent);
-                Log.d("myLogs","Выбран пункт меню Настройки");
+                Log.d("myLogs", "Выбран пункт меню Настройки");
                 return true;
             case R.id.action_delete_progress:
                 ad_delete.create();
@@ -649,19 +484,18 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 return true;
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("myLogs","Resume");
+        Log.d("myLogs", "Resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
+        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getResources().getString(R.string.pref_size), "14")));
         // применяем настройки в текстовом поле
-        TextView textView = findViewById(R.id.textView);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);
-        TextInputEditText textInputEditText = findViewById(R.id.textInputEditText);
-        textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
+        textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         //Применяем настройки стиля шрифта
         String regular = prefs.getString(getString(R.string.pref_style), "");
         int typeface = Typeface.NORMAL;
@@ -673,34 +507,29 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         // меняем настройки в TextView
         textView.setTypeface(null, typeface);
 
-        boolean saving_progress = prefs.getBoolean("save_progress",true);
-        if (saving_progress){
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
-            Bundle arguments =getIntent().getExtras();
-            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
-            int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), 1);
-            int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),0);
-            int BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),1);
+        boolean saving_progress = prefs.getBoolean("save_progress", true);
+        if (saving_progress) {
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+            int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
+            int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
+            int BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
 
-            TextView textView3 = findViewById(R.id.textView3);
             textView3.setText("");
             textView3.append(Integer.toString(COUNTER));
             textView3.append("/10");
-            TextView textView2 = findViewById(R.id.textView2);
             textView2.setText("");
             textView2.append("Уровень: ");
             textView2.append(Integer.toString(LVL));
-            if (BASE_NUM<=0){
-                TextView textView4 = findViewById(R.id.textView4);
+            if (BASE_NUM <= 0) {
                 textView4.setText("");
                 textView4.append("Номер задания: ");
                 textView4.append(Integer.toString(BASE_NUM));
             }
         }
         //перерисуем таблицу (в основном ориентировано на изменение цветовой схемы/ночного режима)
-        if (BASE_NUM==0){
+        if (BASE_NUM == 0) {
             setUp();
-        } else{
+        } else {
             setUp(BASE_NUM);
         }
     }
@@ -708,33 +537,29 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("myLogs","Pause");
+        Log.d("myLogs", "Pause");
         //Применяем настройку сохранения прогресса
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean saving_progress = prefs.getBoolean("save_progress",true);
+        boolean saving_progress = prefs.getBoolean("save_progress", true);
 
-        if (saving_progress){
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS,Context.MODE_PRIVATE);
-            Bundle arguments =getIntent().getExtras();
-            String SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+        if (saving_progress) {
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
 
-            TextView textView3 = findViewById(R.id.textView3);
             String sol = textView3.getText().toString();
-            String sollutions = sol.replace("/10","");
+            String sollutions = sol.replace("/10", "");
             int int_solluted = Integer.parseInt(sollutions);
 
-            TextView textView4 = findViewById(R.id.textView4);
-            BASE_NUM = Integer.parseInt(textView4.getText().toString().replace("Номер задания: ",""));
+            BASE_NUM = Integer.parseInt(textView4.getText().toString().replace("Номер задания: ", ""));
 
             SharedPreferences.Editor ed = activityPreferences.edit();
-            ed.putInt(APP_PREFERENCES_PROGRESS_LVL+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),Task1.getLevel());
-            ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(),int_solluted);
-            ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM+"_"+SUBJECT_TABLE_NAME+"_"+GetTaskNum(), BASE_NUM);
+            ed.putInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), Task1.getLevel());
+            ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), int_solluted);
+            ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), BASE_NUM);
             ed.apply();
         }
     }
 
-    void createTable(int height, int width, String[] ids){
+    void createTable(int height, int width, String[] ids) {
         //общая инициализация
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);
@@ -747,17 +572,15 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         TableRow tableRow8 = new TableRow(this);
         TableRow tableRow9 = new TableRow(this);
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT,1);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
         params.setMargins(1, 1, 1, 1);
-
         boolean END_OF_STRING = false;
         int a = 0;
-        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","Включать автоматически");
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Включать автоматически");
         assert night_mode != null;
-
-        for (int i = 1; i<=height; i++){
-            while (a<i*width){
-                if (a>=ids.length){
+        for (int i = 1; i <= height; i++) {
+            while (a < i * width) {
+                if (a >= ids.length) {
                     END_OF_STRING = true;
                     break;
                 }
@@ -765,19 +588,17 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setGravity(Gravity.START);
-
-                if (night_mode.equalsIgnoreCase("Да")){
-                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                if (night_mode.equalsIgnoreCase("Да")) {
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefultBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
                 }
-
                 if (ids[a].equalsIgnoreCase("#")) {
                     tableElement.setText(" ");
-                }else{
+                } else {
                     tableElement.setText(ids[a]);
                 }
-                switch (i){
+                switch (i) {
                     case 1:
                         tableRow.addView(tableElement);
                         tableRow.setGravity(Gravity.CENTER);
@@ -822,12 +643,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 a++;
             }
             //проверка достижения конца строки
-            if (END_OF_STRING){
+            if (END_OF_STRING) {
                 break;
             }
         }
         //разное оформление и разные таблицы для разных значений "ночного режима"
-        switch (night_mode){
+        switch (night_mode) {
             case ("Включать автоматически"):
                 TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
                 tableLayout_auto.removeAllViews();
@@ -878,6 +699,88 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 tableLayout.addView(tableRow8);
                 tableLayout.addView(tableRow9);
                 break;
+        }
+    }
+
+    public class Task {
+        //переменная для хранения номера задания
+        private int num;
+
+        int getNum() {
+            //возвращает номер текущего задания
+            return num;
+        }
+
+        void setNum(int x) {
+            //устанавливает номер текущего задания
+            this.num = x;
+        }
+
+        int getHashNum() {
+            //С функцией рандома нужно категорически поколдовать, потому что какой-то он не шибко рандомный
+            int x;
+            initArrays();
+            Integer[] tasks = TASKS.toArray(new Integer[0]);
+            Integer[] mistakes = MISTAKES.toArray(new Integer[0]);
+
+            Random random = new Random();
+            boolean not_mistakes = random.nextBoolean();
+            if (mistakes.length > 0) {
+                if (not_mistakes) {
+                    x = tasks[random.nextInt(tasks.length)];
+                } else {
+                    x = mistakes[random.nextInt(mistakes.length)];
+                }
+            } else {
+                x = tasks[random.nextInt(tasks.length)];
+            }
+            this.setNum(x);
+            return x;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        boolean Check(int n) {
+            //проверка текущего задания
+            boolean rez;
+            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(textInputEditText.getText()).toString())) {
+                textView.setBackgroundResource(R.color.colorAccept);
+                rez = true;
+                MISTAKES.remove(n);
+            } else {
+                textView.setBackgroundResource(R.color.colorDeny);
+                rez = false;
+                MISTAKES.add(n);
+            }
+            return rez;
+        }
+
+        int getLevel() {
+            //возвращает текущий уровень
+            int Level;
+            Level = Integer.parseInt(textView2.getText().toString().replace("Уровень: ", ""));
+            return (Level);
+        }
+
+        int LevelUp(int Level) {
+            //увеличивает уровень на 1 (если возможно)
+            int LevelEquals = Level;
+            if (LevelEquals <= 3) {
+                LevelEquals += 1;
+            }
+            if (LevelEquals == 4) {
+                ad.create();
+                ad.show();
+            }
+            return (LevelEquals);
+        }
+
+        int LevelDown(int Level) {
+            //уменьшает уровень на 1 (если возможно)
+            int LevelEquals = Level;
+            if (LevelEquals >= 2) {
+                LevelEquals -= 1;
+            }
+            return (LevelEquals);
         }
     }
 }

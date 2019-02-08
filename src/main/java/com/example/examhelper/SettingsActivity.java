@@ -7,7 +7,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
@@ -33,7 +32,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 int modeNight = 0;
                 switch (night_mode){
                     case ("Включать автоматически"):
-                        modeNight = AppCompatDelegate.MODE_NIGHT_AUTO;
+
                         break;
                     case ("Да"):
                         modeNight = AppCompatDelegate.MODE_NIGHT_YES;
@@ -44,6 +43,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
                 AppCompatDelegate.setDefaultNightMode(modeNight);
                 finish();
+                break;
+            case ("Размер шрифта"):
+                Log.d("myLogs","Изменен размер текста");
                 break;
         }
     }

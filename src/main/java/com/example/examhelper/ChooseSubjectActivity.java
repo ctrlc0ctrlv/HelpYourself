@@ -43,7 +43,6 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
         }
         intent.putExtra("num_of_tasks",num_of_tasks);
 
-
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         boolean chosen_solve = arguments.getBoolean("chosen_solve");

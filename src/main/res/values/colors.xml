@@ -8,4 +8,5 @@
     <color name="colorDefault">#eeeeee</color>
     <color name="colorDarkDefault">#cccccc</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorDefultBlack">#111111</color>
 </resources>

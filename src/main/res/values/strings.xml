@@ -79,7 +79,7 @@
     <string name="pref_color_red">Красный цвет</string>
     <string name="pref_color_green">Зеленый цвет</string>
     <string name="pref_color_blue">Синий цвет</string>
-    <string name="pref_size">14</string>
+    <string name="pref_size">Размер текста</string>
     <string name="pref_style">Стиль текста</string>
     <string name="pref_style_regular">Нормальный</string>
     <string name="pref_style_bold">Полужирный</string>

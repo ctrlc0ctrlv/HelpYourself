@@ -98,11 +98,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         values.put("level", Level);
         values.put("number", Number);
 
-        //Log.d("myLogs",Uslovie);
-        //Log.d("myLogs",Answer);
-        //Log.d("myLogs", String.valueOf(Level));
-        //Log.d("myLogs", String.valueOf(Number));
-
         String TABLE_SUBJECT_NAME = arguments.getString("subject");
         Log.d("myLogs", TABLE_SUBJECT_NAME);
         // Вставляем новый ряд в базу данных и запоминаем его идентификатор
@@ -183,7 +178,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
             }
         }
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override

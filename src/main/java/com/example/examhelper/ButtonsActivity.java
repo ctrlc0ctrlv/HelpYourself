@@ -2,9 +2,9 @@ package com.example.examhelper;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
     int NUM;
+    Bundle arguments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +73,10 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         buttonObjectChoice25.setOnClickListener(this);
         buttonObjectChoice26.setOnClickListener(this);
 
-        Bundle arguments = getIntent().getExtras();
+        arguments = getIntent().getExtras();
         assert arguments != null;
         NUM = arguments.getInt("num_of_tasks");
-        switch (NUM){
+        switch (NUM) {
             case 23:
                 buttonObjectChoice24.setEnabled(false);
                 buttonObjectChoice25.setEnabled(false);
@@ -98,8 +99,6 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         Intent intent = null;
-        Bundle arguments = getIntent().getExtras();
-        assert arguments != null;
         boolean chosen_solve = arguments.getBoolean("chosen_solve");
         boolean chosen_my = arguments.getBoolean("chosen_my");
 
@@ -112,7 +111,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
         int Number = 0;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.buttonChoice1:
                 Number = 1;
                 break;
@@ -192,9 +191,9 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 Number = 26;
                 break;
         }
-        Objects.requireNonNull(intent).putExtra("subject",arguments.getString("subject"));
-        Objects.requireNonNull(intent).putExtra("number",Number);
-        Objects.requireNonNull(intent).putExtra("num_of_tasks",NUM);
+        Objects.requireNonNull(intent).putExtra("subject", arguments.getString("subject"));
+        Objects.requireNonNull(intent).putExtra("number", Number);
+        Objects.requireNonNull(intent).putExtra("num_of_tasks", NUM);
         startActivity(intent);
     }
 }
