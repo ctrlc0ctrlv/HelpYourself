@@ -87,6 +87,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         // Обработчики нажатия кнопок
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
+
         //прописываем уведомление
         final Context context;
         context = AnsweringActivity.this;
@@ -105,30 +106,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
                 int Level = Task1.getLevel();
                 String newLevel = ("Уровень: " + Task1.LevelDown(Level));
+                Log.d("myLogs", "new level after getting down is " + Integer.toString(Task1.LevelDown(Level)));
                 textView2.setText(newLevel);
 
                 if (GetTaskNum() + 1 <= NUM_OF_TASKS) {
                     Toast.makeText(context, "Вы сделали правильный выбор", Toast.LENGTH_LONG).show();
                     intent.putExtra("number", GetTaskNum() + 1);
-                    SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
-                    int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum() + 1, 1);
-
-                    SharedPreferences.Editor editor = activityPreferences.edit();
-                    editor.putInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 3);
-                    editor.apply();
-
-                    textView2.setText("");
-                    textView2.append("Уровень: ");
-                    textView2.append(Integer.toString(LVL));
-                    enterBtn.setEnabled(true);
-                    textView.setBackground(textView2.getBackground());
-                    textInputEditText.setText("");
-                    BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
-                    if (BASE_NUM == 0) {
-                        setUp();
-                    } else {
-                        setUp(BASE_NUM);
-                    }
+                    finish();
+                    startActivity(intent);
                 } else {
                     Toast.makeText(context, "Увы, это последнее задание. Можете выбрать другое =)", Toast.LENGTH_LONG).show();
                     finish();
@@ -225,6 +210,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
 
+        initArrays();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress", true);
         if (saving_progress) {
@@ -236,8 +223,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } else {
             setUp(BASE_NUM);
         }
-
-        initArrays();
     }
 
     @Override
@@ -273,8 +258,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
-        assert (tryDB != null);
-
         Cursor cursor = tryDB.rawQuery(raw, null);
         cursor.moveToFirst();
         String st;
@@ -386,25 +369,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     String giveTable(int n) {
         tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
-        switch (Task1.getLevel()) {
-            case 1:
-                raw += " AND level ==1";
-                break;
-            case 2:
-                raw += " AND (level ==1 OR level ==2)";
-                break;
-            case 3:
-                raw += " AND (level ==1 OR level ==2 OR level ==3)";
-                break;
-            case 4:
-                break;
-        }
 
         String raw_elements = "";
-
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
-            //cursor.moveToPosition(n-1);
             cursor.moveToFirst();
             raw_elements = cursor.getString(5);
             cursor.close();
@@ -415,7 +383,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     int GetTaskNum() {
-        //возвращает номер задания, сохраненный в SharedPreferences
+        //возвращает номер задания, сохраненный в Extras
         assert arguments != null;
         return arguments.getInt("number");
     }
@@ -447,6 +415,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                         String newLevel = ("Уровень: " + Task1.LevelUp(Level));
                         textView2.setText(newLevel);
                         sol = "0/" + int_need_solluted;
+                        initArrays();
                     }
                     textView3.setText(sol);
                     enterBtn.setEnabled(false);
@@ -553,6 +522,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
             SharedPreferences.Editor ed = activityPreferences.edit();
             ed.putInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), Task1.getLevel());
+            Log.d("myLogs", "onPause: current lvl is " + Integer.toString(Task1.getLevel()));
             ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), int_solluted);
             ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), BASE_NUM);
             ed.apply();
@@ -717,9 +687,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
 
         int getHashNum() {
+            //возвращает номер задания на основании текущей выборки и ошибок
             //С функцией рандома нужно категорически поколдовать, потому что какой-то он не шибко рандомный
             int x;
-            initArrays();
             Integer[] tasks = TASKS.toArray(new Integer[0]);
             Integer[] mistakes = MISTAKES.toArray(new Integer[0]);
 
