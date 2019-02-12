@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class ChooseSubjectActivity extends AppCompatActivity implements View.OnClickListener {
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_sub);
@@ -23,8 +22,16 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
         Intent intent;
-        intent = new Intent(this,ButtonsActivity.class);
+        Bundle arguments = getIntent().getExtras();
+        assert arguments != null;
+        if (arguments.getBoolean("chosen_test")) {
+            intent = new Intent(this, Test_AnsweringActivity.class);
+        } else {
+            intent = new Intent(this, ButtonsActivity.class);
 
+            intent.putExtra("chosen_solve", arguments.getBoolean("chosen_solve"));
+            intent.putExtra("chosen_my", arguments.getBoolean("chosen_my"));
+        }
         int num_of_tasks=30;
 
         switch (view.getId()){
@@ -42,14 +49,6 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
                 break;
         }
         intent.putExtra("num_of_tasks",num_of_tasks);
-
-        Bundle arguments = getIntent().getExtras();
-        assert arguments != null;
-        boolean chosen_solve = arguments.getBoolean("chosen_solve");
-        boolean chosen_my = arguments.getBoolean("chosen_my");
-        intent.putExtra("chosen_solve",chosen_solve);
-        intent.putExtra("chosen_my", chosen_my);
-
         startActivity(intent);
     }
 }

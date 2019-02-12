@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,10 +21,10 @@ import com.example.examhelper.data.CustomDbHelper;
 import java.util.Objects;
 
 public class DataBaseActivity extends AppCompatActivity implements View.OnClickListener {
-    private Spinner spinner;
-    private int Level = 1;
+    int Level = 1;
     CustomDbHelper cDbHelper;
     SQLiteDatabase cDb;
+    private Spinner spinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,30 +48,15 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(genderSpinnerAdapter);
         spinner.setSelection(0);
-        spinner.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected, int position, long id) {
-                String selection = (String) parent.getItemAtPosition(position);
-
                 String[] choose = getResources().getStringArray(R.array.levels);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Ваш выбор: " + choose[position], Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), "Ваш выбор: " + choose[position], Toast.LENGTH_SHORT);
                 toast.show();
 
-                final String Level1 = getResources().getString(R.string.Level1);
-                final String Level2 = getResources().getString(R.string.Level2);
-                final String Level3 = getResources().getString(R.string.Level3);
-                if (!(TextUtils.isEmpty(selection))) {
-                        if (selection.equals(Level1)) {
-                            Level = 1;
-                        }
-                        if (selection.equals(Level2)) {
-                            Level = 2;
-                        }
-                        if (selection.equals(Level3)) {
-                            Level = 3;
-                        }
-                }
+                Level = position + 1;
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
                 Level = 0;
             }
@@ -80,7 +64,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void insertTask(){
+    public void insertTask() {
         // Считываем данные из текстовых полей
         TextInputEditText TextInputEditText = findViewById(R.id.TextInputEditText);
         String Uslovie = Objects.requireNonNull(TextInputEditText.getText()).toString();
@@ -90,7 +74,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
 
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
-        int Number  = arguments.getInt("number");
+        int Number = arguments.getInt("number");
 
         ContentValues values = new ContentValues();
         values.put("uslovie", Uslovie);
@@ -102,9 +86,9 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         Log.d("myLogs", TABLE_SUBJECT_NAME);
         // Вставляем новый ряд в базу данных и запоминаем его идентификатор
 
-        if ((Uslovie.equals("")) | (Answer.equals("") )){
+        if ((Uslovie.equals("")) | (Answer.equals(""))) {
             Toast.makeText(this, "Убедитесь, что вы заполнили все поля для ввода", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             // Выводим сообщение в успешном случае или при ошибке
             long newRowId = cDb.insert(TABLE_SUBJECT_NAME, null, values);
             if (newRowId == -1) {
@@ -141,10 +125,10 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         String TABLE_SUBJECT_NAME = arguments.getString("subject");
         Log.d("myLogs", TABLE_SUBJECT_NAME);
         // Выводим сообщение в успешном случае или при ошибке
-        if ((ID.equals("")) | (Uslovie.equals("")) | (Answer.equals("") ) ){
+        if ((ID.equals("")) | (Uslovie.equals("")) | (Answer.equals(""))) {
             Toast.makeText(this, "Убедитесь, что вы заполнили все поля для ввода", Toast.LENGTH_SHORT).show();
-        }else {
-            long newRowId = cDb.update(TABLE_SUBJECT_NAME, values, "_ID ==?",new String[] {ID});
+        } else {
+            long newRowId = cDb.update(TABLE_SUBJECT_NAME, values, "_ID ==?", new String[]{ID});
             if (newRowId == -1) {
                 // Если ID  -1, значит произошла ошибка
                 Toast.makeText(this, "Ошибка при изменении задания", Toast.LENGTH_SHORT).show();
@@ -155,7 +139,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void deleteTask(){
+    public void deleteTask() {
         // Считываем данные из текстовых полей
         TextInputEditText TextInputEditText3 = findViewById(R.id.TextInputEditText3);
         String ID = Objects.requireNonNull(TextInputEditText3.getText()).toString();
@@ -166,10 +150,10 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         String TABLE_SUBJECT_NAME = arguments.getString("subject");
         Log.d("myLogs", TABLE_SUBJECT_NAME);
         // Выводим сообщение в успешном случае или при ошибке
-        if ((ID.equals("")) ){
+        if ((ID.equals(""))) {
             Toast.makeText(this, "Убедитесь, что вы заполнили все поля для ввода", Toast.LENGTH_SHORT).show();
-        }else {
-            long newRowId = cDb.delete(TABLE_SUBJECT_NAME, "_ID ==?",new String[] {ID});
+        } else {
+            long newRowId = cDb.delete(TABLE_SUBJECT_NAME, "_ID ==?", new String[]{ID});
             if (newRowId == -1) {
                 // Если ID  -1, значит произошла ошибка
                 Toast.makeText(this, "Ошибка при удалении задания", Toast.LENGTH_SHORT).show();
@@ -182,7 +166,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button:
                 insertTask();
                 break;
@@ -193,5 +177,5 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
                 deleteTask();
                 break;
         }
-        }
     }
+}

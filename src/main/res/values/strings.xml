@@ -42,6 +42,9 @@
     <string name="current_num">Номер задания:</string>
     <string name="zero_progress">0/10</string>
 
+    <!--Ресурсы для Test_AnsweringActivity-->
+    <string name="no_information">Нет данных</string>
+
     <!--Ресурсы для Show_DB_Activity-->
     <string name="level"><b>Уровень</b></string>
     <string name="show_tasks">Вывести список предустановленных заданий</string>

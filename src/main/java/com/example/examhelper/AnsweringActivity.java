@@ -126,6 +126,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 int Level = Task1.getLevel();
                 String newLevel = ("Уровень: " + Task1.LevelDown(Level));
                 textView2.setText(newLevel);
+                textInputEditText.setText("");
+                textView.setBackground(textView2.getBackground());
+                enterBtn.setEnabled(true);
                 setUp();
             }
         });

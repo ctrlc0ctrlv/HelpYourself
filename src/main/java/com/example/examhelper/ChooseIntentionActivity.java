@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class ChooseIntentionActivity extends AppCompatActivity implements View.OnClickListener {
-
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_choose_intent);
@@ -40,6 +39,8 @@ public class ChooseIntentionActivity extends AppCompatActivity implements View.O
                     startActivity(intent);
                     break;
                 case R.id.button3:
+                    intent.putExtra("chosen_test", true);
+                    startActivity(intent);
                     break;
                 case R.id.button4:
                     Intent i = new Intent(this,TimeActivity.class);
