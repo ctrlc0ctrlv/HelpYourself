@@ -1,8 +1,8 @@
 package com.example.examhelper.data;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class CustomDbHelper extends SQLiteOpenHelper {
@@ -66,7 +66,9 @@ public class CustomDbHelper extends SQLiteOpenHelper {
     }
 
     /*Вызывается при удалении базы данных*/
-    public void onDelete (SQLiteDatabase db){
-        db.delete(CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME, null, null);
+    public void onDelete(SQLiteDatabase db) {
+        //db.delete(CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME, null, null);
+        db.execSQL("DROP TABLE IF EXISTS " + CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME);
+        onCreate(db);
     }
 }
