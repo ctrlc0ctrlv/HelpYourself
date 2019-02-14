@@ -38,7 +38,9 @@
         <activity android:name=".Show_DB_Activity" />
 
         <activity android:name="TimeActivity"/>
+        <activity android:name=".Test_CreatingActivity" />
         <activity android:name=".Test_AnsweringActivity" />
+
 
         <receiver android:name=".TimeNotification" android:enabled="true">
             <intent-filter>

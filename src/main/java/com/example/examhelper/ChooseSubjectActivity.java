@@ -25,7 +25,7 @@ public class ChooseSubjectActivity extends AppCompatActivity implements View.OnC
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         if (arguments.getBoolean("chosen_test")) {
-            intent = new Intent(this, Test_AnsweringActivity.class);
+            intent = new Intent(this, Test_CreatingActivity.class);
         } else {
             intent = new Intent(this, ButtonsActivity.class);
 

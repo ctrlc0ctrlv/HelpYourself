@@ -18,4 +18,83 @@
         <item>Нет</item>
         <item>Включать автоматически</item>
     </string-array>
+
+    <string-array name="tasks_informatics">
+        <item>Задание 1</item>
+        <item>Задание 2</item>
+        <item>Задание 3</item>
+        <item>Задание 4</item>
+        <item>Задание 5</item>
+        <item>Задание 6</item>
+        <item>Задание 7</item>
+        <item>Задание 8</item>
+        <item>Задание 9</item>
+        <item>Задание 10</item>
+        <item>Задание 11</item>
+        <item>Задание 12</item>
+        <item>Задание 13</item>
+        <item>Задание 14</item>
+        <item>Задание 15</item>
+        <item>Задание 16</item>
+        <item>Задание 17</item>
+        <item>Задание 18</item>
+        <item>Задание 19</item>
+        <item>Задание 20</item>
+        <item>Задание 21</item>
+        <item>Задание 22</item>
+        <item>Задание 23</item>
+    </string-array>
+
+    <string-array name="tasks_russian">
+        <item>Задание 1</item>
+        <item>Задание 2</item>
+        <item>Задание 3</item>
+        <item>Задание 4</item>
+        <item>Задание 5</item>
+        <item>Задание 6</item>
+        <item>Задание 7</item>
+        <item>Задание 8</item>
+        <item>Задание 9</item>
+        <item>Задание 10</item>
+        <item>Задание 11</item>
+        <item>Задание 12</item>
+        <item>Задание 13</item>
+        <item>Задание 14</item>
+        <item>Задание 15</item>
+        <item>Задание 16</item>
+        <item>Задание 17</item>
+        <item>Задание 18</item>
+        <item>Задание 19</item>
+        <item>Задание 20</item>
+        <item>Задание 21</item>
+        <item>Задание 22</item>
+        <item>Задание 23</item>
+        <item>Задание 24</item>
+        <item>Задание 25</item>
+        <item>Задание 26</item>
+    </string-array>
+
+    <string-array name="tasks_maths_base">
+        <item>Задание 1</item>
+        <item>Задание 2</item>
+        <item>Задание 3</item>
+        <item>Задание 4</item>
+        <item>Задание 5</item>
+        <item>Задание 6</item>
+        <item>Задание 7</item>
+        <item>Задание 8</item>
+        <item>Задание 9</item>
+        <item>Задание 10</item>
+        <item>Задание 11</item>
+        <item>Задание 12</item>
+        <item>Задание 13</item>
+        <item>Задание 14</item>
+        <item>Задание 15</item>
+        <item>Задание 16</item>
+        <item>Задание 17</item>
+        <item>Задание 18</item>
+        <item>Задание 19</item>
+        <item>Задание 20</item>
+    </string-array>
+
 </resources>

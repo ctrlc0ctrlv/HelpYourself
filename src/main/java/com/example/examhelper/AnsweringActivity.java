@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,7 +43,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
     public static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
     public static final String APP_PREFERENCES_PROGRESS_BASE_NUM = "progress_base_num";
-    public static final String APP_PROGRRESS = "my_progress";
+    public static final String APP_PROGRESS = "my_progress";
     public int BASE_NUM = 0;
     public Set<Integer> TASKS = new HashSet<>();
     public Set<Integer> MISTAKES = new HashSet<>();
@@ -143,7 +144,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         ad_delete.setCancelable(false);
         ad_delete.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = activityPreferences.edit();
                 editor.clear();
                 editor.apply();
@@ -173,7 +174,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         ad_reload_task.setCancelable(false);
         ad_reload_task.setPositiveButton(yesString_delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+                SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = activityPreferences.edit();
 
                 editor.remove(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum());
@@ -218,7 +219,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress", true);
         if (saving_progress) {
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
             BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
         }
         if (BASE_NUM == 0) {
@@ -333,6 +334,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(" ");
         textView4.append(Integer.toString(n));
         setUpTable(n);
+        setUpWebView(n);
         if (n > 0) {
             BASE_NUM = n;
         } else {
@@ -349,6 +351,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(" ");
         textView4.append(Integer.toString(num));
         setUpTable(num);
+        setUpWebView(num);
         Task1.setNum(num);
         BASE_NUM = num;
         if (num <= 0) {
@@ -365,6 +368,18 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 String ids[];
                 ids = raw_table.substring(4).split("\\$");
                 createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
+            }
+        }
+    }
+
+    void setUpWebView(int n) {
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+            if (GetTaskNum() == 15) {
+                WebView webView = findViewById(R.id.webView);
+                String url = "file:///android_asset/informatics/";
+                url += n;
+                url += ".png";
+                webView.loadUrl(url);
             }
         }
     }
@@ -481,7 +496,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         boolean saving_progress = prefs.getBoolean("save_progress", true);
         if (saving_progress) {
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
             int LVL = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
             int COUNTER = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
             int BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 1);
@@ -515,7 +530,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         boolean saving_progress = prefs.getBoolean("save_progress", true);
 
         if (saving_progress) {
-            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRRESS, Context.MODE_PRIVATE);
+            SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
 
             String sol = textView3.getText().toString();
             String sollutions = sol.replace("/10", "");
