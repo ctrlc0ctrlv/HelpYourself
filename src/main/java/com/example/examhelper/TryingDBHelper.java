@@ -20,7 +20,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         private final Context fContext;
 
         TryingDBHelper(Context context) {
-            super(context, DB_NAME, null, 27);
+            super(context, DB_NAME, null, 28);
             this.fContext = context;
         }
         public void createDataBase() throws IOException {
