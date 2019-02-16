@@ -39,7 +39,7 @@
     <string name="go">Далее</string>
     <string name="current_level">Уровень: 1</string>
     <string name="hint">Введите ответ</string>
-    <string name="current_num">Номер задания:</string>
+    <string name="current_num">Номер задания в базе:</string>
     <string name="zero_progress">0/10</string>
 
     <!--Ресурсы для Test_CreatingActivity-->
@@ -56,9 +56,9 @@
     <string name="create_task">Создать задание</string>
     <string name="remake_task">Редактировать задание</string>
     <string name="delete_task">Удалить задание</string>
-    <string name="Level1">Level 1</string>
-    <string name="Level2">Level 2</string>
-    <string name="Level3">Level 3</string>
+    <string name="Level1">Уровень 1</string>
+    <string name="Level2">Уровень 2</string>
+    <string name="Level3">Уровень 3</string>
 
     <!--Ресурсы для ChooseSubActivity-->
     <string name="choose_sub">Выберите предмет:</string>

@@ -31,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
@@ -287,7 +286,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             case 4:
                 break;
         }
-        Integer[] myArray;
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
             while (!cursor.isAfterLast()) {
@@ -302,11 +300,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } catch (SQLiteException e) {
             ad_exception.create();
         }
-        myArray = TASKS.toArray(new Integer[0]);
-        Log.d("myLogs", "Current array=" + Arrays.toString(myArray));
+        //Integer[] myArray = TASKS.toArray(new Integer[0]);
+        //Log.d("myLogs", "Current array=" + Arrays.toString(myArray));
 
-        Integer[] myMistakes = MISTAKES.toArray(new Integer[0]);
-        Log.d("myLogs", "Current mistakes = " + Arrays.toString(myMistakes));
+        //Integer[] myMistakes = MISTAKES.toArray(new Integer[0]);
+        //Log.d("myLogs", "Current mistakes = " + Arrays.toString(myMistakes));
     }
 
     public String giveAns(int n) {
@@ -340,7 +338,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } else {
             ad_exception.show();
         }
-        Log.d("myLogs", "new task num is " + n);
     }
 
     void setUp(int num) {
@@ -444,7 +441,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     //настроечки размера и стиля шрифта
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("myLogs", "Создано меню");
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
         action_clear_database.setVisible(false);
@@ -457,7 +453,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 Intent intent = new Intent();
                 intent.setClass(this, SettingsActivity.class);
                 startActivity(intent);
-                Log.d("myLogs", "Выбран пункт меню Настройки");
                 return true;
             case R.id.action_delete_progress:
                 ad_delete.create();
@@ -476,7 +471,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("myLogs", "Resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
         Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getResources().getString(R.string.pref_size), "14")));
@@ -509,7 +503,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             textView2.append(Integer.toString(LVL));
             if (BASE_NUM <= 0) {
                 textView4.setText("");
-                textView4.append("Номер задания: ");
+                textView4.append(getResources().getString(R.string.current_num));
                 textView4.append(Integer.toString(BASE_NUM));
             }
         }
@@ -524,7 +518,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("myLogs", "Pause");
         //Применяем настройку сохранения прогресса
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress", true);
@@ -536,11 +529,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             String sollutions = sol.replace("/10", "");
             int int_solluted = Integer.parseInt(sollutions);
 
-            BASE_NUM = Integer.parseInt(textView4.getText().toString().replace("Номер задания: ", ""));
+            BASE_NUM = Integer.parseInt(textView4.getText().toString().replace(getResources().getString(R.string.current_num) + " ", ""));
 
             SharedPreferences.Editor ed = activityPreferences.edit();
             ed.putInt(APP_PREFERENCES_PROGRESS_LVL + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), Task1.getLevel());
-            Log.d("myLogs", "onPause: current lvl is " + Integer.toString(Task1.getLevel()));
             ed.putInt(APP_PREFERENCES_PROGRESS_COUNTER + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), int_solluted);
             ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), BASE_NUM);
             ed.apply();
@@ -548,6 +540,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void createTable(int height, int width, String[] ids) {
+        TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
+        tableLayout_auto.removeAllViews();
+        TableLayout tableLayout_black = findViewById(R.id.prices_black);
+        tableLayout_black.removeAllViews();
+        TableLayout tableLayout = findViewById(R.id.prices);
+        tableLayout.removeAllViews();
         //общая инициализация
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);
@@ -638,10 +636,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         //разное оформление и разные таблицы для разных значений "ночного режима"
         switch (night_mode) {
             case ("Включать автоматически"):
-                TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
-                tableLayout_auto.removeAllViews();
                 tableLayout_auto.bringToFront();
-
                 tableLayout_auto.addView(tableRow);
                 tableLayout_auto.addView(tableRow1);
                 tableLayout_auto.addView(tableRow2);
@@ -655,10 +650,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
             case ("Да"):
                 //вставка строк в таблицу
-                TableLayout tableLayout_black = findViewById(R.id.prices_black);
-                tableLayout_black.removeAllViews();
                 tableLayout_black.bringToFront();
-
                 tableLayout_black.addView(tableRow);
                 tableLayout_black.addView(tableRow1);
                 tableLayout_black.addView(tableRow2);
@@ -672,10 +664,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 break;
             case ("Нет"):
                 //вставка строк в таблицу
-                TableLayout tableLayout = findViewById(R.id.prices);
-                tableLayout.removeAllViews();
                 tableLayout.bringToFront();
-
                 tableLayout.addView(tableRow);
                 tableLayout.addView(tableRow1);
                 tableLayout.addView(tableRow2);

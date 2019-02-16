@@ -1,37 +1,51 @@
 package com.example.examhelper;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Hash_randoms {
-    private static Integer[] mistakes = {1,2,3,4,5};
-
     public static void main (String[]args){
-        for (int i = 0; i<20;i++){
-            System.out.println(getHashNum());
-            if (i==9){
-                mistakes = new Integer[0];
-                System.out.println("======");
-            }
+        Scanner in = new Scanner(System.in);
+        int num = in.nextInt();
+
+        String[] inputs = new String[num];
+
+        in = new Scanner(System.in);
+        for (int i = 0; i < num; i++) {
+            inputs[i] = in.nextLine();
         }
-    }
 
-    private static int getHashNum (){
-        //С функцией рандома нужно категорически поколдовать, потому что какой-то он не шибко рандомный
-        int x;
-        Integer[] tasks = {84, 5, 3, 4, 1, 91, 88, 92, 6, 93, 87, 86, 95, 89, 85, 94, 90, 2};
+        StringBuilder st;
+        Set<String> sp1 = new HashSet<>();
 
-        Random random = new Random();
-        boolean not_mistakes = random.nextBoolean();
-
-        if (mistakes.length>0){
-            if (not_mistakes){
-                x = tasks[random.nextInt(tasks.length)];
-            }else{
-                x = mistakes[random.nextInt(mistakes.length)];
+        for (String input : inputs) {
+            st = new StringBuilder();
+            for (int x = 0; x < 7; x++) {
+                if (input.charAt(x) == 'a' | input.charAt(x) == 'b' | input.charAt(x) == 'c') {
+                    st.append("2");
+                } else if (input.charAt(x) == 'd' | input.charAt(x) == 'e' | input.charAt(x) == 'f') {
+                    st.append("3");
+                } else if (input.charAt(x) == 'g' | input.charAt(x) == 'h' | input.charAt(x) == 'i') {
+                    st.append("4");
+                } else if (input.charAt(x) == 'j' | input.charAt(x) == 'k' | input.charAt(x) == 'l') {
+                    st.append("5");
+                } else if (input.charAt(x) == 'm' | input.charAt(x) == 'n' | input.charAt(x) == 'o') {
+                    st.append("6");
+                } else if (input.charAt(x) == 'p' | input.charAt(x) == 'q' | input.charAt(x) == 'r' | input.charAt(x) == 's') {
+                    st.append("7");
+                } else if (input.charAt(x) == 't' | input.charAt(x) == 'u' | input.charAt(x) == 'v') {
+                    st.append("8");
+                } else if (input.charAt(x) == 'w' | input.charAt(x) == 'x' | input.charAt(x) == 'y' | input.charAt(x) == 'z') {
+                    st.append("9");
+                }
             }
-        }else{
-            x = tasks[random.nextInt(tasks.length)];
+            sp1.add(st.toString());
         }
-        return x;
+
+        List qwerty = new ArrayList<>(sp1);
+        System.out.println(qwerty.size());
     }
 }
