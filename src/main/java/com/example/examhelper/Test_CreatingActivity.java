@@ -1,11 +1,13 @@
 package com.example.examhelper;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -22,31 +24,32 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
     static {
         Map<String, String> map = new HashMap<>();
-        map.put("line1", "Мурзик");
-        map.put("line2", "Агент 003");
+        map.put("line1", "Задание 1");
+        map.put("line2", "256");
         items.add(map);
 
         map = new HashMap<>();
-        map.put("line1", "Барсик");
-        map.put("line2", "Агент 004");
+        map.put("line1", "Задание 2");
+        map.put("line2", "134");
         items.add(map);
 
         map = new HashMap<>();
-        map.put("line1", "Васька");
-        map.put("line2", "Агент 005");
+        map.put("line1", "Задание 3");
+        map.put("line2", "865");
         items.add(map);
 
         map = new HashMap<>();
-        map.put("line1", "Рыжик");
-        map.put("line2", "Агент 006");
+        map.put("line1", "Задание 4");
+        map.put("line2", "408");
         items.add(map);
 
         map = new HashMap<>();
-        map.put("line1", "Кузя");
-        map.put("line2", "Агент 007");
+        map.put("line1", "Задание 5");
+        map.put("line2", "923");
         items.add(map);
     }
 
+    AlertDialog.Builder dialog;
     ListView listView;
 
     @Override
@@ -54,40 +57,70 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_creating);
 
+        final Context context;
+        context = Test_CreatingActivity.this;
+        String title = "Вы уверены, что хотите выйти?";
+        String message = "Ваши ответы в текущем тесте будут аннулированы";
+        String yesString = "Выйти";
+        String noString = "Отмена";
+        dialog = new android.app.AlertDialog.Builder(context);
+        dialog.setTitle(title);  // заголовок
+        dialog.setMessage(message); // сообщение
+        dialog.setCancelable(false);
+        dialog.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        dialog.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
+
         listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                //int activePosition = 0; // первый элемент списка
-                //boolean click = listView.performItemClick(listView.getAdapter().getView(activePosition, null, null), activePosition, listView.getAdapter().getItemId(activePosition));
-
                 Intent intent = new Intent(Test_CreatingActivity.this, Test_AnsweringActivity.class);
                 intent.setClass(Test_CreatingActivity.this, Test_AnsweringActivity.class);
+                intent.putExtra("number", position + 1);
+                intent.putExtra("id", items.get(position).get("line2"));
+
+                Bundle arguments = getIntent().getExtras();
+                assert arguments != null;
+
+                intent.putExtra("num_of_tasks", arguments.getInt("num_of_tasks"));
+                intent.putExtra("subject", arguments.getString("subject"));
                 startActivityForResult(intent, 1);
             }
         });
-        ArrayAdapter<String> adapter = null;
         ListAdapter adapter1 = null;
 
         Bundle arguments = getIntent().getExtras();
         assert arguments != null;
         switch (arguments.getInt("num_of_tasks")) {
             case 23:
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.tasks_informatics));
                 adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
                 break;
             case 20:
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.tasks_maths_base));
+                adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
                 break;
             case 26:
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.tasks_russian));
+                adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
                 break;
         }
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter1);
     }
 
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        dialog.create();
+        dialog.show();
     }
 }
