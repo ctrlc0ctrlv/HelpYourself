@@ -3,10 +3,8 @@ package com.example.examhelper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -16,8 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,18 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("myLogs","OnResume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
+        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        assert f_Size != null;
+        Float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         TextView text_view = findViewById(R.id.text_view);
-        text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP,fSize);
-
+        text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
+        //Применяем настройки стиля шрифта
         String regular = prefs.getString(getString(R.string.pref_style), "");
         int typeface = Typeface.NORMAL;
         assert regular != null;

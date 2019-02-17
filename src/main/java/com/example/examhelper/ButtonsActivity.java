@@ -1,14 +1,10 @@
 package com.example.examhelper;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.Objects;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
     int NUM;
@@ -95,7 +91,6 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
         Intent intent = null;
@@ -191,9 +186,10 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 Number = 26;
                 break;
         }
-        Objects.requireNonNull(intent).putExtra("subject", arguments.getString("subject"));
-        Objects.requireNonNull(intent).putExtra("number", Number);
-        Objects.requireNonNull(intent).putExtra("num_of_tasks", NUM);
+        assert intent != null;
+        intent.putExtra("subject", arguments.getString("subject"));
+        intent.putExtra("number", Number);
+        intent.putExtra("num_of_tasks", NUM);
         startActivity(intent);
     }
 }

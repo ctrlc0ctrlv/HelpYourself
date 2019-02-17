@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,11 +33,9 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
     //настройки (в частности, прогресса)
     public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
@@ -83,7 +82,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         goBtn = findViewById(R.id.goBtn);
         //инициализация переменных
         arguments = getIntent().getExtras();
-        SUBJECT_TABLE_NAME = Objects.requireNonNull(arguments).getString("subject");
+        assert arguments != null;
+        SUBJECT_TABLE_NAME = arguments.getString("subject");
         // Обработчики нажатия кнопок
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
@@ -102,7 +102,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
                 Intent intent = getIntent();
-                int NUM_OF_TASKS = Objects.requireNonNull(getIntent().getExtras()).getInt("num_of_tasks");
+                int NUM_OF_TASKS = arguments.getInt("num_of_tasks");
 
                 int Level = Task1.getLevel();
                 String newLevel = ("Уровень: " + Task1.LevelDown(Level));
@@ -121,6 +121,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             }
         });
         ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             public void onClick(DialogInterface dialog, int arg1) {
                 Toast.makeText(context, "Повторение - мать учения", Toast.LENGTH_LONG).show();
                 int Level = Task1.getLevel();
@@ -399,11 +400,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     int GetTaskNum() {
         //возвращает номер задания, сохраненный в Extras
-        assert arguments != null;
         return arguments.getInt("number");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onClick(View view) {
         String sol = textView3.getText().toString();
@@ -467,13 +467,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getResources().getString(R.string.pref_size), "14")));
+        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        assert f_Size != null;
+        Float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
@@ -715,11 +716,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             return x;
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         boolean Check(int n) {
             //проверка текущего задания
             boolean rez;
-            if (giveAns(n).equalsIgnoreCase(Objects.requireNonNull(textInputEditText.getText()).toString())) {
+            Editable gotText = textInputEditText.getText();
+            assert gotText != null;
+            if (giveAns(n).equalsIgnoreCase(gotText.toString())) {
                 textView.setBackgroundResource(R.color.colorAccept);
                 rez = true;
                 MISTAKES.remove(n);
