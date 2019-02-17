@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +28,6 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
     long TIME_INTERVAL = AlarmManager.INTERVAL_DAY;
     TimePicker mTimePicker;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time);
@@ -63,7 +60,6 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
         textView.append(activityPreferences.getString(NEXT_NOTIFICATION_TIME, ""));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

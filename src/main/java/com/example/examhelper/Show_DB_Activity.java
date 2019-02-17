@@ -8,10 +8,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 import com.example.examhelper.data.CustomDbHelper;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class Show_DB_Activity extends AppCompatActivity implements View.OnClickListener {
     AlertDialog.Builder ad;
@@ -170,14 +167,14 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("myLogs", "Resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        Float fSize = Float.parseFloat(Objects.requireNonNull(prefs.getString(getString(R.string.pref_size), "14")));
+        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        assert f_Size != null;
+        Float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         TextView text_view_info = findViewById(R.id.text_view_info);
         text_view_info.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
