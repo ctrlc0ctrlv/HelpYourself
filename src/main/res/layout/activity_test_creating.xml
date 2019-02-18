@@ -15,6 +15,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Проверить тест"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
+
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"

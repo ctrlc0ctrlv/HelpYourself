@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -35,6 +36,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     int TASK_NUM;
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
+
+    public static final String TEST_PROGRESS = "my_test";
+    public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +96,10 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textView3.append(String.valueOf(arguments.getInt("num_of_tasks")));
         textView4.append(" " + Integer.toString(base_ids[TASK_NUM]));
         textView.setText(giveUsl(base_ids[TASK_NUM]));
+
+        SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+        String previous_answer = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), "");
+        textInputEditText.setText(previous_answer);
     }
 
     @Override
@@ -190,5 +198,14 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
     public void onPause() {
         super.onPause();
+        Editable ans = textInputEditText.getText();
+        assert ans != null;
+
+        SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = activityPreferences.edit();
+        ed.putString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), ans.toString());
+        ed.apply();
+
+        Log.d("myLogs", "текущий ответ = " + ans);
     }
 }

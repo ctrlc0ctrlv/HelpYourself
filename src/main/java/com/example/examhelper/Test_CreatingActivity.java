@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -26,8 +28,11 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
     private static final String[] keys = {"line1", "line2"};
     private static final int[] controlIds = {android.R.id.text1, android.R.id.text2};
 
+    public static final String TEST_PROGRESS = "my_test";
+
     AlertDialog.Builder dialog;
     ListView listView;
+    Button button;
 
     Bundle arguments;
     int NUM_OF_TASKS;
@@ -40,6 +45,8 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_creating);
+        button = findViewById(R.id.button);
+        button.setOnClickListener(this);
 
         tryDBHelper = new TryingDBHelper(this);
 
@@ -63,6 +70,10 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         dialog.setCancelable(false);
         dialog.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
+                SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor ed = activityPreferences.edit();
+                ed.clear();
+                ed.apply();
                 finish();
             }
         });
