@@ -15,10 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -40,6 +45,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     public static final String TEST_PROGRESS = "my_test";
     public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answering);
@@ -97,6 +103,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textView4.append(" " + Integer.toString(base_ids[TASK_NUM]));
         textView.setText(giveUsl(base_ids[TASK_NUM]));
 
+        setUpTable(base_ids[TASK_NUM]);
+        setUpWebView(base_ids[TASK_NUM]);
+
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
         String previous_answer = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), "");
         textInputEditText.setText(previous_answer);
@@ -121,6 +130,18 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                     re_create(curr);
                 }
                 break;
+        }
+    }
+
+    void setUpWebView(int n) {
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+            if (TASK_NUM == 15) {
+                WebView webView = findViewById(R.id.webView);
+                String url = "file:///android_asset/informatics/";
+                url += n;
+                url += ".png";
+                webView.loadUrl(url);
+            }
         }
     }
 
@@ -174,6 +195,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         return st;
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -194,8 +216,14 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
             typeface += Typeface.ITALIC;
         // меняем настройки в TextView
         textView.setTypeface(null, typeface);
+
+        assert arguments != null;
+        int[] base_ids = arguments.getIntArray("base_ids");
+        assert base_ids != null;
+        setUpTable(base_ids[TASK_NUM]);
     }
 
+    @Override
     public void onPause() {
         super.onPause();
         Editable ans = textInputEditText.getText();
@@ -205,7 +233,170 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         SharedPreferences.Editor ed = activityPreferences.edit();
         ed.putString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), ans.toString());
         ed.apply();
+    }
 
-        Log.d("myLogs", "текущий ответ = " + ans);
+    void setUpTable(int n) {
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+            String raw_table = giveTable(n);
+            if (raw_table != null) {
+                char height = raw_table.charAt(0);
+                char width = raw_table.charAt(2);
+                String ids[];
+                ids = raw_table.substring(4).split("\\$");
+                createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
+            }
+        }
+    }
+
+    String giveTable(int n) {
+        tryDB = tryDBHelper.getReadableDatabase();
+        String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
+
+        String raw_elements;
+        Cursor cursor = tryDB.rawQuery(raw, null);
+        cursor.moveToFirst();
+        raw_elements = cursor.getString(5);
+        cursor.close();
+        return raw_elements;
+    }
+
+    void createTable(int height, int width, String[] ids) {
+        TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
+        tableLayout_auto.removeAllViews();
+        TableLayout tableLayout_black = findViewById(R.id.prices_black);
+        tableLayout_black.removeAllViews();
+        TableLayout tableLayout = findViewById(R.id.prices);
+        tableLayout.removeAllViews();
+        //общая инициализация
+        TableRow tableRow = new TableRow(this);
+        TableRow tableRow1 = new TableRow(this);
+        TableRow tableRow2 = new TableRow(this);
+        TableRow tableRow3 = new TableRow(this);
+        TableRow tableRow4 = new TableRow(this);
+        TableRow tableRow5 = new TableRow(this);
+        TableRow tableRow6 = new TableRow(this);
+        TableRow tableRow7 = new TableRow(this);
+        TableRow tableRow8 = new TableRow(this);
+        TableRow tableRow9 = new TableRow(this);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        params.setMargins(1, 1, 1, 1);
+        boolean END_OF_STRING = false;
+        int a = 0;
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Включать автоматически");
+        assert night_mode != null;
+        for (int i = 1; i <= height; i++) {
+            while (a < i * width) {
+                if (a >= ids.length) {
+                    END_OF_STRING = true;
+                    break;
+                }
+                TextView tableElement = new TextView(this);
+                tableElement.setTextSize(20);
+                tableElement.setLayoutParams(params);
+                tableElement.setGravity(Gravity.START);
+                if (night_mode.equalsIgnoreCase("Да")) {
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefultBlack));
+                } else if (night_mode.equalsIgnoreCase("Нет")) {
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                }
+                if (ids[a].equalsIgnoreCase("#")) {
+                    tableElement.setText(" ");
+                } else {
+                    tableElement.setText(ids[a]);
+                }
+                switch (i) {
+                    case 1:
+                        tableRow.addView(tableElement);
+                        tableRow.setGravity(Gravity.CENTER);
+                        break;
+                    case 2:
+                        tableRow1.addView(tableElement);
+                        tableRow1.setGravity(Gravity.START);
+                        break;
+                    case 3:
+                        tableRow2.addView(tableElement);
+                        tableRow2.setGravity(Gravity.CENTER);
+                        break;
+                    case 4:
+                        tableRow3.addView(tableElement);
+                        tableRow3.setGravity(Gravity.CENTER);
+                        break;
+                    case 5:
+                        tableRow4.addView(tableElement);
+                        tableRow4.setGravity(Gravity.CENTER);
+                        break;
+                    case 6:
+                        tableRow5.addView(tableElement);
+                        tableRow5.setGravity(Gravity.CENTER);
+                        break;
+                    case 7:
+                        tableRow6.addView(tableElement);
+                        tableRow6.setGravity(Gravity.CENTER);
+                        break;
+                    case 8:
+                        tableRow7.addView(tableElement);
+                        tableRow7.setGravity(Gravity.CENTER);
+                        break;
+                    case 9:
+                        tableRow8.addView(tableElement);
+                        tableRow8.setGravity(Gravity.CENTER);
+                        break;
+                    case 10:
+                        tableRow9.addView(tableElement);
+                        tableRow9.setGravity(Gravity.CENTER);
+                        break;
+                }
+                a++;
+            }
+            //проверка достижения конца строки
+            if (END_OF_STRING) {
+                break;
+            }
+        }
+        //разное оформление и разные таблицы для разных значений "ночного режима"
+        switch (night_mode) {
+            case ("Включать автоматически"):
+                tableLayout_auto.bringToFront();
+                tableLayout_auto.addView(tableRow);
+                tableLayout_auto.addView(tableRow1);
+                tableLayout_auto.addView(tableRow2);
+                tableLayout_auto.addView(tableRow3);
+                tableLayout_auto.addView(tableRow4);
+                tableLayout_auto.addView(tableRow5);
+                tableLayout_auto.addView(tableRow6);
+                tableLayout_auto.addView(tableRow7);
+                tableLayout_auto.addView(tableRow8);
+                tableLayout_auto.addView(tableRow9);
+                break;
+            case ("Да"):
+                //вставка строк в таблицу
+                tableLayout_black.bringToFront();
+                tableLayout_black.addView(tableRow);
+                tableLayout_black.addView(tableRow1);
+                tableLayout_black.addView(tableRow2);
+                tableLayout_black.addView(tableRow3);
+                tableLayout_black.addView(tableRow4);
+                tableLayout_black.addView(tableRow5);
+                tableLayout_black.addView(tableRow6);
+                tableLayout_black.addView(tableRow7);
+                tableLayout_black.addView(tableRow8);
+                tableLayout_black.addView(tableRow9);
+                break;
+            case ("Нет"):
+                //вставка строк в таблицу
+                tableLayout.bringToFront();
+                tableLayout.addView(tableRow);
+                tableLayout.addView(tableRow1);
+                tableLayout.addView(tableRow2);
+                tableLayout.addView(tableRow3);
+                tableLayout.addView(tableRow4);
+                tableLayout.addView(tableRow5);
+                tableLayout.addView(tableRow6);
+                tableLayout.addView(tableRow7);
+                tableLayout.addView(tableRow8);
+                tableLayout.addView(tableRow9);
+                break;
+        }
     }
 }

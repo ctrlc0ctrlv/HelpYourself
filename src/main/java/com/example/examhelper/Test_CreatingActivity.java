@@ -9,12 +9,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,15 +31,15 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
     private static final int[] controlIds = {android.R.id.text1, android.R.id.text2};
 
     public static final String TEST_PROGRESS = "my_test";
+    public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
 
-    AlertDialog.Builder dialog;
-    ListView listView;
-    Button button;
+    private AlertDialog.Builder dialog;
+    private Button button;
+    private ListView listView;
 
-    Bundle arguments;
-    int NUM_OF_TASKS;
-    String SUBJECT_TABLE_NAME;
-    int[] base_ids;
+    private int NUM_OF_TASKS;
+    private String SUBJECT_TABLE_NAME;
+    private int[] base_ids;
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
 
@@ -50,7 +52,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
         tryDBHelper = new TryingDBHelper(this);
 
-        arguments = getIntent().getExtras();
+        Bundle arguments = getIntent().getExtras();
         assert arguments != null;
 
         NUM_OF_TASKS = arguments.getInt("num_of_tasks");
@@ -79,6 +81,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         });
         dialog.setNegativeButton(noString, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
+
             }
         });
 
@@ -115,13 +118,71 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button:
+                checkTest();
+                button.setEnabled(false);
+                break;
+        }
+    }
 
+    public void checkTest() {
+        String[] curr_ans = getAnswers();
+        String[] base_ans = getAnswersFromBase();
+
+        int rez = 0;
+
+        for (int num = 1; num <= NUM_OF_TASKS; num++) {
+            if (curr_ans[num].equalsIgnoreCase(base_ans[num])) {
+                rez += 1;
+            }
+        }
+
+        Toast.makeText(this, "Решено верно: " + Integer.toString(rez) + "\nРешено неверно: " + Integer.toString(NUM_OF_TASKS - rez), Toast.LENGTH_LONG).show();
+
+        //Log.d("myLogs", "curr_answers = "+Arrays.toString(curr_answers));
+        //Log.d("myLogs", "curr_base_answers = "+Arrays.toString(curr_base_answers));
     }
 
     @Override
     public void onBackPressed() {
         dialog.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = activityPreferences.edit();
+        ed.clear();
+        ed.apply();
+        Log.d("myLogs", "cleared successfully");
+    }
+
+    String[] getAnswers() {
+        String[] curr_answers = new String[NUM_OF_TASKS + 1];
+        for (int i = 1; i <= NUM_OF_TASKS; i++) {
+            SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+            curr_answers[i] = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(i), "");
+        }
+        return curr_answers;
+    }
+
+    String[] getAnswersFromBase() {
+        String[] curr_base_answers = new String[NUM_OF_TASKS + 1];
+
+        tryDB = tryDBHelper.getReadableDatabase();
+
+        for (int x = 1; x <= NUM_OF_TASKS; x++) {
+            String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id == " + base_ids[x];
+            Cursor cursor = tryDB.rawQuery(raw, null);
+
+            cursor.moveToFirst();
+            curr_base_answers[x] = cursor.getString(2);
+            cursor.close();
+        }
+        return curr_base_answers;
     }
 
     void initialise_items() {

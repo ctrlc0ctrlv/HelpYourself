@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("myLogs","OnCreate");
@@ -41,10 +42,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(modeNight);
     }
 
+    @Override
     public void onClick(View view){
-        Intent i;
-            i = new Intent(this,ChooseIntentionActivity.class);
-            startActivity(i);
+        switch (view.getId()) {
+            case R.id.button:
+                Intent i;
+                i = new Intent(this, ChooseIntentionActivity.class);
+                startActivity(i);
+                break;
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,11 +114,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         AppCompatDelegate.setDefaultNightMode(modeNight);
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        Log.d("myLogs","onStop");
     }
 }
