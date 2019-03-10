@@ -8,8 +8,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -81,9 +83,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         ad.setMessage(message); // сообщение
         ad.setCancelable(false);
         ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             public void onClick(DialogInterface dialog, int arg1) {
-                setResult(RESULT_OK);
-                finish();
+                set_And_fin();
             }
         });
         ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
@@ -111,6 +113,11 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textInputEditText.setText(previous_answer);
     }
 
+    void set_And_fin() {
+
+        finish();
+    }
+
     @Override
     public void onClick(View view) {
         int curr;
@@ -120,8 +127,8 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 if (curr <= arguments.getInt("num_of_tasks")) {
                     re_create(curr);
                 } else {
-                    ad.create();
-                    ad.show();
+                    //ad.create();
+                    //ad.show();
                 }
                 break;
             case R.id.enterBtn:
@@ -139,7 +146,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 WebView webView = findViewById(R.id.webView);
                 String url = "file:///android_asset/informatics/";
                 url += n;
-                url += ".png";
+                url += ".jpg";
                 webView.loadUrl(url);
             }
         }

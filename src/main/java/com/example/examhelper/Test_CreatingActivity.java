@@ -1,5 +1,6 @@
 package com.example.examhelper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,15 +20,15 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-public class Test_CreatingActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final List<Map<String, String>> items = new ArrayList<>();
-    private static final String[] keys = {"line1", "line2"};
-    private static final int[] controlIds = {android.R.id.text1, android.R.id.text2};
+public class Test_CreatingActivity extends Activity implements View.OnClickListener {
+    private static final List<HashMap<String, Object>> items = new ArrayList<>();
+    private static final String[] keys = {"line1", "line2", "icon1"};
+    private static final int[] controlIds = {R.id.textview_title, R.id.textview_description, R.id.imageview_icon};
 
     public static final String TEST_PROGRESS = "my_test";
     public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
@@ -43,22 +43,32 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
 
+    private Bundle arguments;
+    private boolean[] poses;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("myLogs", "created successfuly");
         setContentView(R.layout.activity_test_creating);
         button = findViewById(R.id.button);
         button.setOnClickListener(this);
 
         tryDBHelper = new TryingDBHelper(this);
 
-        Bundle arguments = getIntent().getExtras();
+        arguments = getIntent().getExtras();
         assert arguments != null;
 
         NUM_OF_TASKS = arguments.getInt("num_of_tasks");
         SUBJECT_TABLE_NAME = arguments.getString("subject");
+        boolean checked = arguments.getBoolean("checked");
+        poses = new boolean[NUM_OF_TASKS];
 
-        initialise_items();
+        if (checked) {
+            button.setEnabled(false);
+            poses = arguments.getBooleanArray("solved");
+        }
+        initialise_items(checked);
 
         final Context context;
         context = Test_CreatingActivity.this;
@@ -89,31 +99,25 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                Intent intent = new Intent(Test_CreatingActivity.this, Test_AnsweringActivity.class);
-                intent.setClass(Test_CreatingActivity.this, Test_AnsweringActivity.class);
-                intent.putExtra("number", position + 1);
-                //intent.putExtra("id", base_ids[position+1]);
-                intent.putExtra("base_ids", base_ids);
-                intent.putExtra("num_of_tasks", NUM_OF_TASKS);
-                intent.putExtra("subject", SUBJECT_TABLE_NAME);
-                startActivityForResult(intent, 1);
+                start_(position);
             }
         });
-        ListAdapter adapter1 = null;
 
-
-        switch (NUM_OF_TASKS) {
-            case 23:
-                adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
-                break;
-            case 20:
-                adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
-                break;
-            case 26:
-                adapter1 = new SimpleAdapter(this, items, android.R.layout.simple_list_item_2, keys, controlIds);
-                break;
-        }
+        ListAdapter adapter1 = new SimpleAdapter(this, items, R.layout.layer, keys, controlIds);
         listView.setAdapter(adapter1);
+
+        //button.setText(Html.fromHtml("3<sup>1</sup>/<sub>2</sub>"));
+    }
+
+    void start_(int position) {
+        Intent intent = new Intent(this, Test_AnsweringActivity.class);
+        //intent.setClass(Test_CreatingActivity.this, Test_AnsweringActivity.class);
+        intent.putExtra("number", position + 1);
+        //intent.putExtra("id", base_ids[position+1]);
+        intent.putExtra("base_ids", base_ids);
+        intent.putExtra("num_of_tasks", NUM_OF_TASKS);
+        intent.putExtra("subject", SUBJECT_TABLE_NAME);
+        startActivity(intent);
     }
 
     @Override
@@ -121,27 +125,46 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()) {
             case R.id.button:
                 checkTest();
-                button.setEnabled(false);
                 break;
         }
     }
 
     public void checkTest() {
+        button.setEnabled(false);
+
         String[] curr_ans = getAnswers();
         String[] base_ans = getAnswersFromBase();
 
         int rez = 0;
 
+
         for (int num = 1; num <= NUM_OF_TASKS; num++) {
             if (curr_ans[num].equalsIgnoreCase(base_ans[num])) {
+                poses[num - 1] = true;
                 rez += 1;
+
+                //listView.getAdapter().getView()
+                //viewGroup.getRootView().setBackgroundColor(getResources().getColor(R.color.colorAccept));
+            } else {
+                poses[num - 1] = false;
             }
         }
 
+        Log.d("myLogs", Arrays.toString(poses));
         Toast.makeText(this, "Решено верно: " + Integer.toString(rez) + "\nРешено неверно: " + Integer.toString(NUM_OF_TASKS - rez), Toast.LENGTH_LONG).show();
-
+        re_create();
         //Log.d("myLogs", "curr_answers = "+Arrays.toString(curr_answers));
         //Log.d("myLogs", "curr_base_answers = "+Arrays.toString(curr_base_answers));
+    }
+
+    void re_create() {
+        Intent intent = getIntent();
+        intent.putExtra("checked", true);
+        intent.putExtra("base_ids", base_ids);
+        intent.putExtra("solved", poses);
+
+        finish();
+        startActivity(intent);
     }
 
     @Override
@@ -185,16 +208,23 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         return curr_base_answers;
     }
 
-    void initialise_items() {
+    void initialise_items(boolean checked) {
         items.clear();
-        Map<String, String> map;
+        HashMap<String, Object> map;
 
-        return_base_ids();
+        if (!checked) {
+            return_base_ids();
+        } else {
+            base_ids = arguments.getIntArray("base_ids");
+        }
 
         for (int i = 1; i <= NUM_OF_TASKS; i++) {
             map = new HashMap<>();
             map.put("line1", "Задание " + i);
             map.put("line2", Integer.toString(base_ids[i]));
+            if (checked && poses[i - 1]) {
+                map.put("icon1", R.drawable.tick);
+            }
             items.add(map);
         }
     }
