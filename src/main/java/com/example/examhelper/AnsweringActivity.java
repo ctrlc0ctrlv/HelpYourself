@@ -376,7 +376,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 WebView webView = findViewById(R.id.webView);
                 String url = "file:///android_asset/informatics/";
                 url += n;
-                url += ".png";
+                url += ".jpg";
                 webView.loadUrl(url);
             }
         }
@@ -472,7 +472,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        String f_Size = prefs.getString("text_size", "14");
         assert f_Size != null;
         Float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле

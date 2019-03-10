@@ -1,8 +1,13 @@
 <resources>
     <!--Базовые ресурсы приложения-->
     <string name="app_name">HelpYourself</string>
+
+    <!--Ресурсы для MainActivity-->
     <string name="welcome_to_the_club_buddy">Welcome to the club, buddy!</string>
     <string name="let_s_start">Начать работу</string>
+    <string name="map">Карта</string>
+    <string name="dial">Диал</string>
+    <string name="mail">Мыло</string>
 
     <!--Ресурсы для ButtonsActivity-->
     <string name="_1">Задание 1</string>
@@ -44,6 +49,7 @@
 
     <!--Ресурсы для Test_CreatingActivity-->
     <string name="no_information">Нет данных</string>
+    <string name="check_test">Проверить тест</string>
 
     <!--Ресурсы для Show_DB_Activity-->
     <string name="level"><b>Уровень</b></string>
@@ -77,12 +83,7 @@
     <!--Ресурсы для SettingsActivity-->
     <string name="action_settings">Настройки</string>
     <string name="action_delete_progress">Сбросить прогресс</string>
-    <string name="pref_color">Цвет текста</string>
-    <string name="pref_color_black">Черный цвет</string>
-    <string name="pref_color_red">Красный цвет</string>
-    <string name="pref_color_green">Зеленый цвет</string>
-    <string name="pref_color_blue">Синий цвет</string>
-    <string name="pref_size">Размер текста</string>
+    <string name="pref_size">text_size</string>
     <string name="pref_style">Стиль текста</string>
     <string name="pref_style_regular">Нормальный</string>
     <string name="pref_style_bold">Полужирный</string>

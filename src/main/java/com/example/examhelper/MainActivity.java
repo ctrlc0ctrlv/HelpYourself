@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -40,6 +42,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         AppCompatDelegate.setDefaultNightMode(modeNight);
+
+
+        final TextView text_view = findViewById(R.id.text_view);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_map:
+                                text_view.setText("Карта");
+                                item.setChecked(true);
+                                break;
+                            case R.id.action_dial:
+                                text_view.setText("Диал");
+                                item.setChecked(true);
+                                break;
+                            case R.id.action_mail:
+                                text_view.setText("Мыло");
+                                item.setChecked(true);
+                                break;
+                        }
+                        return false;
+                    }
+                });
     }
 
     @Override

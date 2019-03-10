@@ -7,6 +7,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
@@ -44,8 +45,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 AppCompatDelegate.setDefaultNightMode(modeNight);
                 finish();
                 break;
-            case ("Размер шрифта"):
+            case ("text_size"):
                 Log.d("myLogs","Изменен размер текста");
+                String f_Size = preferences.getString("text_size", "14");
+                assert f_Size != null;
+                Float fSize = Float.parseFloat(f_Size);
+                if (fSize < 10) {
+                    Toast.makeText(this, "Использование слишком малого размера шрифта может привести к ошибкам", Toast.LENGTH_LONG).show();
+                } else if (fSize > 32) {
+                    Toast.makeText(this, "Использование слишком большого размера шрифта может привести к ошибкам", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
