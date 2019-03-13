@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final TextView text_view = findViewById(R.id.text_view);
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.getMenu().getItem(1).setChecked(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -53,17 +53,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_map:
-                                text_view.setText("Карта");
+                                text_view.setText("Задания");
                                 item.setChecked(true);
-                                break;
-                            case R.id.action_dial:
-                                text_view.setText("Диал");
-                                item.setChecked(true);
+                                finish();
+                                Intent intent0 = new Intent(getBaseContext(), Show_DB_Activity.class);
+                                startActivity(intent0);
                                 break;
                             case R.id.action_mail:
-                                text_view.setText("Мыло");
+                                text_view.setText("Решать");
                                 item.setChecked(true);
+                                finish();
+                                Intent intent1 = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(intent1);
                                 break;
+                            case R.id.action_settings:
+                                text_view.setText("Настройки");
+                                item.setChecked(true);
+                                finish();
+                                Intent intent2 = new Intent(getBaseContext(), NewSettingsActivity.class);
+                                startActivity(intent2);
                         }
                         return false;
                     }
@@ -81,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    /*public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem action_delete_progress = menu.findItem(R.id.action_delete_progress);
         MenuItem action_reload_task = menu.findItem(R.id.action_reload_task);
@@ -91,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         action_delete_progress.setVisible(false);
         action_clear_database.setVisible(false);
         return true;
-    }
+    }*/
 
-    public boolean onOptionsItemSelected(MenuItem item) {
+    /*public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent();
@@ -103,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 return true;
         }
-    }
+    }*/
 
     @Override
     public void onResume() {
@@ -112,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
         assert f_Size != null;
-        Float fSize = Float.parseFloat(f_Size);
+        float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         TextView text_view = findViewById(R.id.text_view);
         text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);

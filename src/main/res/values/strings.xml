@@ -5,9 +5,10 @@
     <!--Ресурсы для MainActivity-->
     <string name="welcome_to_the_club_buddy">Welcome to the club, buddy!</string>
     <string name="let_s_start">Начать работу</string>
-    <string name="map">Карта</string>
-    <string name="dial">Диал</string>
-    <string name="mail">Мыло</string>
+    <string name="map">Задания</string>
+    <string name="dial">Тест</string>
+    <string name="mail">Решать</string>
+    <string name="settings">Настройки</string>
 
     <!--Ресурсы для ButtonsActivity-->
     <string name="_1">Задание 1</string>
@@ -92,5 +93,8 @@
 
     <!--Ресурсы для TimeActivity-->
     <string name="set_notification">Настроить уведомление</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

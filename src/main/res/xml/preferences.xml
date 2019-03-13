@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:defaultValue="14"
-        android:dialogTitle="Введите размер шрифта (от 10 до 32)"
-        android:inputType="number"
-        android:key="text_size"
-        android:summary="Устанавливает новый размер шрифта"
-        android:title="Размер шрифта" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/app_name">
+    <PreferenceCategory android:title="Шрифт">
+        <EditTextPreference
+            android:defaultValue="14"
+            android:dialogTitle="Введите размер шрифта (от 10 до 32)"
+            android:inputType="number"
+            android:key="text_size"
+            android:summary="Устанавливает новый размер шрифта"
+            android:title="Размер шрифта" />
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Выберите стиль для шрифта"
+            android:entries="@array/text_style"
+            android:entryValues="@array/text_style"
+            android:key="@string/pref_style"
+            android:summary="Устанавливает стиль для шрифта"
+            android:title="Стиль для шрифта" />
+    </PreferenceCategory>
 
-    <ListPreference
-        android:key="@string/pref_style"
-        android:title="Стиль для шрифта"
-        android:summary="Устанавливает стиль для шрифта"
-        android:defaultValue="1"
-        android:entries="@array/text_style"
-        android:entryValues="@array/text_style"
-        android:dialogTitle="Выберите стиль для шрифта" />
-
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="save_progress"
-        android:summary="Возможность сохранять прогресс после выхода из приложения"
-        android:title="Сохранение прогресса" />
+    <PreferenceCategory android:title="Прогресс">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="save_progress"
+            android:summary="Возможность сохранять прогресс после выхода из приложения"
+            android:title="Сохранение прогресса" />
+    </PreferenceCategory>
 
 
-    <ListPreference
-        android:key="night_mode"
-        android:summary="Изменение цветовой схемы для лучшего отображения в темноте"
-        android:title="Ночной режим"
-        android:defaultValue="auto"
-        android:entries="@array/night_modes"
-        android:entryValues="@array/night_modes"
-        android:dialogTitle="Включить ночной режим?" />
+    <PreferenceCategory android:title="Внешний вид">
+        <ListPreference
+            android:defaultValue="auto"
+            android:dialogTitle="Включить ночной режим?"
+            android:entries="@array/night_modes"
+            android:entryValues="@array/night_modes"
+            android:key="night_mode"
+            android:summary="Изменение цветовой схемы для лучшего отображения в темноте"
+            android:title="Ночной режим" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -49,7 +49,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 Log.d("myLogs","Изменен размер текста");
                 String f_Size = preferences.getString("text_size", "14");
                 assert f_Size != null;
-                Float fSize = Float.parseFloat(f_Size);
+                float fSize = Float.parseFloat(f_Size);
                 if (fSize < 10) {
                     Toast.makeText(this, "Использование слишком малого размера шрифта может привести к ошибкам", Toast.LENGTH_LONG).show();
                 } else if (fSize > 32) {

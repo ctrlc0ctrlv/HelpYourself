@@ -5,8 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorAccept">#7a66ff00</color>
     <color name="colorDeny">#7aff0000</color>
-    <color name="colorDefault">#eeeeee</color>
-    <color name="colorDarkDefault">#cccccc</color>
+    <color name="colorDefault">#EEEEEE</color>
+    <color name="colorDarkDefault">#CCCCCC</color>
     <color name="colorBlack">#000000</color>
     <color name="colorDefultBlack">#111111</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

@@ -474,7 +474,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString("text_size", "14");
         assert f_Size != null;
-        Float fSize = Float.parseFloat(f_Size);
+        float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
@@ -575,6 +575,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setGravity(Gravity.START);
+                tableElement.setWidth(TableLayout.LayoutParams.MATCH_PARENT);
                 if (night_mode.equalsIgnoreCase("Да")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefultBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
@@ -592,7 +593,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                         break;
                     case 2:
                         tableRow1.addView(tableElement);
-                        tableRow1.setGravity(Gravity.START);
+                        tableRow1.setGravity(Gravity.CENTER);
                         break;
                     case 3:
                         tableRow2.addView(tableElement);
