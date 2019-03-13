@@ -10,10 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,13 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
     private SQLiteDatabase mDb;
     private CustomDbHelper cDBHelper;
     private SQLiteDatabase cDb;
+
+    final int INDEX_INFORMATICS = 101;
+    final int INDEX_RUSSIAN = 102;
+    final int INDEX_MATHS_BASE = 103;
+
+    String TABLE_SUBJECT_NAME = null;
+    int number = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +85,65 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
             public void onClick(DialogInterface dialog, int arg1) {
             }
         });
+
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_map:
+                                item.setChecked(true);
+                                finish();
+                                Intent intent0 = new Intent(getBaseContext(), Show_DB_Activity.class);
+                                startActivity(intent0);
+                                break;
+                            case R.id.action_mail:
+                                item.setChecked(true);
+                                finish();
+                                Intent intent1 = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(intent1);
+                                break;
+                            case R.id.action_settings:
+                                item.setChecked(true);
+                                finish();
+                                Intent intent2 = new Intent(getBaseContext(), NewSettingsActivity.class);
+                                startActivity(intent2);
+                        }
+                        return false;
+                    }
+                });
+
+        registerForContextMenu(button6);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        switch (view.getId()) {
+            case R.id.button6:
+                menu.add(Menu.NONE, INDEX_INFORMATICS, Menu.NONE, "Информатика");
+                menu.add(Menu.NONE, INDEX_RUSSIAN, Menu.NONE, "Русский язык");
+                menu.add(Menu.NONE, INDEX_MATHS_BASE, Menu.NONE, "Математика (базовый уровень)");
+                break;
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case INDEX_INFORMATICS:
+                TABLE_SUBJECT_NAME = "informatics";
+                break;
+            case INDEX_RUSSIAN:
+                TABLE_SUBJECT_NAME = "russian";
+                break;
+            default:
+                return super.onContextItemSelected(item);
+        }
+        return true;
+    }
 
     @Override
     public void onClick(View view) {
@@ -93,9 +159,12 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.button6:
+                openContextMenu(findViewById(R.id.button6));
+
+
                 TextView text_view_info = findViewById(R.id.text_view_info);
                 StringBuilder productBuilder = new StringBuilder();
-                for (int i = 1; i < 4; i++) {
+                /*for (int i = 1; i < 4; i++) {
                     productBuilder.append(getString(R.string.level)).append(" ").append(i).append(":\n");
                     arguments = getIntent().getExtras();
                     assert arguments != null;
@@ -112,7 +181,7 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                     }
                     productBuilder.append("\n");
                     cursor.close();
-                }
+                }*/
                 String product = productBuilder.toString();
                 text_view_info.setText(product);
                 break;
@@ -174,7 +243,7 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
         assert f_Size != null;
-        Float fSize = Float.parseFloat(f_Size);
+        float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         TextView text_view_info = findViewById(R.id.text_view_info);
         text_view_info.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
