@@ -32,9 +32,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 assert night_mode != null;
                 int modeNight = 0;
                 switch (night_mode){
-                    case ("Включать автоматически"):
-
-                        break;
                     case ("Да"):
                         modeNight = AppCompatDelegate.MODE_NIGHT_YES;
                         break;

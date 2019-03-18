@@ -16,7 +16,6 @@
     <string-array name="night_modes">
         <item>Да</item>
         <item>Нет</item>
-        <item>Включать автоматически</item>
     </string-array>
 
     <string-array name="tasks_informatics">

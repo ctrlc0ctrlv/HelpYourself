@@ -252,5 +252,7 @@ public class Test_CreatingActivity extends Activity implements View.OnClickListe
             base_ids[x] = cursor.getInt(0);
             cursor.close();
         }
+        Log.d("myLogs", Arrays.toString(base_ids));
+        Log.d("myLogs", SUBJECT_TABLE_NAME);
     }
 }

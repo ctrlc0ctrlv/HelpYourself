@@ -541,8 +541,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void createTable(int height, int width, String[] ids) {
-        TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
-        tableLayout_auto.removeAllViews();
+        //TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
+        //tableLayout_auto.removeAllViews();
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
@@ -637,19 +637,19 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         //разное оформление и разные таблицы для разных значений "ночного режима"
         switch (night_mode) {
-            case ("Включать автоматически"):
-                tableLayout_auto.bringToFront();
-                tableLayout_auto.addView(tableRow);
-                tableLayout_auto.addView(tableRow1);
-                tableLayout_auto.addView(tableRow2);
-                tableLayout_auto.addView(tableRow3);
-                tableLayout_auto.addView(tableRow4);
-                tableLayout_auto.addView(tableRow5);
-                tableLayout_auto.addView(tableRow6);
-                tableLayout_auto.addView(tableRow7);
-                tableLayout_auto.addView(tableRow8);
-                tableLayout_auto.addView(tableRow9);
-                break;
+            //case ("Включать автоматически"):
+            //tableLayout_auto.bringToFront();
+            //tableLayout_auto.addView(tableRow);
+            //tableLayout_auto.addView(tableRow1);
+            //tableLayout_auto.addView(tableRow2);
+            //tableLayout_auto.addView(tableRow3);
+            //tableLayout_auto.addView(tableRow4);
+            //tableLayout_auto.addView(tableRow5);
+            //tableLayout_auto.addView(tableRow6);
+            //tableLayout_auto.addView(tableRow7);
+            //tableLayout_auto.addView(tableRow8);
+            //tableLayout_auto.addView(tableRow9);
+            //break;
             case ("Да"):
                 //вставка строк в таблицу
                 tableLayout_black.bringToFront();

@@ -3,6 +3,7 @@ package com.example.examhelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -94,7 +95,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         Intent intent = null;
-        boolean chosen_solve = arguments.getBoolean("chosen_solve");
+        /*boolean chosen_solve = arguments.getBoolean("chosen_solve");
         boolean chosen_my = arguments.getBoolean("chosen_my");
 
         if (chosen_solve) {
@@ -104,7 +105,10 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
                 intent = new Intent(this, Show_DB_Activity.class);
                 //intent = new Intent (this, DataBaseDisplayActivity.class);
             }
-        }
+        }*/
+
+        intent = new Intent(this, AnsweringActivity.class);
+
         int Number = 0;
         switch (view.getId()) {
             case R.id.buttonChoice1:
@@ -188,6 +192,7 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         }
         assert intent != null;
         intent.putExtra("subject", arguments.getString("subject"));
+        Log.d("myLogs", arguments.getString("subject"));
         intent.putExtra("number", Number);
         intent.putExtra("num_of_tasks", NUM);
         startActivity(intent);

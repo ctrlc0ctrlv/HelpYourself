@@ -14,9 +14,12 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assert night_mode != null;
         int modeNight = 0;
         switch (night_mode){
-            case ("Включать автоматически"):
-
-                break;
             case ("Да"):
                 modeNight = AppCompatDelegate.MODE_NIGHT_YES;
                 break;
@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         AppCompatDelegate.setDefaultNightMode(modeNight);
 
+        final Intent intent0 = new Intent(this, Show_DB_Activity.class);
+        final Intent intent1 = new Intent(this, MainActivity.class);
 
         final TextView text_view = findViewById(R.id.text_view);
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -54,23 +56,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         switch (item.getItemId()) {
                             case R.id.action_map:
                                 text_view.setText("Задания");
-                                item.setChecked(true);
-                                finish();
-                                Intent intent0 = new Intent(getBaseContext(), Show_DB_Activity.class);
-                                startActivity(intent0);
+                                RadioGroup radioGroup = findViewById(R.id.radioGroup);
+                                switch (radioGroup.getCheckedRadioButtonId()) {
+                                    case -1:
+                                        Toast.makeText(getBaseContext(), "Выберите необходимый предмет для начала работы", Toast.LENGTH_LONG).show();
+                                        break;
+                                    case R.id.radioButton:
+                                        intent0.putExtra("subject", "informatics");
+                                        intent0.putExtra("num_of_tasks", 23);
+                                        item.setChecked(true);
+                                        finish();
+                                        startActivity(intent0);
+                                        break;
+                                    case R.id.radioButton2:
+                                        intent0.putExtra("subject", "russian");
+                                        intent0.putExtra("num_of_tasks", 26);
+                                        item.setChecked(true);
+                                        finish();
+                                        startActivity(intent0);
+                                        break;
+                                    case R.id.radioButton3:
+                                        intent0.putExtra("subject", "maths_base");
+                                        intent0.putExtra("num_of_tasks", 20);
+                                        item.setChecked(true);
+                                        finish();
+                                        startActivity(intent0);
+                                        break;
+                                }
                                 break;
                             case R.id.action_mail:
                                 text_view.setText("Решать");
                                 item.setChecked(true);
                                 finish();
-                                Intent intent1 = new Intent(getBaseContext(), MainActivity.class);
                                 startActivity(intent1);
                                 break;
                             case R.id.action_settings:
                                 text_view.setText("Настройки");
-                                item.setChecked(true);
-                                finish();
-                                Intent intent2 = new Intent(getBaseContext(), NewSettingsActivity.class);
+                                Intent intent2 = new Intent(getBaseContext(), SettingsActivity.class);
                                 startActivity(intent2);
                         }
                         return false;
@@ -82,9 +104,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.button:
-                Intent i;
-                i = new Intent(this, ChooseIntentionActivity.class);
-                startActivity(i);
+                //Intent i;
+                //i = new Intent(this, ChooseIntentionActivity.class);
+                //startActivity(i);
+                RadioGroup radioGroup2 = findViewById(R.id.radioGroup2);
+                switch (radioGroup2.getCheckedRadioButtonId()) {
+                    case -1:
+                        Toast.makeText(getBaseContext(), "Выберите необходимые пункты для начала работы", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.radioButton4:
+                        intent = new Intent(this, ButtonsActivity.class);
+                        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+                        switch (radioGroup.getCheckedRadioButtonId()) {
+                            case -1:
+                                Toast.makeText(getBaseContext(), "Выберите необходимый предмет для начала работы", Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.radioButton:
+                                intent.putExtra("subject", "informatics");
+                                intent.putExtra("num_of_tasks", 23);
+                                startActivity(intent);
+                                break;
+                            case R.id.radioButton2:
+                                intent.putExtra("subject", "russian");
+                                intent.putExtra("num_of_tasks", 26);
+                                startActivity(intent);
+                                break;
+                            case R.id.radioButton3:
+                                intent.putExtra("subject", "maths_base");
+                                intent.putExtra("num_of_tasks", 20);
+                                startActivity(intent);
+                                break;
+                        }
+                        break;
+                    case R.id.radioButton5:
+                        intent = new Intent(this, Test_CreatingActivity.class);
+                        radioGroup = findViewById(R.id.radioGroup);
+                        switch (radioGroup.getCheckedRadioButtonId()) {
+                            case -1:
+                                Toast.makeText(getBaseContext(), "Выберите необходимый предмет для начала работы", Toast.LENGTH_LONG).show();
+                                break;
+                            case R.id.radioButton:
+                                intent.putExtra("subject", "informatics");
+                                intent.putExtra("num_of_tasks", 23);
+                                startActivity(intent);
+                                break;
+                            case R.id.radioButton2:
+                                intent.putExtra("subject", "russian");
+                                intent.putExtra("num_of_tasks", 26);
+                                startActivity(intent);
+                                break;
+                            case R.id.radioButton3:
+                                intent.putExtra("subject", "maths_base");
+                                intent.putExtra("num_of_tasks", 20);
+                                startActivity(intent);
+                                break;
+                        }
+                        break;
+                }
                 break;
         }
     }
@@ -113,9 +189,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }*/
 
+
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("myLogs", "Main.resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
@@ -135,13 +213,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // меняем настройки в TextView
         text_view.setTypeface(null, typeface);
 
-        String night_mode = prefs.getString("night_mode","Включать автоматически");
+        String night_mode = prefs.getString("night_mode", "Да");
         assert night_mode != null;
         int modeNight = 0;
         switch (night_mode){
-            case ("Включать автоматически"):
-
-                break;
             case ("Да"):
                 modeNight = AppCompatDelegate.MODE_NIGHT_YES;
                 break;
