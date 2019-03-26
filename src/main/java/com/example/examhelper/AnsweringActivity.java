@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -222,11 +223,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             SharedPreferences activityPreferences = getSharedPreferences(APP_PROGRESS, Context.MODE_PRIVATE);
             BASE_NUM = activityPreferences.getInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), 0);
         }
-        if (BASE_NUM == 0) {
+        /*if (BASE_NUM == 0) {
             setUp();
         } else {
             setUp(BASE_NUM);
-        }
+        }*/
     }
 
     @Override
@@ -333,6 +334,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(" ");
         textView4.append(Integer.toString(n));
         setUpTable(n);
+        Log.d("myLogs", "1");
         setUpWebView(n);
         if (n > 0) {
             BASE_NUM = n;
@@ -349,6 +351,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4.append(" ");
         textView4.append(Integer.toString(num));
         setUpTable(num);
+        Log.d("myLogs", "2");
         setUpWebView(num);
         Task1.setNum(num);
         BASE_NUM = num;
@@ -358,13 +361,23 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUpTable(int n) {
-        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+        ArrayList<String> allowed_table = new ArrayList<>();
+        allowed_table.add("3");
+        allowed_table.add("20");
+        allowed_table.add("21");
+        String curr = String.valueOf(GetTaskNum());
+        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        if ((SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") && allowed_table.contains(curr)) || (SUBJECT_TABLE_NAME.equalsIgnoreCase("russian") && GetTaskNum() == 8)) {
             String raw_table = giveTable(n);
             if (raw_table != null) {
+                Log.d("myLogs", raw_table);
                 char height = raw_table.charAt(0);
                 char width = raw_table.charAt(2);
                 String ids[];
                 ids = raw_table.substring(4).split("\\$");
+                for (int i = 0; i < ids.length; i++) {
+                    ids[i] = ids[i].trim();
+                }
                 createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
             }
         }
@@ -386,15 +399,22 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
 
-        String raw_elements = "";
+        String raw_elements = null;
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToFirst();
             raw_elements = cursor.getString(5);
+            if (raw_elements == null) {
+                Log.d("myLogs", "empty");
+            } else if (raw_elements.equals("")) {
+                Log.d("myLogs", "zero length string at position " + String.valueOf(n));
+            }
             cursor.close();
         } catch (SQLiteException e) {
             ad_exception.create();
         }
+        assert raw_elements != null;
+        raw_elements = raw_elements.trim();
         return raw_elements;
     }
 

@@ -15,12 +15,12 @@ import java.io.OutputStream;
 public class TryingDBHelper extends SQLiteOpenHelper {
         @SuppressLint("SdCardPath")
         private static String DB_PATH = "/data/data/com.example.examhelper/databases/";
-    private static String DB_NAME = "default (2).db";
+    private static String DB_NAME = "default (3).db";
         private SQLiteDatabase dataBase;
         private final Context fContext;
 
         TryingDBHelper(Context context) {
-            super(context, DB_NAME, null, 12);
+            super(context, DB_NAME, null, 8);
             this.fContext = context;
         }
         public void createDataBase() throws IOException {

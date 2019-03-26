@@ -126,9 +126,6 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 curr = arguments.getInt("number") + 1;
                 if (curr <= arguments.getInt("num_of_tasks")) {
                     re_create(curr);
-                } else {
-                    //ad.create();
-                    //ad.show();
                 }
                 break;
             case R.id.enterBtn:
@@ -209,7 +206,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
         assert f_Size != null;
-        Float fSize = Float.parseFloat(f_Size);
+        float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);

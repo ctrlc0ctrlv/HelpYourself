@@ -35,7 +35,6 @@ public class Test_CreatingActivity extends Activity implements View.OnClickListe
 
     private AlertDialog.Builder dialog;
     private Button button;
-    private ListView listView;
 
     private int NUM_OF_TASKS;
     private String SUBJECT_TABLE_NAME;
@@ -95,7 +94,7 @@ public class Test_CreatingActivity extends Activity implements View.OnClickListe
             }
         });
 
-        listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {

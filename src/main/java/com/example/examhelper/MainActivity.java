@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("myLogs", "Main.resume");
+        Log.d("myLogs", "MainActivity.resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
