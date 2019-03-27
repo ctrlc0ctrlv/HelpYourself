@@ -384,9 +384,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUpWebView(int n) {
+        WebView webView = findViewById(R.id.webView);
+        webView.clearView();
+
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (GetTaskNum() == 15) {
-                WebView webView = findViewById(R.id.webView);
+            if (GetTaskNum() == 15 || (GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432))) {
                 String url = "file:///android_asset/informatics/";
                 url += n;
                 url += ".jpg";
@@ -583,7 +585,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         params.setMargins(1, 1, 1, 1);
         boolean END_OF_STRING = false;
         int a = 0;
-        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Включать автоматически");
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Нет");
         assert night_mode != null;
         for (int i = 1; i <= height; i++) {
             while (a < i * width) {
@@ -597,7 +599,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 tableElement.setGravity(Gravity.START);
                 tableElement.setWidth(TableLayout.LayoutParams.MATCH_PARENT);
                 if (night_mode.equalsIgnoreCase("Да")) {
-                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefultBlack));
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorTableBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
                 }

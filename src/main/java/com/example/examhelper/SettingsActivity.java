@@ -28,7 +28,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         switch (key){
             case ("night_mode"):
                 Log.d("myLogs","OnChangeSettings");
-                String night_mode = preferences.getString("night_mode","Включать автоматически");
+                String night_mode = preferences.getString("night_mode", "Нет");
                 assert night_mode != null;
                 int modeNight = 0;
                 switch (night_mode){
@@ -39,6 +39,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         modeNight = AppCompatDelegate.MODE_NIGHT_NO;
                         break;
                 }
+
+                Toast.makeText(getApplicationContext(), "Рекомендуем перезапустить приложение для корректной работы ночного режима", Toast.LENGTH_SHORT).show();
+
                 AppCompatDelegate.setDefaultNightMode(modeNight);
                 finish();
                 break;

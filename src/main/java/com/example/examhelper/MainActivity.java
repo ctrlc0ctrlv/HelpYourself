@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button button = findViewById(R.id.button);
         button.setOnClickListener(this); // Обработчик нажатия кнопки
 
-        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","Включать автоматически");
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Нет");
         assert night_mode != null;
         int modeNight = 0;
         switch (night_mode){
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // меняем настройки в TextView
         text_view.setTypeface(null, typeface);
 
-        String night_mode = prefs.getString("night_mode", "Да");
+        String night_mode = prefs.getString("night_mode", "Нет");
         assert night_mode != null;
         int modeNight = 0;
         switch (night_mode){

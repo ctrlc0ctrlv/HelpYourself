@@ -9,5 +9,6 @@
     <color name="colorDarkDefault">#CCCCCC</color>
     <color name="colorBlack">#000000</color>
     <color name="colorDefultBlack">#111111</color>
+    <color name="colorTableBlack">#333333</color>
     <color name="colorWhite">#FFFFFF</color>
 </resources>

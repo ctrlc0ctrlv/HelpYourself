@@ -29,6 +29,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Test_AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
     TextView textView;
@@ -67,6 +68,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         goBtn.setOnClickListener(this);
         //инициализируем переменные
         tryDBHelper = new TryingDBHelper(this);
+
+        tryDB = tryDBHelper.getReadableDatabase();
+
         arguments = getIntent().getExtras();
         assert arguments != null;
         SUBJECT_TABLE_NAME = arguments.getString("subject");
@@ -184,7 +188,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
     public String giveUsl(final int n) {
         //достает из базы данных условие задания с указанным номером
-        tryDB = tryDBHelper.getReadableDatabase();
+        ///tryDB = tryDBHelper.getReadableDatabase();
         try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
@@ -221,10 +225,10 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         // меняем настройки в TextView
         textView.setTypeface(null, typeface);
 
-        assert arguments != null;
+        /*assert arguments != null;
         int[] base_ids = arguments.getIntArray("base_ids");
         assert base_ids != null;
-        setUpTable(base_ids[TASK_NUM]);
+        setUpTable(base_ids[TASK_NUM]);*/
     }
 
     @Override
@@ -240,20 +244,29 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     }
 
     void setUpTable(int n) {
-        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
+        ArrayList<String> allowed_table = new ArrayList<>();
+        allowed_table.add("3");
+        allowed_table.add("20");
+        allowed_table.add("21");
+        String curr = String.valueOf(TASK_NUM);
+        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        if ((SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") && allowed_table.contains(curr)) || (SUBJECT_TABLE_NAME.equalsIgnoreCase("russian") && TASK_NUM == 8)) {
             String raw_table = giveTable(n);
             if (raw_table != null) {
                 char height = raw_table.charAt(0);
                 char width = raw_table.charAt(2);
                 String ids[];
                 ids = raw_table.substring(4).split("\\$");
+                for (int i = 0; i < ids.length; i++) {
+                    ids[i] = ids[i].trim();
+                }
                 createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
             }
         }
     }
 
     String giveTable(int n) {
-        tryDB = tryDBHelper.getReadableDatabase();
+        ///tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
 
         String raw_elements;
@@ -265,8 +278,6 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     }
 
     void createTable(int height, int width, String[] ids) {
-        TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
-        tableLayout_auto.removeAllViews();
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
@@ -287,7 +298,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         params.setMargins(1, 1, 1, 1);
         boolean END_OF_STRING = false;
         int a = 0;
-        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Включать автоматически");
+        String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Нет");
         assert night_mode != null;
         for (int i = 1; i <= height; i++) {
             while (a < i * width) {
@@ -299,8 +310,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setGravity(Gravity.START);
+                tableElement.setWidth(TableLayout.LayoutParams.MATCH_PARENT);
                 if (night_mode.equalsIgnoreCase("Да")) {
-                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefultBlack));
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorTableBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
                 }
@@ -316,7 +328,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                         break;
                     case 2:
                         tableRow1.addView(tableElement);
-                        tableRow1.setGravity(Gravity.START);
+                        tableRow1.setGravity(Gravity.CENTER);
                         break;
                     case 3:
                         tableRow2.addView(tableElement);
@@ -360,19 +372,6 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         }
         //разное оформление и разные таблицы для разных значений "ночного режима"
         switch (night_mode) {
-            case ("Включать автоматически"):
-                tableLayout_auto.bringToFront();
-                tableLayout_auto.addView(tableRow);
-                tableLayout_auto.addView(tableRow1);
-                tableLayout_auto.addView(tableRow2);
-                tableLayout_auto.addView(tableRow3);
-                tableLayout_auto.addView(tableRow4);
-                tableLayout_auto.addView(tableRow5);
-                tableLayout_auto.addView(tableRow6);
-                tableLayout_auto.addView(tableRow7);
-                tableLayout_auto.addView(tableRow8);
-                tableLayout_auto.addView(tableRow9);
-                break;
             case ("Да"):
                 //вставка строк в таблицу
                 tableLayout_black.bringToFront();
