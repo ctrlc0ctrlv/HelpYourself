@@ -11,4 +11,9 @@
     <color name="colorDefultBlack">#111111</color>
     <color name="colorTableBlack">#333333</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <color name="newPink">#D22780</color>
+    <color name="newPurple">#5e227f</color>
+    <color name="newBlack">#1a1a1a</color>
+    <color name="newGray">#cccccc</color>
 </resources>

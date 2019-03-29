@@ -41,10 +41,10 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_db);
         //Найдем компоненты в XML разметке
-        Button button6 = findViewById(R.id.button6);
+        //Button button6 = findViewById(R.id.button6);
         Button button5 = findViewById(R.id.button5);
         FloatingActionButton fab = findViewById(R.id.fab);
-        button6.setOnClickListener(this);
+        //button6.setOnClickListener(this);
         button5.setOnClickListener(this);
         fab.setOnClickListener(this);
 
@@ -109,7 +109,7 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                     }
                 });
 
-        registerForContextMenu(button6);
+        //registerForContextMenu(button6);
     }
 
     @Override

@@ -8,6 +8,7 @@
             android:inputType="number"
             android:key="text_size"
             android:summary="Устанавливает новый размер шрифта"
+            android:textColorLink="@color/colorAccent"
             android:title="Размер шрифта" />
         <ListPreference
             android:defaultValue="1"
