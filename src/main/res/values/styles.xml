@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -11,7 +10,7 @@
     <style name="NewTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/newPurple</item>
         <item name="colorPrimaryDark">@color/newBlack</item>
-        <item name="colorAccent">@color/newPurple</item>
+        <item name="colorAccent">@color/newPink</item>
+        <item name="android:colorBackground">@color/newDefault</item>
     </style>
-
 </resources>

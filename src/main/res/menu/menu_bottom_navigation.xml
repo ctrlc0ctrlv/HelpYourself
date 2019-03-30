@@ -3,13 +3,13 @@
     <item
         android:id="@+id/action_map"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/map" />
+        android:title=" " />
     <item
         android:id="@+id/action_mail"
         android:icon="@drawable/ic_done"
-        android:title="@string/mail" />
+        android:title=" " />
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings" />
+        android:title=" " />
 </menu>

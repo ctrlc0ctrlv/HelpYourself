@@ -149,7 +149,7 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
                                 textView.append("Ближайшее уведомление: ");
 
                                 textView.append(calendar.getTime().toString());
-                                Toast.makeText(TimeActivity.this, "Уведомление сработает: " + calendar.getTime(), Toast.LENGTH_LONG).show();
+                                //Toast.makeText(TimeActivity.this, "Уведомление сработает: " + calendar.getTime(), Toast.LENGTH_LONG).show();
 
                                 editor.putString(NEXT_NOTIFICATION_TIME, calendar.getTime().toString());
                                 editor.putLong("interval", TIME_INTERVAL);

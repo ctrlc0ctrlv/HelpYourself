@@ -1,8 +1,10 @@
 package com.example.examhelper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
@@ -21,6 +23,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         Log.d("myLogs","OnCreateSettings");
+
+        Preference change_notifications = findPreference("change_notifications");
+        change_notifications.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getApplicationContext(), TimeActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
     }
 
     @Override

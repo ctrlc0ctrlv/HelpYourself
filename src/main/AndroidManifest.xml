@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.examhelper">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
 
@@ -14,34 +14,26 @@
         android:roundIcon="@mipmap/logo_3"
         android:supportsRtl="true"
         android:theme="@style/NewTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ChooseSubjectActivity"></activity>
-
-        <activity android:name=".ChooseIntentionActivity"></activity>
-
-        <activity android:name=".DataBaseActivity"></activity>
-
-        <activity android:name=".AnsweringActivity"></activity>
-
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/app_name">
-        </activity>
-
+        <activity android:name=".ChooseSubjectActivity" />
+        <activity android:name=".ChooseIntentionActivity" />
+        <activity android:name=".DataBaseActivity" />
+        <activity android:name=".AnsweringActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".Show_DB_Activity" />
-
-        <activity android:name="TimeActivity"/>
+        <activity android:name=".TimeActivity" />
         <activity android:name=".Test_CreatingActivity" />
         <activity android:name=".Test_AnsweringActivity" />
 
-        <receiver android:name=".TimeNotification" android:enabled="true">
+        <receiver
+            android:name=".TimeNotification"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

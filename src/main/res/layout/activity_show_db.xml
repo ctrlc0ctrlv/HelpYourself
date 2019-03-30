@@ -17,15 +17,16 @@
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorAccept"
-        app:fabSize="normal"
+        app:backgroundTint="@color/newPink"
+        app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@color/colorPrimary" />
+        app:maxImageSize="50dp"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -86,7 +87,7 @@
             android:layout_weight="1"
             android:text="@string/my_tasks"
             android:textAllCaps="false"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -94,6 +95,8 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradient"
+        app:itemIconSize="38dp"
         app:itemIconTint="@drawable/bottom_states"
         app:itemTextColor="@drawable/bottom_states"
         app:layout_constraintBottom_toBottomOf="parent"

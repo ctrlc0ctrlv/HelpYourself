@@ -118,7 +118,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     }
 
     void set_And_fin() {
-
+        setResult(666);
         finish();
     }
 
@@ -130,6 +130,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 curr = arguments.getInt("number") + 1;
                 if (curr <= arguments.getInt("num_of_tasks")) {
                     re_create(curr);
+                } else if (curr == arguments.getInt("num_of_tasks") + 1) {
+                    ad.create();
+                    ad.show();
                 }
                 break;
             case R.id.enterBtn:
@@ -314,7 +317,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                 if (night_mode.equalsIgnoreCase("Да")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorTableBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
-                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.newDefault));
                 }
                 if (ids[a].equalsIgnoreCase("#")) {
                     tableElement.setText(" ");

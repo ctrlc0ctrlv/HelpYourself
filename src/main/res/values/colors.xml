@@ -13,7 +13,8 @@
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="newPink">#D22780</color>
-    <color name="newPurple">#5e227f</color>
+    <color name="newPurple">#5E227F</color>
     <color name="newBlack">#1a1a1a</color>
-    <color name="newGray">#cccccc</color>
+    <color name="newGray">#CCCCCC</color>
+    <color name="newDefault">#f2f4fb</color>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.examhelper;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class Test_CreatingActivity extends Activity implements View.OnClickListener {
+public class Test_CreatingActivity extends AppCompatActivity implements View.OnClickListener {
     private static final List<HashMap<String, Object>> items = new ArrayList<>();
     private static final String[] keys = {"line1", "line2", "icon1"};
     private static final int[] controlIds = {R.id.textview_title, R.id.textview_description, R.id.imageview_icon};
@@ -116,7 +116,15 @@ public class Test_CreatingActivity extends Activity implements View.OnClickListe
         intent.putExtra("base_ids", base_ids);
         intent.putExtra("num_of_tasks", NUM_OF_TASKS);
         intent.putExtra("subject", SUBJECT_TABLE_NAME);
-        startActivity(intent);
+        startActivityForResult(intent, 666);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            dialog.create();
+            dialog.show();
+        }
     }
 
     @Override

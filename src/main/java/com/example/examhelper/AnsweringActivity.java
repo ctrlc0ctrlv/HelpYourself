@@ -601,7 +601,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 if (night_mode.equalsIgnoreCase("Да")) {
                     tableElement.setBackgroundColor(getResources().getColor(R.color.colorTableBlack));
                 } else if (night_mode.equalsIgnoreCase("Нет")) {
-                    tableElement.setBackgroundColor(getResources().getColor(R.color.colorDefault));
+                    tableElement.setBackgroundColor(getResources().getColor(R.color.newDefault));
                 }
                 if (ids[a].equalsIgnoreCase("#")) {
                     tableElement.setText(" ");

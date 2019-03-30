@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -125,9 +124,7 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                 intent.putExtra("subject", subject);
                 startActivity(intent);
                 break;
-            case R.id.button6:
-                TextView text_view_info = findViewById(R.id.text_view_info);
-                StringBuilder productBuilder = new StringBuilder();
+            /*case R.id.button6:
                 for (int i = 1; i < 4; i++) {
                     productBuilder.append(getString(R.string.level)).append(" ").append(i).append(":\n");
                     arguments = getIntent().getExtras();
@@ -148,10 +145,12 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                 }
                 String product = productBuilder.toString();
                 text_view_info.setText(product);
-                break;
+                break;*/
             case R.id.button5:
+                TextView text_view_info = findViewById(R.id.text_view_info);
+                StringBuilder productBuilder = new StringBuilder();
                 text_view_info = findViewById(R.id.text_view_info);
-                product = "";
+                String product = "";
                 StringBuilder productBuilder1 = new StringBuilder(product);
                 for (int i = 1; i < 4; i++) {
                     productBuilder1.append(getString(R.string.level)).append(" ").append(i).append(":\n");

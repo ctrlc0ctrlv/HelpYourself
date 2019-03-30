@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:label="@string/app_name">
+    android:label="@string/app_name"
+    android:title="@string/app_name">
     <PreferenceCategory android:title="Шрифт">
         <EditTextPreference
             android:defaultValue="14"
@@ -38,5 +39,17 @@
             android:key="night_mode"
             android:summary="Изменение цветовой схемы для лучшего отображения в темноте"
             android:title="Ночной режим" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_notifications">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="check_box_preference_1"
+            android:title="Включить уведомления" />
+        <PreferenceScreen
+            android:dependency="check_box_preference_1"
+            android:key="change_notifications"
+            android:summary="Настройка интервала между уведомлениями"
+            android:title="Настроить уведомления"></PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>
