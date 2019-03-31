@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,20 +16,20 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Test_AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,6 +48,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
     public static final String TEST_PROGRESS = "my_test";
     public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
+    int[] base_ids;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,13 +101,25 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         });
         //вывод всего нужного на экран
         assert arguments != null;
-        int[] base_ids = arguments.getIntArray("base_ids");
+        base_ids = arguments.getIntArray("base_ids");
         assert base_ids != null;
 
+        setUp();
+    }
+
+    void set_And_fin() {
+        setResult(666);
+        //Log.d("myLogs","result set successfully");
+        finish();
+    }
+
+    void setUp() {
         textView3.setText("");
         textView3.append(String.valueOf(TASK_NUM));
         textView3.append("/");
         textView3.append(String.valueOf(arguments.getInt("num_of_tasks")));
+
+        textView4.setText(getResources().getString(R.string.current_num));
         textView4.append(" " + Integer.toString(base_ids[TASK_NUM]));
         textView.setText(giveUsl(base_ids[TASK_NUM]));
 
@@ -115,11 +129,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
         String previous_answer = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), "");
         textInputEditText.setText(previous_answer);
-    }
-
-    void set_And_fin() {
-        setResult(666);
-        finish();
+        //Log.d("myLogs","current TASK_NUM value is "+String.valueOf(TASK_NUM));
     }
 
     @Override
@@ -127,45 +137,69 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         int curr;
         switch (view.getId()) {
             case R.id.goBtn:
-                curr = arguments.getInt("number") + 1;
+                curr = TASK_NUM + 1;
+                TASK_NUM += 1;
                 if (curr <= arguments.getInt("num_of_tasks")) {
-                    re_create(curr);
+                    re_create(1);
                 } else if (curr == arguments.getInt("num_of_tasks") + 1) {
                     ad.create();
                     ad.show();
                 }
                 break;
             case R.id.enterBtn:
-                curr = arguments.getInt("number") - 1;
+                curr = TASK_NUM - 1;
+                TASK_NUM -= 1;
                 if (curr > 0) {
-                    re_create(curr);
+                    re_create(-1);
                 }
                 break;
         }
     }
 
     void setUpWebView(int n) {
+        ImageView imageView = findViewById(R.id.imageView);
+        imageView.setImageResource(0);
+        imageView.setMinimumHeight(0);
+
+
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (TASK_NUM == 15) {
-                WebView webView = findViewById(R.id.webView);
-                String url = "file:///android_asset/informatics/";
-                url += n;
+            if (TASK_NUM == 15 || TASK_NUM == 3 && (n == 430 || n == 431 || n == 432)) {
+                /*String url = "file:///android_asset/informatics/";
+                url += String.valueOf(n);
                 url += ".jpg";
-                webView.loadUrl(url);
+                //webView.loadUrl(url);
+                //imageView.setImageURI(Uri.parse(url));
+                //imageView.setImageResource(R.drawable.i_have_done);*/
+
+                try {
+                    // получаем входной поток
+                    InputStream ims = getAssets().open("informatics/283.jpg");
+                    // загружаем как Drawable
+                    Drawable d = Drawable.createFromStream(ims, null);
+                    // выводим картинку в ImageView
+                    imageView.setImageDrawable(d);
+                    imageView.setMinimumHeight(300);
+                } catch (IOException ex) {
+                    //Log.d("myLogs","EXCEPTION");
+                }
             }
         }
     }
 
     void re_create(int n) {
-        Intent intent = getIntent();
-        intent.putExtra("number", n);
+        Editable ans = textInputEditText.getText();
+        assert ans != null;
 
-        finish();
-        startActivity(intent);
+        SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = activityPreferences.edit();
+        ed.putString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM - n), ans.toString());
+        //Log.d("myLogs","preferences: written for "+String.valueOf(TASK_NUM-n));
+        ed.apply();
+        setUp();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("myLogs", "Создано меню");
+        //Log.d("myLogs", "Создано меню");
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem action_delete_progress = menu.findItem(R.id.action_delete_progress);
         MenuItem action_reload_task = menu.findItem(R.id.action_reload_task);
@@ -204,6 +238,17 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         st = cursor.getString(1);
         cursor.close();
         return st;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -252,7 +297,11 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         allowed_table.add("20");
         allowed_table.add("21");
         String curr = String.valueOf(TASK_NUM);
-        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        //Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        TableLayout tableLayout_black = findViewById(R.id.prices_black);
+        tableLayout_black.removeAllViews();
+        TableLayout tableLayout = findViewById(R.id.prices);
+        tableLayout.removeAllViews();
         if ((SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") && allowed_table.contains(curr)) || (SUBJECT_TABLE_NAME.equalsIgnoreCase("russian") && TASK_NUM == 8)) {
             String raw_table = giveTable(n);
             if (raw_table != null) {
@@ -282,9 +331,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
     void createTable(int height, int width, String[] ids) {
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
-        tableLayout_black.removeAllViews();
+        //tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
-        tableLayout.removeAllViews();
+        //tableLayout.removeAllViews();
         //общая инициализация
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);

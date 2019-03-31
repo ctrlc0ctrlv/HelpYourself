@@ -10,6 +10,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,14 +25,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -367,6 +369,10 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         allowed_table.add("21");
         String curr = String.valueOf(GetTaskNum());
         Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        TableLayout tableLayout_black = findViewById(R.id.prices_black);
+        tableLayout_black.removeAllViews();
+        TableLayout tableLayout = findViewById(R.id.prices);
+        tableLayout.removeAllViews();
         if ((SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") && allowed_table.contains(curr)) || (SUBJECT_TABLE_NAME.equalsIgnoreCase("russian") && GetTaskNum() == 8)) {
             String raw_table = giveTable(n);
             if (raw_table != null) {
@@ -384,15 +390,34 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     void setUpWebView(int n) {
-        WebView webView = findViewById(R.id.webView);
-        webView.clearView();
+        ImageView imageView = findViewById(R.id.imageView);
+        imageView.setImageResource(0);
+        imageView.setMinimumHeight(0);
+
 
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (GetTaskNum() == 15 || (GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432))) {
-                String url = "file:///android_asset/informatics/";
-                url += n;
+            if (GetTaskNum() == 15 || GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432)) {
+                /*String url = "file:///android_asset/informatics/";
+                url += String.valueOf(n);
                 url += ".jpg";
-                webView.loadUrl(url);
+                //webView.loadUrl(url);
+                //imageView.setImageURI(Uri.parse(url));
+                //imageView.setImageResource(R.drawable.i_have_done);*/
+
+                try {
+                    // получаем входной поток
+                    String uri = "informatics/";
+                    uri += String.valueOf(n);
+                    uri += ".jpg";
+                    InputStream ims = getAssets().open(uri);
+                    // загружаем как Drawable
+                    Drawable d = Drawable.createFromStream(ims, null);
+                    // выводим картинку в ImageView
+                    imageView.setImageDrawable(d);
+                    imageView.setMinimumHeight(500);
+                } catch (IOException ex) {
+                    Log.d("myLogs", "EXCEPTION");
+                }
             }
         }
     }
@@ -566,9 +591,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         //TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
         //tableLayout_auto.removeAllViews();
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
-        tableLayout_black.removeAllViews();
+        //tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
-        tableLayout.removeAllViews();
+        //tableLayout.removeAllViews();
         //общая инициализация
         TableRow tableRow = new TableRow(this);
         TableRow tableRow1 = new TableRow(this);

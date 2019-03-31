@@ -58,12 +58,11 @@
                 android:text="@string/current_num"
                 android:textSize="20sp" />
 
-            <WebView
-                android:id="@+id/webView"
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/colorDefault" />
+                android:background="@color/newDefault" />
 
             <TextView
                 android:id="@+id/textView"

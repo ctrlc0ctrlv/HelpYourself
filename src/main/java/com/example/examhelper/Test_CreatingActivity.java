@@ -67,7 +67,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
             button.setEnabled(false);
             poses = arguments.getBooleanArray("solved");
         }
-        initialise_items(checked);
+        //initialise_items(checked);
 
         final Context context;
         context = Test_CreatingActivity.this;
@@ -121,10 +121,13 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1) {
-            dialog.create();
-            dialog.show();
+        if (requestCode == 666) {
+            if (resultCode == 666) {
+                checkTest();
+            }
         }
+        Log.d("myLogs", "requestcode = " + String.valueOf(requestCode));
+        Log.d("myLogs", "resultcode = " + String.valueOf(resultCode));
     }
 
     @Override
@@ -181,6 +184,21 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putIntArray("base_ids", base_ids);
+        outState.putStringArray("answers", getAnswers());
+        super.onSaveInstanceState(outState);
+        Log.d("myLogs", "onSaveInstanceState");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        base_ids = savedInstanceState.getIntArray("base_ids");
+        Log.d("myLogs", "onRestoreInstanceState");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
@@ -188,6 +206,20 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         ed.clear();
         ed.apply();
         Log.d("myLogs", "cleared successfully");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean checked = arguments.getBoolean("checked");
+        poses = new boolean[NUM_OF_TASKS];
+
+        if (checked) {
+            button.setEnabled(false);
+            poses = arguments.getBooleanArray("solved");
+        }
+        initialise_items(checked);
+        Log.d("myLogs", "onResume");
     }
 
     String[] getAnswers() {
