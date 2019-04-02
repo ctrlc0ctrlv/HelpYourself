@@ -52,6 +52,9 @@
         <activity
             android:name=".New_Test_CreatingActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ButtonsActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".TimeNotification"
