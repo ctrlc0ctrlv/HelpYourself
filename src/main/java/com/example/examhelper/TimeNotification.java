@@ -17,7 +17,7 @@ public class TimeNotification extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean enabled_notifs = sharedPreferences.getBoolean("check_box_preference_1", false);
-        if (!enabled_notifs) {
+        if (enabled_notifs) {
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             Intent notificationIntent = new Intent(context, MainActivity.class);

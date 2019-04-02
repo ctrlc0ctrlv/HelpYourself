@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -41,10 +40,8 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
         //на всякий случай выводим дату в логи, мало ли
         Date date = new Date(System.currentTimeMillis());
         Log.d("myLogs", date.toString());
-
-        SharedPreferences activityPreferences = getSharedPreferences(NEXT_NOTIFICATION, Context.MODE_PRIVATE);
-        TextView textView = findViewById(R.id.textView);
-        textView.append("Ближайшее уведомление: ");
+        //TextView textView = findViewById(R.id.textView);
+        //textView.append("Ближайшее уведомление: ");
         /*if (!Objects.requireNonNull(activityPreferences.getString(ZERO_NOTIFICATION_TIME, "")).equalsIgnoreCase("")){
             Calendar zero_notification = Calendar.getInstance();
             zero_notification.setTimeInMillis(Date.parse(activityPreferences.getString(ZERO_NOTIFICATION_TIME,"")));
@@ -57,7 +54,7 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("myLogs",closest_notif.getTime().toString());
         }*/
 
-        textView.append(activityPreferences.getString(NEXT_NOTIFICATION_TIME, ""));
+        //textView.append(activityPreferences.getString(NEXT_NOTIFICATION_TIME, ""));
     }
 
     @Override
@@ -76,8 +73,8 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
                 pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 manager.cancel(pendingIntent);
                 Toast.makeText(this, "Уведомление удалено", Toast.LENGTH_LONG).show();
-                TextView textView = findViewById(R.id.textView);
-                textView.setText("");
+                //TextView textView = findViewById(R.id.textView);
+                //textView.setText("");
                 break;
         }
     }
@@ -144,11 +141,11 @@ public class TimeActivity extends AppCompatActivity implements View.OnClickListe
                                 manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), TIME_INTERVAL, pendingIntent);
                                 Log.d("myLogs", "Уведомление" + calendar.getTime().toString());
 
-                                TextView textView = findViewById(R.id.textView);
-                                textView.setText("");
-                                textView.append("Ближайшее уведомление: ");
+                                //TextView textView = findViewById(R.id.textView);
+                                //textView.setText("");
+                                //textView.append("Ближайшее уведомление: ");
 
-                                textView.append(calendar.getTime().toString());
+                                //textView.append(calendar.getTime().toString());
                                 //Toast.makeText(TimeActivity.this, "Уведомление сработает: " + calendar.getTime(), Toast.LENGTH_LONG).show();
 
                                 editor.putString(NEXT_NOTIFICATION_TIME, calendar.getTime().toString());
