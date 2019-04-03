@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import java.io.IOException;
 
 public class Show_DB_Activity extends AppCompatActivity implements View.OnClickListener {
     AlertDialog.Builder ad;
+    AlertDialog.Builder dialog;
     //Переменная для работы с БД
     TryingDBHelper mDBHelper;
     private SQLiteDatabase mDb;
@@ -46,6 +49,8 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         //button6.setOnClickListener(this);
         button5.setOnClickListener(this);
         fab.setOnClickListener(this);
+
+        createDialog();
 
         mDBHelper = new TryingDBHelper(this);
         cDBHelper = new CustomDbHelper(this);
@@ -221,5 +226,36 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
         // меняем настройки в TextView
         text_view_info.setTypeface(null, typeface);
         text_view_info.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        dialog.create();
+        dialog.show();
+    }
+
+    void createDialog() {
+        //прописываем уведомление
+        final Context context;
+        context = Show_DB_Activity.this;
+        String title = "Вы уверены?";
+        String message = "Выйти из приложения?";
+        String yesString = "Да";
+        String noString = "Отмена";
+        dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(title);  // заголовок
+        dialog.setMessage(message); // сообщение
+        dialog.setCancelable(false);
+        dialog.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        dialog.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
     }
 }

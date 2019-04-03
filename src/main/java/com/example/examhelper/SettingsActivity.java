@@ -3,6 +3,8 @@ package com.example.examhelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -33,6 +35,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return false;
             }
         });
+
+        /*Preference text_size = findPreference("text_size");
+        text_size.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getApplicationContext(),SeekActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });*/
     }
 
     @Override
@@ -57,16 +69,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 AppCompatDelegate.setDefaultNightMode(modeNight);
                 finish();
                 break;
-            case ("text_size"):
-                Log.d("myLogs","Изменен размер текста");
-                String f_Size = preferences.getString("text_size", "14");
-                assert f_Size != null;
-                float fSize = Float.parseFloat(f_Size);
-                if (fSize < 10) {
-                    Toast.makeText(this, "Использование слишком малого размера шрифта может привести к ошибкам", Toast.LENGTH_LONG).show();
-                } else if (fSize > 32) {
-                    Toast.makeText(this, "Использование слишком большого размера шрифта может привести к ошибкам", Toast.LENGTH_LONG).show();
-                }
+            case ("seekBarPreference"):
+                int f_Size = preferences.getInt("seekBarPreference", 25);
+                Log.d("myLogs", "Изменен размер текста на " + f_Size);
+
+                Resources res = getResources();
+                Configuration configuration = new Configuration(res.getConfiguration());
+
+                final float start_value = 0.8f; //начальное значение размера шрифта
+                //final float max_start_value = 1.6f;
+                final float step = 0.016f; //шаг увеличения коэффициента
+
+                configuration.fontScale = start_value + step * f_Size;
+                res.updateConfiguration(configuration, res.getDisplayMetrics());
+                Toast.makeText(getBaseContext(), "Рекомендуем перезапустить приложение для применения настроек", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

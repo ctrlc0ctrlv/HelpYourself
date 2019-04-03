@@ -93,10 +93,11 @@
     <string name="pref_notifications">Уведомления</string>
     <string name="pref_set_notifications">Настроить уведомления</string>
 
+    <!--Ресурсы для SeekBarPreference-->
+    <string name="dialog_title">Изменение размера шрифта</string>
+    <string name="dialog_summary">Устанавливает новый размер шрифта</string>
+
     <!--Ресурсы для TimeActivity-->
     <string name="set_notification">Настроить уведомление</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

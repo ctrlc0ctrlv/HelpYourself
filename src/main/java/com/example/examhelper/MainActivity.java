@@ -1,16 +1,22 @@
 package com.example.examhelper;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +26,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Intent intent;
+    AlertDialog.Builder ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Button button = findViewById(R.id.button);
         button.setOnClickListener(this); // Обработчик нажатия кнопки
+
+        createDialog();
 
         String night_mode = PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode", "Нет");
         assert night_mode != null;
@@ -98,6 +107,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return false;
                     }
                 });
+
+        Resources res = getResources();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int f_Size;
+        try {
+            //считываем коэффициент размера шрифта
+            f_Size = preferences.getInt("seekBarPreference", 25);
+        } catch (Exception e) {
+            f_Size = 25;
+        }
+
+        final float start_value = 0.8f; //начальное значение размера шрифта
+        //final float max_start_value = 1.6f;
+        final float step = 0.016f; //шаг увеличения коэффициента
+
+        Configuration configuration = new Configuration(res.getConfiguration());
+        configuration.fontScale = start_value + step * f_Size;
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
     }
 
     @Override
@@ -196,12 +223,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("myLogs", "MainActivity.resume");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        /*String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
         assert f_Size != null;
         float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
+        text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);*/
         TextView text_view = findViewById(R.id.text_view);
-        text_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         //Применяем настройки стиля шрифта
         String regular = prefs.getString(getString(R.string.pref_style), "");
         int typeface = Typeface.NORMAL;
@@ -225,5 +252,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         AppCompatDelegate.setDefaultNightMode(modeNight);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ad.create();
+        ad.show();
+    }
+
+    void createDialog() {
+        //прописываем уведомление
+        final Context context;
+        context = MainActivity.this;
+        String title = "Вы уверены?";
+        String message = "Выйти из приложения?";
+        String yesString = "Да";
+        String noString = "Отмена";
+        ad = new AlertDialog.Builder(context);
+        ad.setTitle(title);  // заголовок
+        ad.setMessage(message); // сообщение
+        ad.setCancelable(false);
+        ad.setPositiveButton(yesString, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        ad.setNegativeButton(noString, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
     }
 }

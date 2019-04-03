@@ -140,7 +140,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
                 // Если ID  -1, значит произошла ошибка
                 Toast.makeText(this, "Ошибка при изменении задания", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Задание под номером " + (newRowId + 1) + " успешно изменено", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Задание под номером " + (ID) + " успешно изменено", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -165,7 +165,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
                 // Если ID  -1, значит произошла ошибка
                 Toast.makeText(this, "Ошибка при удалении задания", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Задание под номером " + newRowId + " успешно удалено", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Задание под номером " + ID + " успешно удалено", Toast.LENGTH_SHORT).show();
             }
         }
     }

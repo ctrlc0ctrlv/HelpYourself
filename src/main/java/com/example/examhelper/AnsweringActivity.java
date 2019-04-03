@@ -619,7 +619,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                     break;
                 }
                 TextView tableElement = new TextView(this);
-                tableElement.setTextSize(20);
+                //tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setGravity(Gravity.START);
                 tableElement.setWidth(TableLayout.LayoutParams.MATCH_PARENT);

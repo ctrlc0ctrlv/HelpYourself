@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Информатика"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioButton2"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Русский язык"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioButton3"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Математика (база)"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
         </RadioGroup>
 
         <RadioGroup
@@ -74,14 +74,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Решать задания"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioButton5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Создать тест"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
         </RadioGroup>
     </LinearLayout>
 
