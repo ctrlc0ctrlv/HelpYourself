@@ -91,7 +91,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         goBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
 
-        //прописываем уведомление
+        /*
+         * Диалоговое окно номер 1
+         * */
         final Context context;
         context = AnsweringActivity.this;
         String title = "Вы прошли все уровни в этом задании!";
@@ -136,7 +138,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 setUp();
             }
         });
-        //второе уведомление
+        /*
+         * Диалоговое окно номер 2
+         * */
         String title_delete = "Вы уверены? Это действие невозможно отменить";
         String message_delete = "Ваш прогресс во всех заданиях обнулится";
         String yesString_delete = "Да";
@@ -169,7 +173,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        //третье уведомление
+        /*
+         * Диалоговое окно номер 3
+         */
         String message_reload = "Ваш прогресс в этом задании обнулится";
         ad_reload_task = new AlertDialog.Builder(context);
         ad_reload_task.setTitle(title_delete);  // заголовок
@@ -200,7 +206,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             public void onClick(DialogInterface dialog, int arg1) {
             }
         });
-        //уведомление об ошибке с базой
+        /*
+         * Диалог об ошибке
+         */
         String title_exception = "Ошибка при поиске в базе данных";
         String message_exception = "Если вы видите это сообщение, значит злые силы мешают вам подготовиться к ЕГЭ. Попробуйте еще раз";
         String yesString_exception = "ОК";
@@ -216,6 +224,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
+        try {
+            tryDBHelper.copyDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tryDB = tryDBHelper.getReadableDatabase();
 
         initArrays();
 
@@ -275,6 +289,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     public void initArrays() {
         //возвращет массив уникальных номеров заданий
+        try {
+            tryDBHelper.copyDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE number ==" + GetTaskNum();
         switch (Task1.getLevel()) {
@@ -684,19 +703,6 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         //разное оформление и разные таблицы для разных значений "ночного режима"
         switch (night_mode) {
-            //case ("Включать автоматически"):
-            //tableLayout_auto.bringToFront();
-            //tableLayout_auto.addView(tableRow);
-            //tableLayout_auto.addView(tableRow1);
-            //tableLayout_auto.addView(tableRow2);
-            //tableLayout_auto.addView(tableRow3);
-            //tableLayout_auto.addView(tableRow4);
-            //tableLayout_auto.addView(tableRow5);
-            //tableLayout_auto.addView(tableRow6);
-            //tableLayout_auto.addView(tableRow7);
-            //tableLayout_auto.addView(tableRow8);
-            //tableLayout_auto.addView(tableRow9);
-            //break;
             case ("Да"):
                 //вставка строк в таблицу
                 tableLayout_black.bringToFront();
@@ -743,8 +749,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
 
         int getHashNum() {
-            //возвращает номер задания на основании текущей выборки и ошибок
-            //С функцией рандома нужно категорически поколдовать, потому что какой-то он не шибко рандомный
+            /*
+             * Возвращает числовое значение номера задания на основании текущей выборки заданий и массива ошибок
+             */
             int x;
             Integer[] tasks = TASKS.toArray(new Integer[0]);
             Integer[] mistakes = MISTAKES.toArray(new Integer[0]);
@@ -765,7 +772,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
 
         boolean Check(int n) {
-            //проверка текущего задания
+            /*
+             * Проверяет задание; возвращает true - задание решено верно или false - задание решено неверно
+             */
             boolean rez;
             Editable gotText = textInputEditText.getText();
             assert gotText != null;
@@ -782,14 +791,18 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
 
         int getLevel() {
-            //возвращает текущий уровень
+            /*
+             * Возвращает числовое значение текущего уровня
+             */
             int Level;
             Level = Integer.parseInt(textView2.getText().toString().replace("Уровень: ", ""));
             return (Level);
         }
 
         int LevelUp(int Level) {
-            //увеличивает уровень на 1 (если возможно)
+            /*
+             * Увеличивает уровень на 1 (если это возможно)
+             */
             int LevelEquals = Level;
             if (LevelEquals <= 3) {
                 LevelEquals += 1;
@@ -802,7 +815,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
 
         int LevelDown(int Level) {
-            //уменьшает уровень на 1 (если возможно)
+            /*
+             * Уменьшает уровень на 1 (если это возможно)
+             */
             int LevelEquals = Level;
             if (LevelEquals >= 2) {
                 LevelEquals -= 1;

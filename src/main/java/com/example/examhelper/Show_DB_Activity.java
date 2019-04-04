@@ -20,7 +20,10 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.examhelper.data.CustomDbHelper;
@@ -113,7 +116,36 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                     }
                 });
 
-        //registerForContextMenu(button6);
+        Spinner spinner3 = findViewById(R.id.spinner3);
+        Bundle arguments = getIntent().getExtras();
+        assert arguments != null;
+        ArrayAdapter genderSpinnerAdapter1 = null;
+        TABLE_SUBJECT_NAME = arguments.getString("subject");
+        assert TABLE_SUBJECT_NAME != null;
+        switch (TABLE_SUBJECT_NAME) {
+            case "informatics":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.informatics, android.R.layout.simple_spinner_item);
+                break;
+            case "russian":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.russian, android.R.layout.simple_spinner_item);
+                break;
+            case "maths_base":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.maths_base, android.R.layout.simple_spinner_item);
+                break;
+        }
+        assert genderSpinnerAdapter1 != null;
+        genderSpinnerAdapter1.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner3.setAdapter(genderSpinnerAdapter1);
+        spinner3.setSelection(0);
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View itemSelected, int position, long id) {
+
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -153,8 +185,6 @@ public class Show_DB_Activity extends AppCompatActivity implements View.OnClickL
                 break;*/
             case R.id.button5:
                 TextView text_view_info = findViewById(R.id.text_view_info);
-                StringBuilder productBuilder = new StringBuilder();
-                text_view_info = findViewById(R.id.text_view_info);
                 String product = "";
                 StringBuilder productBuilder1 = new StringBuilder(product);
                 for (int i = 1; i < 4; i++) {

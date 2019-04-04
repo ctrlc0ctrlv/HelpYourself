@@ -257,9 +257,23 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
             base_ids = arguments.getIntArray("base_ids");
         }
 
+        String[] names = new String[0];
+
+        switch (SUBJECT_TABLE_NAME) {
+            case "russian":
+                names = getResources().getStringArray(R.array.russian);
+                break;
+            case "maths_base":
+                names = getResources().getStringArray(R.array.maths_base);
+                break;
+            case "informatics":
+                names = getResources().getStringArray(R.array.informatics);
+                break;
+        }
+
         for (int i = 1; i <= NUM_OF_TASKS; i++) {
             map = new HashMap<>();
-            map.put("line1", "Задание " + i);
+            map.put("line1", names[i - 1]);
             map.put("line2", Integer.toString(base_ids[i]));
             if (checked && poses[i - 1]) {
                 map.put("icon1", R.drawable.tick);

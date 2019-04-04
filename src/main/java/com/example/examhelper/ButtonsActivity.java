@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
     int NUM;
@@ -70,24 +71,103 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
         buttonObjectChoice25.setOnClickListener(this);
         buttonObjectChoice26.setOnClickListener(this);
 
+        LinearLayout linearLayout = findViewById(R.id.LinearLayout);
+
         arguments = getIntent().getExtras();
         assert arguments != null;
         NUM = arguments.getInt("num_of_tasks");
         switch (NUM) {
             case 23:
-                buttonObjectChoice24.setEnabled(false);
-                buttonObjectChoice25.setEnabled(false);
-                buttonObjectChoice26.setEnabled(false);
+                String[] names = getResources().getStringArray(R.array.informatics);
+
+                buttonObjectChoice1.setText(names[0]);
+                buttonObjectChoice2.setText(names[1]);
+                buttonObjectChoice3.setText(names[2]);
+                buttonObjectChoice4.setText(names[3]);
+                buttonObjectChoice5.setText(names[4]);
+                buttonObjectChoice6.setText(names[5]);
+                buttonObjectChoice7.setText(names[6]);
+                buttonObjectChoice8.setText(names[7]);
+                buttonObjectChoice9.setText(names[8]);
+                buttonObjectChoice10.setText(names[9]);
+                buttonObjectChoice11.setText(names[10]);
+                buttonObjectChoice12.setText(names[11]);
+                buttonObjectChoice13.setText(names[12]);
+                buttonObjectChoice14.setText(names[13]);
+                buttonObjectChoice15.setText(names[14]);
+                buttonObjectChoice16.setText(names[15]);
+                buttonObjectChoice17.setText(names[16]);
+                buttonObjectChoice18.setText(names[17]);
+                buttonObjectChoice19.setText(names[18]);
+                buttonObjectChoice20.setText(names[19]);
+                buttonObjectChoice21.setText(names[20]);
+                buttonObjectChoice22.setText(names[21]);
+                buttonObjectChoice23.setText(names[22]);
+
+                linearLayout.removeView(buttonObjectChoice26);
+                linearLayout.removeView(buttonObjectChoice25);
+                linearLayout.removeView(buttonObjectChoice24);
                 break;
             case 20:
-                buttonObjectChoice21.setEnabled(false);
-                buttonObjectChoice22.setEnabled(false);
-                buttonObjectChoice23.setEnabled(false);
-                buttonObjectChoice24.setEnabled(false);
-                buttonObjectChoice25.setEnabled(false);
-                buttonObjectChoice26.setEnabled(false);
+                names = getResources().getStringArray(R.array.maths_base);
+
+                buttonObjectChoice1.setText(names[0]);
+                buttonObjectChoice2.setText(names[1]);
+                buttonObjectChoice3.setText(names[2]);
+                buttonObjectChoice4.setText(names[3]);
+                buttonObjectChoice5.setText(names[4]);
+                buttonObjectChoice6.setText(names[5]);
+                buttonObjectChoice7.setText(names[6]);
+                buttonObjectChoice8.setText(names[7]);
+                buttonObjectChoice9.setText(names[8]);
+                buttonObjectChoice10.setText(names[9]);
+                buttonObjectChoice11.setText(names[10]);
+                buttonObjectChoice12.setText(names[11]);
+                buttonObjectChoice13.setText(names[12]);
+                buttonObjectChoice14.setText(names[13]);
+                buttonObjectChoice15.setText(names[14]);
+                buttonObjectChoice16.setText(names[15]);
+                buttonObjectChoice17.setText(names[16]);
+                buttonObjectChoice18.setText(names[17]);
+                buttonObjectChoice19.setText(names[18]);
+                buttonObjectChoice20.setText(names[19]);
+
+                linearLayout.removeView(buttonObjectChoice26);
+                linearLayout.removeView(buttonObjectChoice25);
+                linearLayout.removeView(buttonObjectChoice24);
+                linearLayout.removeView(buttonObjectChoice23);
+                linearLayout.removeView(buttonObjectChoice22);
+                linearLayout.removeView(buttonObjectChoice21);
                 break;
             case 26:
+                names = getResources().getStringArray(R.array.russian);
+
+                buttonObjectChoice1.setText(names[0]);
+                buttonObjectChoice2.setText(names[1]);
+                buttonObjectChoice3.setText(names[2]);
+                buttonObjectChoice4.setText(names[3]);
+                buttonObjectChoice5.setText(names[4]);
+                buttonObjectChoice6.setText(names[5]);
+                buttonObjectChoice7.setText(names[6]);
+                buttonObjectChoice8.setText(names[7]);
+                buttonObjectChoice9.setText(names[8]);
+                buttonObjectChoice10.setText(names[9]);
+                buttonObjectChoice11.setText(names[10]);
+                buttonObjectChoice12.setText(names[11]);
+                buttonObjectChoice13.setText(names[12]);
+                buttonObjectChoice14.setText(names[13]);
+                buttonObjectChoice15.setText(names[14]);
+                buttonObjectChoice16.setText(names[15]);
+                buttonObjectChoice17.setText(names[16]);
+                buttonObjectChoice18.setText(names[17]);
+                buttonObjectChoice19.setText(names[18]);
+                buttonObjectChoice20.setText(names[19]);
+                buttonObjectChoice21.setText(names[20]);
+                buttonObjectChoice22.setText(names[21]);
+                buttonObjectChoice23.setText(names[22]);
+                buttonObjectChoice24.setText(names[23]);
+                buttonObjectChoice25.setText(names[24]);
+                buttonObjectChoice26.setText(names[25]);
                 break;
         }
     }

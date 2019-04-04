@@ -22,6 +22,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     CustomDbHelper cDbHelper;
     SQLiteDatabase cDb;
     private Spinner spinner;
+    private Spinner spinner2;
     TextInputEditText TextInputEditText;
     TextInputEditText TextInputEditText2;
     TextInputEditText TextInputEditText3;
@@ -30,6 +31,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_base_set);
         spinner = findViewById(R.id.spinner);
+        spinner2 = findViewById(R.id.spinner2);
         setupSpinner();
 
         TextInputEditText = findViewById(R.id.TextInputEditText);
@@ -63,6 +65,37 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
             }
             public void onNothingSelected(AdapterView<?> parent) {
                 Level = 0;
+            }
+        });
+
+
+        Bundle arguments = getIntent().getExtras();
+        assert arguments != null;
+        ArrayAdapter genderSpinnerAdapter1 = null;
+        String TABLE_SUBJECT_NAME = arguments.getString("subject");
+        assert TABLE_SUBJECT_NAME != null;
+        switch (TABLE_SUBJECT_NAME) {
+            case "informatics":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.informatics, android.R.layout.simple_spinner_item);
+                break;
+            case "russian":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.russian, android.R.layout.simple_spinner_item);
+                break;
+            case "maths_base":
+                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.maths_base, android.R.layout.simple_spinner_item);
+                break;
+        }
+        assert genderSpinnerAdapter1 != null;
+        genderSpinnerAdapter1.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner2.setAdapter(genderSpinnerAdapter1);
+        spinner2.setSelection(0);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View itemSelected, int position, long id) {
+
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
