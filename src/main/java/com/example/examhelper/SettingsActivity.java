@@ -36,15 +36,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
-        /*Preference text_size = findPreference("text_size");
-        text_size.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference about = findPreference("about");
+        about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getApplicationContext(),SeekActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FragmentsActivity.class);
                 startActivity(intent);
                 return false;
             }
-        });*/
+        });
     }
 
     @Override

@@ -55,6 +55,9 @@
         <activity
             android:name=".ButtonsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".FragmentsActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".TimeNotification"

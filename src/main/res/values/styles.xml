@@ -12,5 +12,7 @@
         <item name="colorPrimaryDark">@color/newBlack</item>
         <item name="colorAccent">@color/newPink</item>
         <item name="android:colorBackground">@color/newDefault</item>
+        <item name="colorButtonNormal">@color/newButton</item>
+        <item name="android:textColor">@color/newText</item>
     </style>
 </resources>
