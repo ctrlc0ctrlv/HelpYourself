@@ -20,14 +20,6 @@
             example:maxValue="50"
             example:minValue="0" />
 
-        <ListPreference
-            android:defaultValue="1"
-            android:dialogTitle="Выберите стиль для шрифта"
-            android:entries="@array/text_style"
-            android:entryValues="@array/text_style"
-            android:key="@string/pref_style"
-            android:summary="Устанавливает стиль для шрифта"
-            android:title="Стиль для шрифта" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Прогресс">

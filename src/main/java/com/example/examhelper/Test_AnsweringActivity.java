@@ -3,7 +3,6 @@ package com.example.examhelper;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,8 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -173,7 +170,10 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
                 try {
                     // получаем входной поток
-                    InputStream ims = getAssets().open("informatics/283.jpg");
+                    String uri = "informatics/";
+                    uri += String.valueOf(n);
+                    uri += ".jpg";
+                    InputStream ims = getAssets().open(uri);
                     // загружаем как Drawable
                     Drawable d = Drawable.createFromStream(ims, null);
                     // выводим картинку в ImageView
@@ -196,31 +196,6 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         //Log.d("myLogs","preferences: written for "+String.valueOf(TASK_NUM-n));
         ed.apply();
         setUp();
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //Log.d("myLogs", "Создано меню");
-        getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem action_delete_progress = menu.findItem(R.id.action_delete_progress);
-        MenuItem action_reload_task = menu.findItem(R.id.action_reload_task);
-        MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
-
-        action_reload_task.setVisible(false);
-        action_delete_progress.setVisible(false);
-        action_clear_database.setVisible(false);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent();
-                intent.setClass(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return true;
-        }
     }
 
     public String giveUsl(final int n) {

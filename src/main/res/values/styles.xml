@@ -14,5 +14,6 @@
         <item name="android:colorBackground">@color/newDefault</item>
         <item name="colorButtonNormal">@color/newButton</item>
         <item name="android:textColor">@color/newText</item>
+        <item name="android:typeface">sans</item>
     </style>
 </resources>

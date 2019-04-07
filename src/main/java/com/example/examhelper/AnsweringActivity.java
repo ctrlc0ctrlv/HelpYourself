@@ -509,17 +509,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem action_clear_database = menu.findItem(R.id.action_clear_database);
+        MenuItem settings = menu.findItem(R.id.action_settings);
         action_clear_database.setVisible(false);
+        settings.setVisible(false);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent();
-                intent.setClass(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.action_delete_progress:
                 ad_delete.create();
                 ad_delete.show();

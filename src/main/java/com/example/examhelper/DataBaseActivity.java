@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.examhelper.data.CustomDbHelper;
@@ -22,7 +23,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     CustomDbHelper cDbHelper;
     SQLiteDatabase cDb;
     private Spinner spinner;
-    private Spinner spinner2;
     TextInputEditText TextInputEditText;
     TextInputEditText TextInputEditText2;
     TextInputEditText TextInputEditText3;
@@ -31,7 +31,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_base_set);
         spinner = findViewById(R.id.spinner);
-        spinner2 = findViewById(R.id.spinner2);
         setupSpinner();
 
         TextInputEditText = findViewById(R.id.TextInputEditText);
@@ -48,6 +47,29 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
 
         cDbHelper = new CustomDbHelper(this);
         cDb = cDbHelper.getWritableDatabase();
+
+        Bundle arguments = getIntent().getExtras();
+        assert arguments != null;
+
+        String TABLE_SUBJECT_NAME = arguments.getString("subject");
+        assert TABLE_SUBJECT_NAME != null;
+
+        int Number = arguments.getInt("number");
+        TextView textView = findViewById(R.id.textView);
+        String message = "";
+
+        switch (TABLE_SUBJECT_NAME) {
+            case "informatics":
+                message = getResources().getStringArray(R.array.informatics)[Number - 1];
+                break;
+            case "russian":
+                message = getResources().getStringArray(R.array.russian)[Number - 1];
+                break;
+            case "maths_base":
+                message = getResources().getStringArray(R.array.maths_base)[Number - 1];
+                break;
+        }
+        textView.setText(message);
     }
 
     private void setupSpinner() {
@@ -63,37 +85,6 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
 
                 Level = position + 1;
             }
-            public void onNothingSelected(AdapterView<?> parent) {
-                Level = 0;
-            }
-        });
-
-
-        Bundle arguments = getIntent().getExtras();
-        assert arguments != null;
-        ArrayAdapter genderSpinnerAdapter1 = null;
-        String TABLE_SUBJECT_NAME = arguments.getString("subject");
-        assert TABLE_SUBJECT_NAME != null;
-        switch (TABLE_SUBJECT_NAME) {
-            case "informatics":
-                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.informatics, android.R.layout.simple_spinner_item);
-                break;
-            case "russian":
-                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.russian, android.R.layout.simple_spinner_item);
-                break;
-            case "maths_base":
-                genderSpinnerAdapter1 = ArrayAdapter.createFromResource(this, R.array.maths_base, android.R.layout.simple_spinner_item);
-                break;
-        }
-        assert genderSpinnerAdapter1 != null;
-        genderSpinnerAdapter1.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner2.setAdapter(genderSpinnerAdapter1);
-        spinner2.setSelection(0);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View itemSelected, int position, long id) {
-
-            }
-
             public void onNothingSelected(AdapterView<?> parent) {
 
             }

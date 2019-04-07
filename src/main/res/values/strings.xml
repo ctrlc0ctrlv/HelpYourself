@@ -52,7 +52,7 @@
     <string name="no_information">Нет данных</string>
     <string name="check_test">Проверить тест</string>
 
-    <!--Ресурсы для Show_DB_Activity-->
+    <!--Ресурсы для MainFragment2-->
     <string name="level"><b>Уровень</b></string>
     <string name="show_tasks">Вывести список предустановленных заданий</string>
     <string name="my_tasks">Мои задания</string>

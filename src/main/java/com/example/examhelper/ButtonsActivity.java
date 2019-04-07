@@ -175,17 +175,6 @@ public class ButtonsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(this, AnsweringActivity.class);
-        /*boolean chosen_solve = arguments.getBoolean("chosen_solve");
-        boolean chosen_my = arguments.getBoolean("chosen_my");
-
-        if (chosen_solve) {
-            intent = new Intent(this, AnsweringActivity.class);
-        } else {
-            if (chosen_my) {
-                intent = new Intent(this, Show_DB_Activity.class);
-                //intent = new Intent (this, DataBaseDisplayActivity.class);
-            }
-        }*/
 
         int Number = 0;
         switch (view.getId()) {
