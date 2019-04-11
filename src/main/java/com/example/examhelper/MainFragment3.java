@@ -35,15 +35,16 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
             }
         });
 
-        /*Preference about = findPreference("about");
+        Preference about = findPreference("about");
         about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), FragmentsActivity.class);
+                //Intent intent = new Intent(getActivity(), AboutActivity.class);
+                Intent intent = new Intent(getActivity(), MathActivity.class);
                 startActivity(intent);
                 return false;
             }
-        });*/
+        });
     }
 
     @Override

@@ -33,7 +33,7 @@
 
     <PreferenceCategory android:title="Внешний вид">
         <ListPreference
-            android:defaultValue="auto"
+            android:defaultValue="false"
             android:dialogTitle="Включить ночной режим?"
             android:entries="@array/night_modes"
             android:entryValues="@array/night_modes"

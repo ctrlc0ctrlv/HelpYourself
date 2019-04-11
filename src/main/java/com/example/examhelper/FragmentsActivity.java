@@ -45,6 +45,7 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
             fragmentTransaction.add(R.id.fragment1, myFragment1, TAG_1);
             fragmentTransaction.commit();
         }
+        myFragment3 = new MainFragment3();
     }
 
     @Override

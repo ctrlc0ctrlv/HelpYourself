@@ -160,7 +160,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
 
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (TASK_NUM == 15 || TASK_NUM == 3 && (n == 430 || n == 431 || n == 432)) {
+            if (TASK_NUM == 15 || TASK_NUM == 3 && (n == 430 || n == 431 || n == 432) || TASK_NUM == 12 && (n == 451 || n == 452 || n == 453 || n == 454)) {
                 /*String url = "file:///android_asset/informatics/";
                 url += String.valueOf(n);
                 url += ".jpg";

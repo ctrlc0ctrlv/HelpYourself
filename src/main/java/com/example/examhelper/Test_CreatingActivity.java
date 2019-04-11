@@ -104,8 +104,6 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
         ListAdapter adapter1 = new SimpleAdapter(this, items, R.layout.layer, keys, controlIds);
         listView.setAdapter(adapter1);
-
-        //button.setText(Html.fromHtml("3<sup>1</sup>/<sub>2</sub>"));
     }
 
     void start_(int position) {
@@ -289,11 +287,13 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
 
         Random random;
 
+        tryDBHelper.onCreate(tryDB);
         try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         for (int x = 1; x < base_ids.length; x++) {
             String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE number == " + x;
             Cursor cursor = tryDB.rawQuery(raw, null);
@@ -307,5 +307,6 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         }
         Log.d("myLogs", Arrays.toString(base_ids));
         Log.d("myLogs", SUBJECT_TABLE_NAME);
+        tryDB.close();
     }
 }

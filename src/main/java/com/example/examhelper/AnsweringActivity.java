@@ -35,6 +35,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -244,6 +245,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } else {
             setUp(BASE_NUM);
         }*/
+        tryDB.close();
     }
 
     @Override
@@ -284,6 +286,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         String st;
         st = cursor.getString(1);
         cursor.close();
+        tryDB.close();
         return st;
     }
 
@@ -328,21 +331,23 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Integer[] myMistakes = MISTAKES.toArray(new Integer[0]);
         //Log.d("myLogs", "Current mistakes = " + Arrays.toString(myMistakes));
+        tryDB.close();
     }
 
-    public String giveAns(int n) {
+    public String[] giveAns(int n) {
         //возвращает ответ из базы данных по номеру задания
         tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
-        String ans = "";
+        String[] ans = null;
         try {
             Cursor cursor = tryDB.rawQuery(raw, null);
             cursor.moveToFirst();
-            ans = cursor.getString(2);
+            ans = cursor.getString(2).split("\\$");
             cursor.close();
         } catch (SQLiteException e) {
             ad_exception.create();
         }
+        tryDB.close();
         return ans;
     }
 
@@ -415,7 +420,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
 
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (GetTaskNum() == 15 || GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432)) {
+            if (GetTaskNum() == 15 || GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432) || GetTaskNum() == 12 && (n == 451 || n == 452 || n == 453 || n == 454)) {
                 /*String url = "file:///android_asset/informatics/";
                 url += String.valueOf(n);
                 url += ".jpg";
@@ -461,6 +466,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         assert raw_elements != null;
         raw_elements = raw_elements.trim();
+        tryDB.close();
         return raw_elements;
     }
 
@@ -775,7 +781,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             boolean rez;
             Editable gotText = textInputEditText.getText();
             assert gotText != null;
-            if (giveAns(n).equalsIgnoreCase(gotText.toString())) {
+            if (Arrays.asList(giveAns(n)).contains(gotText.toString())) {
                 textView.setBackgroundResource(R.color.colorAccept);
                 rez = true;
                 MISTAKES.remove(n);
