@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MainFragment3 extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
@@ -52,21 +50,11 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
         switch (key) {
             case ("night_mode"):
                 Log.d("myLogs", "OnChangeSettings");
-                String night_mode = preferences.getString("night_mode", "Нет");
-                assert night_mode != null;
-                int modeNight = 0;
-                switch (night_mode) {
-                    case ("Да"):
-                        modeNight = AppCompatDelegate.MODE_NIGHT_YES;
-                        break;
-                    case ("Нет"):
-                        modeNight = AppCompatDelegate.MODE_NIGHT_NO;
-                        break;
-                }
+                getActivity().recreate();
 
-                Toast.makeText(getActivity().getBaseContext(), "Рекомендуем перезапустить приложение для корректной работы ночного режима", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Рекомендуем перезапустить приложение для корректной работы ночного режима", Toast.LENGTH_SHORT).show();
 
-                AppCompatDelegate.setDefaultNightMode(modeNight);
+                //AppCompatDelegate.setDefaultNightMode(modeNight);
                 break;
             case ("seekBarPreference"):
                 int f_Size = preferences.getInt("seekBarPreference", 25);
@@ -81,8 +69,14 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
 
                 configuration.fontScale = start_value + step * f_Size;
                 res.updateConfiguration(configuration, res.getDisplayMetrics());
-                Toast.makeText(getActivity().getBaseContext(), "Рекомендуем перезапустить приложение для применения настроек", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getBaseContext(), "Рекомендуем перезапустить приложение для применения настроек", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("myLogs", "fragment detached");
     }
 }

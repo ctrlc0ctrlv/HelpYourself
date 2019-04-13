@@ -389,6 +389,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
+        allowed_table.add("17");
         allowed_table.add("20");
         allowed_table.add("21");
         String curr = String.valueOf(GetTaskNum());
@@ -641,7 +642,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                     break;
                 }
                 TextView tableElement = new TextView(this);
-                //tableElement.setTextSize(20);
+                tableElement.setTextSize(20);
                 tableElement.setLayoutParams(params);
                 tableElement.setGravity(Gravity.START);
                 tableElement.setWidth(TableLayout.LayoutParams.MATCH_PARENT);

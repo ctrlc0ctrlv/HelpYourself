@@ -2,12 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:label="@string/app_name"
     android:title="@string/app_name">
-    <PreferenceCategory android:title="О программе">
-        <PreferenceScreen
-            android:key="about"
-            android:summary="Основная информация о приложении"
-            android:title="О приложении"></PreferenceScreen>
-    </PreferenceCategory>
     <PreferenceCategory android:title="Шрифт">
         <com.example.examhelper.SeekBarPreference xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:example="http://schemas.android.com/apk/res/com.example.examhelper"
@@ -52,5 +46,11 @@
             android:key="change_notifications"
             android:summary="Настройка интервала между уведомлениями"
             android:title="Настроить уведомления"></PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="О программе">
+        <PreferenceScreen
+            android:key="about"
+            android:summary="Основная информация о приложении"
+            android:title="О приложении"></PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

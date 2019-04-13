@@ -15,6 +15,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -269,10 +270,11 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
+        allowed_table.add("17");
         allowed_table.add("20");
         allowed_table.add("21");
         String curr = String.valueOf(TASK_NUM);
-        //Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
