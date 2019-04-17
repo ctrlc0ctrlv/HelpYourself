@@ -3,8 +3,6 @@ package com.example.examhelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -50,14 +48,23 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
         switch (key) {
             case ("night_mode"):
                 Log.d("myLogs", "OnChangeSettings");
-                getActivity().recreate();
+                Log.d("myLogs", String.valueOf(getActivity()));
 
+                try {
+                    this.getActivity().recreate();
+                } catch (Exception e) {
+                    Log.d("myLogs", "exception: " + e);
+                }
                 //Toast.makeText(getActivity(), "Рекомендуем перезапустить приложение для корректной работы ночного режима", Toast.LENGTH_SHORT).show();
-
                 //AppCompatDelegate.setDefaultNightMode(modeNight);
                 break;
             case ("seekBarPreference"):
-                int f_Size = preferences.getInt("seekBarPreference", 25);
+                try {
+                    this.getActivity().recreate();
+                } catch (Exception e) {
+                    Log.d("myLogs", "fontexception: " + e);
+                }
+                /*int f_Size = preferences.getInt("seekBarPreference", 25);
                 Log.d("myLogs", "Изменен размер текста на " + f_Size);
 
                 Resources res = getActivity().getResources();
@@ -68,7 +75,7 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
                 final float step = 0.016f; //шаг увеличения коэффициента
 
                 configuration.fontScale = start_value + step * f_Size;
-                res.updateConfiguration(configuration, res.getDisplayMetrics());
+                res.updateConfiguration(configuration, res.getDisplayMetrics());*/
                 //Toast.makeText(getActivity().getBaseContext(), "Рекомендуем перезапустить приложение для применения настроек", Toast.LENGTH_SHORT).show();
                 break;
         }

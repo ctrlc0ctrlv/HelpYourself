@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -49,6 +50,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public int BASE_NUM = 0;
     public Set<Integer> TASKS = new HashSet<>();
     public Set<Integer> MISTAKES = new HashSet<>();
+
+    final String Url = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
     //экземпляр класса Task
     Task Task1 = new Task();
     //уведомления
@@ -57,6 +60,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     AlertDialog.Builder ad_reload_task;
     AlertDialog.Builder ad_exception;
     //компоненты разметки экрана
+    WebView webView;
     TextView textView;
     TextView textView2;
     TextView textView3;
@@ -77,6 +81,23 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_answering);
         Log.d("myLogs", "Create");
         //инициализация всех компонентов
+        webView = findViewById(R.id.webView);
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        /*// Demo display equation url += "This is a display equation: $$P=\frac{F}{A}$$";
+        String url = Url + "This is also an identical display equation with different format:\\[P=\\frac{F}{A+B}\\]";
+        // equations aligned at equal sign url += "You can also put aligned equations just like Latex:";
+        String align = "\\begin{aligned}" + "F\\; &= P \\times (A+B) = 4000 \\times 0.2 = 800\\; \\text{N}\\end{aligned}";
+        align += "Так же работает русский текст";
+        align += "\\begin{aligned} A_{2} + B_{2} = C_{1} \\end{aligned}";
+        align += "\\begin{aligned} \\frac{(a+b)^3}{4} - \\frac{(a-b)^2}{4} = ab \\end{aligned}";
+        align += "\\begin{aligned} _{n}^{m}X + _{k}^{l}Y \\to \\dots \\end{aligned}";
+        align += "\\begin{aligned} \\text{Можно делать так: }(2x + \\frac{1}{3x})^2 \\text{ или даже так: } \\left( 2x + \\frac{1}{3x} \\right)^2 \\end{aligned}";
+        align += "\\begin{aligned} \\sum_{i=0}^n i^2 = \\frac{(n^2+n)(2n+1)}{6} \\end{aligned}";
+        url += align;
+        // Finally, must enclose the brackets url += "</span></p>";
+        webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");*/
+
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView2);
         textView3 = findViewById(R.id.textView3);
@@ -354,6 +375,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     void setUp() {
         //устанавливает условие на экран пользователя
         int n = Task1.getHashNum();
+        String url = Url + giveUsl(n).replace("\n", "<br/>");
+        webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
         textView.setText(giveUsl(n));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));
@@ -371,6 +394,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     void setUp(int num) {
         //устанавливает условие на экран пользователя
+        String url = Url + giveUsl(num).replace("\n", "<br/>");
+        webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
         textView.setText(giveUsl(num));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));

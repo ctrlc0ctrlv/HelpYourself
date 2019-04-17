@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -31,6 +32,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Test_AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
+    final String Url = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
+
+    WebView webView;
     TextView textView;
     TextView textView3;
     TextView textView4;
@@ -56,6 +60,8 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         TextView textView2 = findViewById(R.id.textView2);
         textView2.setVisibility(View.GONE);
         //инициализируем компоненты
+        webView = findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
         textView = findViewById(R.id.textView);
         textView3 = findViewById(R.id.textView3);
         textView4 = findViewById(R.id.textView4);
@@ -120,6 +126,8 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textView4.setText(getResources().getString(R.string.current_num));
         textView4.append(" " + Integer.toString(base_ids[TASK_NUM]));
         textView.setText(giveUsl(base_ids[TASK_NUM]));
+        String url = Url + giveUsl(base_ids[TASK_NUM]).replace("\n", "<br/>");
+        webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
 
         setUpTable(base_ids[TASK_NUM]);
         setUpWebView(base_ids[TASK_NUM]);
