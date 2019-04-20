@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -124,16 +123,14 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
                 checkTest();
             }
         }
-        Log.d("myLogs", "requestcode = " + String.valueOf(requestCode));
-        Log.d("myLogs", "resultcode = " + String.valueOf(resultCode));
+        Log.d("myLogs", "requestcode = " + requestCode);
+        Log.d("myLogs", "resultcode = " + resultCode);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button:
-                checkTest();
-                break;
+        if (view.getId() == R.id.button) {
+            checkTest();
         }
     }
 
@@ -159,7 +156,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         }
 
         Log.d("myLogs", Arrays.toString(poses));
-        Toast.makeText(this, "Решено верно: " + Integer.toString(rez) + "\nРешено неверно: " + Integer.toString(NUM_OF_TASKS - rez), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Решено верно: " + rez + "\nРешено неверно: " + (NUM_OF_TASKS - rez), Toast.LENGTH_LONG).show();
         re_create();
         //Log.d("myLogs", "curr_answers = "+Arrays.toString(curr_answers));
         //Log.d("myLogs", "curr_base_answers = "+Arrays.toString(curr_base_answers));
@@ -224,7 +221,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         String[] curr_answers = new String[NUM_OF_TASKS + 1];
         for (int i = 1; i <= NUM_OF_TASKS; i++) {
             SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
-            curr_answers[i] = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(i), "");
+            curr_answers[i] = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + i, "");
         }
         return curr_answers;
     }
@@ -242,6 +239,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
             curr_base_answers[x] = cursor.getString(2);
             cursor.close();
         }
+        tryDB.close();
         return curr_base_answers;
     }
 
@@ -286,13 +284,6 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         tryDB = tryDBHelper.getReadableDatabase();
 
         Random random;
-
-        tryDBHelper.onCreate(tryDB);
-        try {
-            tryDBHelper.copyDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         for (int x = 1; x < base_ids.length; x++) {
             String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE number == " + x;

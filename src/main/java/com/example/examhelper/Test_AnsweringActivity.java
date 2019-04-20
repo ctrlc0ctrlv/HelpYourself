@@ -1,12 +1,12 @@
 package com.example.examhelper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +31,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Test_AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
-    final String Url = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
+    final String DayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
+    final String NightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
+    String Url;
 
     WebView webView;
-    TextView textView;
+    //TextView textView;
     TextView textView3;
     TextView textView4;
     TextInputEditText textInputEditText;
@@ -52,6 +53,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
     int[] base_ids;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,20 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         //инициализируем компоненты
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        textView = findViewById(R.id.textView);
+        webView.setBackgroundColor(getResources().getColor(R.color.newDefault));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String night = sharedPreferences.getString("night_mode", "Нет");
+        assert night != null;
+        switch (night) {
+            case ("Да"):
+                Url = NightUrl;
+                break;
+            case ("Нет"):
+                Url = DayUrl;
+                break;
+        }
+
+        //textView = findViewById(R.id.textView);
         textView3 = findViewById(R.id.textView3);
         textView4 = findViewById(R.id.textView4);
         textInputEditText = findViewById(R.id.textInputEditText);
@@ -124,8 +139,8 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textView3.append(String.valueOf(arguments.getInt("num_of_tasks")));
 
         textView4.setText(getResources().getString(R.string.current_num));
-        textView4.append(" " + Integer.toString(base_ids[TASK_NUM]));
-        textView.setText(giveUsl(base_ids[TASK_NUM]));
+        textView4.append(" " + base_ids[TASK_NUM]);
+        //textView.setText(giveUsl(base_ids[TASK_NUM]));
         String url = Url + giveUsl(base_ids[TASK_NUM]).replace("\n", "<br/>");
         webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
 
@@ -133,7 +148,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         setUpWebView(base_ids[TASK_NUM]);
 
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
-        String previous_answer = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), "");
+        String previous_answer = activityPreferences.getString(TEST_PROGRESS_ANSWER + "_" + TASK_NUM, "");
         textInputEditText.setText(previous_answer);
         //Log.d("myLogs","current TASK_NUM value is "+String.valueOf(TASK_NUM));
     }
@@ -201,7 +216,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = activityPreferences.edit();
-        ed.putString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM - n), ans.toString());
+        ed.putString(TEST_PROGRESS_ANSWER + "_" + (TASK_NUM - n), ans.toString());
         //Log.d("myLogs","preferences: written for "+String.valueOf(TASK_NUM-n));
         ed.apply();
         setUp();
@@ -210,11 +225,11 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     public String giveUsl(final int n) {
         //достает из базы данных условие задания с указанным номером
         ///tryDB = tryDBHelper.getReadableDatabase();
-        try {
+        /*try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
         Cursor cursor = tryDB.rawQuery(raw, null);
         cursor.moveToFirst();
@@ -238,24 +253,15 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // читаем размер шрифта из EditTextPreference
-        String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
-        assert f_Size != null;
-        float fSize = Float.parseFloat(f_Size);
+        //String f_Size = prefs.getString(getResources().getString(R.string.pref_size), "14");
+        //assert f_Size != null;
+        //float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
-        textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
-        //Применяем настройки стиля шрифта
-        String regular = prefs.getString(getString(R.string.pref_style), "");
-        int typeface = Typeface.NORMAL;
-        assert regular != null;
-        if (regular.contains("Полужирный"))
-            typeface += Typeface.BOLD;
-        if (regular.contains("Курсив"))
-            typeface += Typeface.ITALIC;
-        // меняем настройки в TextView
-        textView.setTypeface(null, typeface);
+        //textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
+        //textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
+        //textView.setTypeface(null, typeface);
 
         /*assert arguments != null;
         int[] base_ids = arguments.getIntArray("base_ids");
@@ -271,18 +277,22 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
 
         SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = activityPreferences.edit();
-        ed.putString(TEST_PROGRESS_ANSWER + "_" + Integer.toString(TASK_NUM), ans.toString());
+        ed.putString(TEST_PROGRESS_ANSWER + "_" + TASK_NUM, ans.toString());
         ed.apply();
+
+        tryDB.close();
     }
 
     void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
+        allowed_table.add("8");
         allowed_table.add("17");
+        allowed_table.add("19");
         allowed_table.add("20");
         allowed_table.add("21");
         String curr = String.valueOf(TASK_NUM);
-        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        Log.d("myLogs", "containing: " + allowed_table.contains(curr));
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
@@ -292,7 +302,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
             if (raw_table != null) {
                 char height = raw_table.charAt(0);
                 char width = raw_table.charAt(2);
-                String ids[];
+                String[] ids;
                 ids = raw_table.substring(4).split("\\$");
                 for (int i = 0; i < ids.length; i++) {
                     ids[i] = ids[i].trim();

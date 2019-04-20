@@ -20,6 +20,8 @@ import android.view.MenuItem;
 public class FragmentsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     AlertDialog.Builder ad;
 
+    final static double epsilon = 0.00001;
+
     final static String TAG_1 = "FRAGMENT_1";
     final static String TAG_2 = "FRAGMENT_2";
     final static String TAG_3 = "FRAGMENT_3";
@@ -56,9 +58,11 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         final float start_value = 0.8f; //начальное значение размера шрифта
         //final float max_start_value = 1.6f;
         final float step = 0.016f; //шаг увеличения коэффициента
-        float oldSclale = configuration.fontScale;
+        float oldScale = configuration.fontScale;
+        Log.d("myLogs", String.valueOf(oldScale));
         float newScale = start_value + step * f_Size;
-        if (oldSclale != newScale) {
+        if (Math.abs(oldScale - newScale) > epsilon) {
+            Log.d("myLogs", String.valueOf(Math.abs(oldScale - newScale)));
             configuration.fontScale = start_value + step * f_Size;
             res.updateConfiguration(configuration, res.getDisplayMetrics());
             recreate();

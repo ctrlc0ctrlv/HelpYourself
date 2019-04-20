@@ -1,5 +1,6 @@
 package com.example.examhelper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +10,6 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +19,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +50,9 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     public Set<Integer> TASKS = new HashSet<>();
     public Set<Integer> MISTAKES = new HashSet<>();
 
-    final String Url = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
+    final String DayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
+    final String NightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS', 'output/CommonHTML']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js', 'CHTML-preview.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
+    String Url;
     //экземпляр класса Task
     Task Task1 = new Task();
     //уведомления
@@ -61,7 +62,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     AlertDialog.Builder ad_exception;
     //компоненты разметки экрана
     WebView webView;
-    TextView textView;
+    //TextView textView;
     TextView textView2;
     TextView textView3;
     TextView textView4;
@@ -75,6 +76,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     private TryingDBHelper tryDBHelper;
     private SQLiteDatabase tryDB;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +84,20 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         Log.d("myLogs", "Create");
         //инициализация всех компонентов
         webView = findViewById(R.id.webView);
-
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setBackgroundColor(getResources().getColor(R.color.newDefault));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String night = sharedPreferences.getString("night_mode", "Нет");
+        assert night != null;
+        switch (night) {
+            case ("Да"):
+                Url = NightUrl;
+                break;
+            case ("Нет"):
+                Url = DayUrl;
+                break;
+        }
+
         /*// Demo display equation url += "This is a display equation: $$P=\frac{F}{A}$$";
         String url = Url + "This is also an identical display equation with different format:\\[P=\\frac{F}{A+B}\\]";
         // equations aligned at equal sign url += "You can also put aligned equations just like Latex:";
@@ -98,7 +112,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         // Finally, must enclose the brackets url += "</span></p>";
         webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");*/
 
-        textView = findViewById(R.id.textView);
+        //textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView2);
         textView3 = findViewById(R.id.textView3);
         textView4 = findViewById(R.id.textView4);
@@ -133,7 +147,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
                 int Level = Task1.getLevel();
                 String newLevel = ("Уровень: " + Task1.LevelDown(Level));
-                Log.d("myLogs", "new level after getting down is " + Integer.toString(Task1.LevelDown(Level)));
+                Log.d("myLogs", "new level after getting down is " + Task1.LevelDown(Level));
                 textView2.setText(newLevel);
 
                 if (GetTaskNum() + 1 <= NUM_OF_TASKS) {
@@ -155,7 +169,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 String newLevel = ("Уровень: " + Task1.LevelDown(Level));
                 textView2.setText(newLevel);
                 textInputEditText.setText("");
-                textView.setBackground(textView2.getBackground());
+                //textView.setBackground(textView2.getBackground());
                 enterBtn.setEnabled(true);
                 setUp();
             }
@@ -246,11 +260,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Оформляем задания
         tryDBHelper = new TryingDBHelper(this);
-        try {
+        /*try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         tryDB = tryDBHelper.getReadableDatabase();
 
         initArrays();
@@ -266,7 +280,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } else {
             setUp(BASE_NUM);
         }*/
-        tryDB.close();
+        //tryDB.close();
     }
 
     @Override
@@ -295,30 +309,30 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
     public String giveUsl(final int n) {
         //достает из базы данных условие задания с указанным номером
-        tryDB = tryDBHelper.getReadableDatabase();
-        try {
+        //tryDB = tryDBHelper.getReadableDatabase();
+        /*try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
         Cursor cursor = tryDB.rawQuery(raw, null);
         cursor.moveToFirst();
         String st;
         st = cursor.getString(1);
         cursor.close();
-        tryDB.close();
+        //tryDB.close();
         return st;
     }
 
     public void initArrays() {
         //возвращет массив уникальных номеров заданий
-        try {
+        /*try {
             tryDBHelper.copyDataBase();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        tryDB = tryDBHelper.getReadableDatabase();
+        }*/
+        //tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE number ==" + GetTaskNum();
         switch (Task1.getLevel()) {
             case 1:
@@ -352,12 +366,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
 
         //Integer[] myMistakes = MISTAKES.toArray(new Integer[0]);
         //Log.d("myLogs", "Current mistakes = " + Arrays.toString(myMistakes));
-        tryDB.close();
+        //tryDB.close();
     }
 
     public String[] giveAns(int n) {
         //возвращает ответ из базы данных по номеру задания
-        tryDB = tryDBHelper.getReadableDatabase();
+        //tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
         String[] ans = null;
         try {
@@ -368,7 +382,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } catch (SQLiteException e) {
             ad_exception.create();
         }
-        tryDB.close();
+        //tryDB.close();
         return ans;
     }
 
@@ -377,7 +391,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         int n = Task1.getHashNum();
         String url = Url + giveUsl(n).replace("\n", "<br/>");
         webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
-        textView.setText(giveUsl(n));
+        //textView.setText(giveUsl(n));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
@@ -396,7 +410,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         //устанавливает условие на экран пользователя
         String url = Url + giveUsl(num).replace("\n", "<br/>");
         webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
-        textView.setText(giveUsl(num));
+        //textView.setText(giveUsl(num));
         textView4.setText("");
         textView4.append(getResources().getString(R.string.current_num));
         textView4.append(" ");
@@ -414,11 +428,13 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
+        allowed_table.add("8");
         allowed_table.add("17");
+        allowed_table.add("19");
         allowed_table.add("20");
         allowed_table.add("21");
         String curr = String.valueOf(GetTaskNum());
-        Log.d("myLogs", "containing: " + String.valueOf(allowed_table.contains(curr)));
+        Log.d("myLogs", "containing: " + allowed_table.contains(curr));
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
@@ -429,7 +445,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
                 Log.d("myLogs", raw_table);
                 char height = raw_table.charAt(0);
                 char width = raw_table.charAt(2);
-                String ids[];
+                String[] ids;
                 ids = raw_table.substring(4).split("\\$");
                 for (int i = 0; i < ids.length; i++) {
                     ids[i] = ids[i].trim();
@@ -473,7 +489,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     }
 
     String giveTable(int n) {
-        tryDB = tryDBHelper.getReadableDatabase();
+        //tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
 
         String raw_elements = null;
@@ -484,7 +500,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             if (raw_elements == null) {
                 Log.d("myLogs", "empty");
             } else if (raw_elements.equals("")) {
-                Log.d("myLogs", "zero length string at position " + String.valueOf(n));
+                Log.d("myLogs", "zero length string at position " + n);
             }
             cursor.close();
         } catch (SQLiteException e) {
@@ -492,7 +508,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
         assert raw_elements != null;
         raw_elements = raw_elements.trim();
-        tryDB.close();
+        //tryDB.close();
         return raw_elements;
     }
 
@@ -512,7 +528,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.goBtn:
                 enterBtn.setEnabled(true);
-                textView.setBackground(textView2.getBackground());
+                //textView.setBackground(textView2.getBackground());
                 textInputEditText.setText("");
                 setUp();
                 break;
@@ -569,20 +585,12 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         // читаем размер шрифта из EditTextPreference
         String f_Size = prefs.getString("text_size", "14");
         assert f_Size != null;
-        float fSize = Float.parseFloat(f_Size);
+        //float fSize = Float.parseFloat(f_Size);
         // применяем настройки в текстовом поле
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
-        textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
-        //Применяем настройки стиля шрифта
-        String regular = prefs.getString(getString(R.string.pref_style), "");
-        int typeface = Typeface.NORMAL;
-        assert regular != null;
-        if (regular.contains("Полужирный"))
-            typeface += Typeface.BOLD;
-        if (regular.contains("Курсив"))
-            typeface += Typeface.ITALIC;
+        //textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
+        //textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fSize);
         // меняем настройки в TextView
-        textView.setTypeface(null, typeface);
+        //textView.setTypeface(null, typeface);
 
         boolean saving_progress = prefs.getBoolean("save_progress", true);
         if (saving_progress) {
@@ -633,6 +641,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), BASE_NUM);
             ed.apply();
         }
+
+        tryDB.close();
     }
 
     void createTable(int height, int width, String[] ids) {
@@ -808,11 +818,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             Editable gotText = textInputEditText.getText();
             assert gotText != null;
             if (Arrays.asList(giveAns(n)).contains(gotText.toString())) {
-                textView.setBackgroundResource(R.color.colorAccept);
+                //textView.setBackgroundResource(R.color.colorAccept);
                 rez = true;
                 MISTAKES.remove(n);
             } else {
-                textView.setBackgroundResource(R.color.colorDeny);
+                //textView.setBackgroundResource(R.color.colorDeny);
                 rez = false;
                 MISTAKES.add(n);
             }

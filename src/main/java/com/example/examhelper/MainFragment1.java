@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,10 @@ import android.widget.Toast;
 public class MainFragment1 extends Fragment {
     Intent intent;
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootview = inflater.inflate(R.layout.fragment_main1, container, false);
+        Log.d("myLogs", "exit");
 
         Button button = rootview.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
