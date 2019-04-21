@@ -32,7 +32,7 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
     MainFragment3 myFragment3;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String night = sharedPreferences.getString("night_mode", "Нет");
         assert night != null;
@@ -48,13 +48,13 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
                 break;
         }
         if (prev_night != curr_night) {
-            recreate();
+            //recreate();
         }
 
         int f_Size = sharedPreferences.getInt("seekBarPreference", 25);
         Log.d("myLogs", "Изменен размер текста на " + f_Size);
-        Resources res = this.getResources();
-        Configuration configuration = new Configuration(res.getConfiguration());
+        Resources res = FragmentsActivity.this.getResources();
+        Configuration configuration = res.getConfiguration();
         final float start_value = 0.8f; //начальное значение размера шрифта
         //final float max_start_value = 1.6f;
         final float step = 0.016f; //шаг увеличения коэффициента
@@ -65,7 +65,7 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
             Log.d("myLogs", String.valueOf(Math.abs(oldScale - newScale)));
             configuration.fontScale = start_value + step * f_Size;
             res.updateConfiguration(configuration, res.getDisplayMetrics());
-            recreate();
+            //recreate();
         }
 
         super.onCreate(savedInstanceState);
@@ -212,13 +212,12 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
+        super.onResume();
         myFragmentManager = getFragmentManager();
         myFragment1 = new MainFragment1();
         myFragment2 = new MainFragment2();
         myFragment3 = new MainFragment3();
-        super.onResume();
-
 
         Log.d("myLogs", String.valueOf(myFragmentManager.findFragmentByTag(TAG_1)));
         Log.d("myLogs", String.valueOf(myFragmentManager.findFragmentByTag(TAG_2)));
@@ -226,7 +225,7 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();

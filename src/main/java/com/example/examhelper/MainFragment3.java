@@ -36,7 +36,7 @@ public class MainFragment3 extends PreferenceFragment implements SharedPreferenc
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 //Intent intent = new Intent(getActivity(), AboutActivity.class);
-                Intent intent = new Intent(getActivity(), MathActivity.class);
+                Intent intent = new Intent(getActivity(), ThreadActivity.class);
                 startActivity(intent);
                 return false;
             }

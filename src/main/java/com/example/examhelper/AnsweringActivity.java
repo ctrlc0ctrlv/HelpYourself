@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.examhelper.data.CustomDbHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -265,9 +268,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        tryDB = tryDBHelper.getReadableDatabase();
-
-        initArrays();
+        //tryDB = tryDBHelper.getReadableDatabase();
+        tryDB = tryDBHelper.getWritableDatabase();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean saving_progress = prefs.getBoolean("save_progress", true);
@@ -281,6 +283,58 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             setUp(BASE_NUM);
         }*/
         //tryDB.close();
+
+        insertRecords();
+
+        initArrays();
+    }
+
+    private void insertRecords() {
+        CustomDbHelper cDBHelper = new CustomDbHelper(this);
+        SQLiteDatabase cDb = cDBHelper.getReadableDatabase();
+        cDBHelper.onCreate(cDb);
+
+        Cursor ccursor = cDb.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE level ==1", null);
+        Cursor cursor = tryDB.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME, null);
+        String sql;
+
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
+            sql = "INSERT INTO " + SUBJECT_TABLE_NAME + " VALUES(?,?,?,?,?)";
+        } else {
+            sql = "INSERT INTO " + SUBJECT_TABLE_NAME + " VALUES(?,?,?,?,?,?)";
+        }
+
+        SQLiteStatement statement = tryDB.compileStatement(sql);
+        cursor.moveToLast();
+        int i = cursor.getInt(0) + 1;
+        int count = 0;
+        cursor.close();
+        tryDB.beginTransaction();
+        try {
+            ccursor.moveToFirst();
+            while (!ccursor.isAfterLast()) {
+                statement.clearBindings();
+                statement.bindLong(1, i);
+                statement.bindString(2, ccursor.getString(1));
+                statement.bindString(3, ccursor.getString(2));
+                statement.bindLong(4, ccursor.getInt(3));
+                statement.bindLong(5, ccursor.getInt(4));
+                if (!SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
+                    statement.bindString(6, "");
+                }
+                statement.execute();
+                Log.d("myLogs", "row " + i);
+                i += 1;
+                count += 1;
+                ccursor.moveToNext();
+            }
+            tryDB.setTransactionSuccessful();
+            Log.d("myLogs", "transaction success: " + count + " rows copied");
+        } finally {
+            tryDB.endTransaction();
+        }
+        ccursor.close();
+        cDb.close();
     }
 
     @Override
@@ -528,7 +582,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.goBtn:
                 enterBtn.setEnabled(true);
-                //textView.setBackground(textView2.getBackground());
+                webView.setBackgroundColor(getResources().getColor(R.color.newDefault));
                 textInputEditText.setText("");
                 setUp();
                 break;
@@ -641,7 +695,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             ed.putInt(APP_PREFERENCES_PROGRESS_BASE_NUM + "_" + SUBJECT_TABLE_NAME + "_" + GetTaskNum(), BASE_NUM);
             ed.apply();
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         tryDB.close();
     }
 
@@ -818,11 +876,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             Editable gotText = textInputEditText.getText();
             assert gotText != null;
             if (Arrays.asList(giveAns(n)).contains(gotText.toString())) {
-                //textView.setBackgroundResource(R.color.colorAccept);
+                webView.setBackgroundColor(getResources().getColor(R.color.colorAccept));
                 rez = true;
                 MISTAKES.remove(n);
             } else {
-                //textView.setBackgroundResource(R.color.colorDeny);
+                webView.setBackgroundColor(getResources().getColor(R.color.colorDeny));
                 rez = false;
                 MISTAKES.add(n);
             }

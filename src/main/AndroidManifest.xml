@@ -20,16 +20,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AnsweringActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TimeActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Test_CreatingActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Test_AnsweringActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ButtonsActivity"
             android:screenOrientation="portrait" />
@@ -47,6 +47,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MathActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ThreadActivity"
             android:screenOrientation="portrait" />
 
         <receiver

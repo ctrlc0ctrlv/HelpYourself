@@ -270,7 +270,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         Editable ans = textInputEditText.getText();
         assert ans != null;
@@ -279,7 +279,11 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         SharedPreferences.Editor ed = activityPreferences.edit();
         ed.putString(TEST_PROGRESS_ANSWER + "_" + TASK_NUM, ans.toString());
         ed.apply();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         tryDB.close();
     }
 

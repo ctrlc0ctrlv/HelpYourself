@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ import java.util.zip.ZipInputStream;
 
 public class TryingDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "default (3).db";
-    //@SuppressLint("SdCardPath")
+    private static final String CUSTOM_NAME = "custom1.db";
     private String DB_PATH = "/data/data/com.example.examhelper/databases/";
         private SQLiteDatabase dataBase;
         private final Context fContext;
@@ -30,10 +31,12 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             this.fContext = context;
             Log.d("myLogs", DB_PATH);
             try {
-                File dbFile = new File(DB_PATH + DB_NAME);
+                Log.d("myLogs", DB_PATH = fContext.getDatabasePath(DB_NAME).getPath());
+                File dbFile = new File(DB_PATH);
                 Log.d("myLogs", "db deleted: " + dbFile.delete());
                 //copyDataBase();
-                copyFromZipFile();
+                //copyFromZipFile();
+                massCopy();
             } catch (IOException e) {
                 Log.d("myLogs", "ERROR IN CONSTRUCTOR");
             }
@@ -55,7 +58,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             SQLiteDatabase checkDB = null;
             try {
                 Log.d("myLogs", "Checking database...");
-                String myPath = DB_PATH + DB_NAME;
+                String myPath = DB_PATH;
                 checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
             } catch (SQLiteException e) {
                 Log.d("myLogs", "There is no such database");
@@ -67,11 +70,11 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             return checkDB != null;
     }
 
-        void copyDataBase() throws IOException {
-            Log.d("myLogs", "Coping database...");
-            InputStream input = fContext.getAssets().open(DB_NAME);
-            String outFileName = DB_PATH + DB_NAME;
-            OutputStream output = new FileOutputStream(outFileName);
+    private void copyDataBase() throws IOException {
+        Log.d("myLogs", "Coping custom data...");
+        InputStream input = new FileInputStream(fContext.getDatabasePath(CUSTOM_NAME));
+
+        OutputStream output = new FileOutputStream(DB_PATH);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = input.read(buffer)) > 0) {
@@ -82,9 +85,41 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             input.close();
         }
 
+    private void massCopy() throws IOException {
+        Log.d("myLogs", "merging databases...");
+
+        //InputStream input = new FileInputStream(DB_PATH+CUSTOM_NAME);
+        InputStream is = fContext.getResources().openRawResource(R.raw.def);
+        OutputStream myOutput = new FileOutputStream(DB_PATH);
+        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
+        try {
+            while (zis.getNextEntry() != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int count;
+
+                while ((count = zis.read(buffer)) != -1) {
+                    baos.write(buffer, 0, count);
+                }
+                baos.writeTo(myOutput);
+            }
+            //byte[] buffer = new byte[1024];
+            //int length;
+            // while ((length = input.read(buffer)) > 0) {
+            //myOutput.write(buffer, 0, length);
+            //}
+        } finally {
+            zis.close();
+            myOutput.flush();
+            myOutput.close();
+            is.close();
+            //input.close();
+        }
+    }
+
     private void copyFromZipFile() throws IOException {
         InputStream is = fContext.getResources().openRawResource(R.raw.def);
-        OutputStream myOutput = new FileOutputStream(DB_PATH + DB_NAME);
+        OutputStream myOutput = new FileOutputStream(DB_PATH);
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         try {
             while (zis.getNextEntry() != null) {
@@ -107,7 +142,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
 
     private void openDataBase() throws SQLException {
             Log.d("myLogs", "Opening database...");
-            String path = DB_PATH + DB_NAME;
+        String path = DB_PATH;
             dataBase = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
         }
 
@@ -134,12 +169,13 @@ public class TryingDBHelper extends SQLiteOpenHelper {
 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             if (newVersion > oldVersion) {
-                File dbFile = new File(DB_PATH + DB_NAME);
+                File dbFile = new File(DB_PATH);
                 if (checkDataBase()) {
-                    Log.d("myLogs", String.valueOf(dbFile.delete()));
+                    Log.d("myLogs", "deleted: " + dbFile.delete());
                     try {
                         //copyDataBase();
-                        copyFromZipFile();
+                        //copyFromZipFile();
+                        massCopy();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -17,5 +17,6 @@ class CustomDataContract {
         final static String COLUMN_ANSWER = "answer";
         final static String COLUMN_LEVEL = "level";
         final static String COLUMN_NUMBER = "number";
+        final static String COLUMN_TABLE = "'table'";
     }
 }

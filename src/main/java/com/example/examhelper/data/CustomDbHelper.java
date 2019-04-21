@@ -31,21 +31,23 @@ public class CustomDbHelper extends SQLiteOpenHelper {
                 + CustomDataContract.CustomTasks.COLUMN_USLOVIE + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_ANSWER + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_LEVEL + " INTEGER NOT NULL DEFAULT 1, "
-                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 1)";
+                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 0, "
+                + CustomDataContract.CustomTasks.COLUMN_TABLE + " TEXT)";
 
         String SQL_CREATE_PROGRESS_TABLE_RUSSIAN = "CREATE TABLE IF NOT EXISTS " + CustomDataContract.CustomTasks.TABLE_RUSSIAN_NAME + " ("
                 + CustomDataContract.CustomTasks._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CustomDataContract.CustomTasks.COLUMN_USLOVIE + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_ANSWER + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_LEVEL + " INTEGER NOT NULL DEFAULT 1, "
-                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 1)";
+                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 0, "
+                + CustomDataContract.CustomTasks.COLUMN_TABLE + " TEXT)";
 
         String SQL_CREATE_PROGRESS_TABLE_MATHS_BASE = "CREATE TABLE IF NOT EXISTS " + CustomDataContract.CustomTasks.TABLE_MATHS_BASE_NAME + " ("
                 + CustomDataContract.CustomTasks._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CustomDataContract.CustomTasks.COLUMN_USLOVIE + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_ANSWER + " TEXT NOT NULL, "
                 + CustomDataContract.CustomTasks.COLUMN_LEVEL + " INTEGER NOT NULL DEFAULT 1, "
-                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 1)";
+                + CustomDataContract.CustomTasks.COLUMN_NUMBER + " INTEGER NOT NULL DEFAULT 0)";
 
         // Запускаем создание таблицы
         db.execSQL(SQL_CREATE_PROGRESS_TABLE_INFORMATICS);
