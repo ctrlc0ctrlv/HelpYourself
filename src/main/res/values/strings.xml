@@ -100,8 +100,14 @@
     <!--Ресурсы для TimeActivity-->
     <string name="set_notification">Настроить уведомление</string>
 
+    <!--Ресурсы для AboutActivity-->
     <string name="about">
-        Приложение для успешной подготовки к ЕГЭ HelpYourself\nРазработано командой МАОУ Лицея №180 "Полифорум" при поддержке образовательной программы ЮнIT-Урал 2018-2019\n\nСлужба технической поддержки: sup.helpyourself@gmail.com
+        Приложение для успешной подготовки к ЕГЭ HelpYourself\nРазработано командой МАОУ Лицея №180 \"Полифорум\" при поддержке образовательной программы ЮнIT-Урал 2018-2019\n\nСлужба технической поддержки: sup.helpyourself@gmail.com
     </string>
+
+    <!--Ресурсы для ThreadActivity-->
+    <string name="kb"> КБ</string>
+    <string name="progress">Прогресс: </string>
+    <string name="success">Копирование завершено. Скопировано: </string>
 
 </resources>

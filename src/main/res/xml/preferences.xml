@@ -3,8 +3,7 @@
     android:label="@string/app_name"
     android:title="@string/app_name">
     <PreferenceCategory android:title="Шрифт">
-        <com.example.examhelper.SeekBarPreference
-            xmlns:example="http://schemas.android.com/apk/res/com.example.examhelper"
+        <com.easyege.examhelper.SeekBarPreference xmlns:example="http://schemas.android.com/apk/res/com.easyege.examhelper"
             android:defaultValue="25"
             android:dialogTitle="@string/dialog_title"
             android:key="seekBarPreference"
@@ -27,7 +26,7 @@
 
     <PreferenceCategory android:title="Внешний вид">
         <ListPreference
-            android:defaultValue="false"
+            android:defaultValue="Нет"
             android:dialogTitle="Включить ночной режим?"
             android:entries="@array/night_modes"
             android:entryValues="@array/night_modes"
@@ -45,12 +44,12 @@
             android:dependency="check_box_preference_1"
             android:key="change_notifications"
             android:summary="Настройка интервала между уведомлениями"
-            android:title="Настроить уведомления"></PreferenceScreen>
+            android:title="Настроить уведомления" />
     </PreferenceCategory>
     <PreferenceCategory android:title="О программе">
         <PreferenceScreen
             android:key="about"
             android:summary="Основная информация о приложении"
-            android:title="О приложении"></PreferenceScreen>
+            android:title="О приложении" />
     </PreferenceCategory>
 </PreferenceScreen>

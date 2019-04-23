@@ -11,7 +11,7 @@ android {
     }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.examhelper"
+        applicationId "com.easyege.examhelper"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
