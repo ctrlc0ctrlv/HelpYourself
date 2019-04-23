@@ -1,4 +1,4 @@
-package com.example.examhelper;
+package com.easyege.examhelper;
 
 import org.junit.Test;
 

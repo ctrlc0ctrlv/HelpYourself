@@ -2,6 +2,6 @@
     package="com.example.examhelper">
 
     <application>
-        <activity android:name="com.example.examhelper.ButtonsActivity"></activity>
+        <activity android:name="com.easyege.examhelper.ButtonsActivity"></activity>
     </application>
 </manifest>

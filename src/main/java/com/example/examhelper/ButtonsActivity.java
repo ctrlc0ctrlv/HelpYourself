@@ -1,4 +1,4 @@
-package com.example.examhelper;
+package com.easyege.examhelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

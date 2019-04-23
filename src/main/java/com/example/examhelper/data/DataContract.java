@@ -1,4 +1,4 @@
-package com.example.examhelper.data;
+package com.easyege.examhelper.data;
 
 import android.provider.BaseColumns;
 

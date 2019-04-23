@@ -1,4 +1,4 @@
-package com.example.examhelper;
+package com.easyege.examhelper;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
