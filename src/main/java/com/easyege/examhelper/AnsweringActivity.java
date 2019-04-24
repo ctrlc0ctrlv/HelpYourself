@@ -448,6 +448,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         } catch (SQLiteException e) {
             ad_exception.create();
         }
+
+        TASKS.remove(BASE_NUM);
         //Integer[] myArray = TASKS.toArray(new Integer[0]);
         //Log.d("myLogs", "Current array=" + Arrays.toString(myArray));
 
@@ -547,9 +549,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         imageView.setImageResource(0);
         imageView.setMinimumHeight(0);
 
+        int[] allowed_picture = new int[]{185, 186, 187, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 283, 284, 294, 430, 431, 432, 451, 452, 453, 454, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495};
+        ArrayList<Integer> pic = new ArrayList<>();
+        for (int a : allowed_picture) {
+            pic.add(a);
+        }
 
-        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (GetTaskNum() == 15 || GetTaskNum() == 3 && (n == 430 || n == 431 || n == 432) || GetTaskNum() == 12 && (n == 451 || n == 452 || n == 453 || n == 454)) {
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") || SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
+            if ((GetTaskNum() == 13 || GetTaskNum() == 14 || GetTaskNum() == 15 || GetTaskNum() == 3 || GetTaskNum() == 12) && pic.contains(n)) {
                 /*String url = "file:///android_asset/informatics/";
                 url += String.valueOf(n);
                 url += ".jpg";
@@ -878,11 +885,11 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             this.num = x;
         }
 
-        private int getHashNum() {
+        /*private int getHashNum() {
             /*
              * Возвращает числовое значение номера задания на основании текущей выборки заданий и массива ошибок
              */
-            int x;
+            /*int x;
             Integer[] tasks = TASKS.toArray(new Integer[0]);
             Integer[] mistakes = MISTAKES.toArray(new Integer[0]);
 
@@ -891,11 +898,45 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             if (mistakes.length > 0) {
                 if (not_mistakes) {
                     x = tasks[random.nextInt(tasks.length)];
+
                 } else {
                     x = mistakes[random.nextInt(mistakes.length)];
                 }
             } else {
                 x = tasks[random.nextInt(tasks.length)];
+            }
+            this.setNum(x);
+            return x;
+        }*/
+
+        private int getHashNum() {
+            /*
+             * Возвращает числовое значение номера задания на основании текущей выборки заданий и массива ошибок
+             */
+            int x;
+            Integer[] tasks = TASKS.toArray(new Integer[0]);
+            Integer[] mistakes = MISTAKES.toArray(new Integer[0]);
+            if (tasks.length == 0) {
+                initArrays();
+                tasks = TASKS.toArray(new Integer[0]);
+            }
+
+            Log.d("myLogs", "tasks: " + Arrays.toString(tasks));
+            Log.d("myLogs", "mistakes: " + Arrays.toString(mistakes));
+
+            Random random = new Random();
+            boolean not_mistakes = random.nextBoolean();
+            if (mistakes.length > 0) {
+                if (not_mistakes) {
+                    x = tasks[random.nextInt(tasks.length)];
+                    TASKS.remove(x);
+                } else {
+                    x = mistakes[random.nextInt(mistakes.length)];
+                    //MISTAKES.remove(x);
+                }
+            } else {
+                x = tasks[random.nextInt(tasks.length)];
+                TASKS.remove(x);
             }
             this.setNum(x);
             return x;

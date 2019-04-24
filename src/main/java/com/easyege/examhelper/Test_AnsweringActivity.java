@@ -196,9 +196,14 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         imageView.setImageResource(0);
         imageView.setMinimumHeight(0);
 
+        int[] allowed_picture = new int[]{185, 186, 187, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 283, 284, 294, 430, 431, 432, 451, 452, 453, 454, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495};
+        ArrayList<Integer> pic = new ArrayList<>();
+        for (int a : allowed_picture) {
+            pic.add(a);
+        }
 
-        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics")) {
-            if (TASK_NUM == 15 || TASK_NUM == 3 && (n == 430 || n == 431 || n == 432) || TASK_NUM == 12 && (n == 451 || n == 452 || n == 453 || n == 454)) {
+        if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") || SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
+            if ((TASK_NUM == 13 || TASK_NUM == 14 || TASK_NUM == 15 || TASK_NUM == 3 || TASK_NUM == 12) && pic.contains(n)) {
                 /*String url = "file:///android_asset/informatics/";
                 url += String.valueOf(n);
                 url += ".jpg";
@@ -216,9 +221,9 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
                     Drawable d = Drawable.createFromStream(ims, null);
                     // выводим картинку в ImageView
                     imageView.setImageDrawable(d);
-                    imageView.setMinimumHeight(300);
+                    imageView.setMinimumHeight(500);
                 } catch (IOException ex) {
-                    //Log.d("myLogs","EXCEPTION");
+                    Log.d("myLogs", "EXCEPTION");
                 }
             }
         }
