@@ -20,12 +20,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TimeActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String NEXT_NOTIFICATION = "next_notification";
-    public static final String NEXT_NOTIFICATION_TIME = "next_notification_time";
-    public static final String ZERO_NOTIFICATION_TIME = "zero_notification_time";
+    private static final String NEXT_NOTIFICATION = "next_notification";
+    private static final String NEXT_NOTIFICATION_TIME = "next_notification_time";
+    private static final String ZERO_NOTIFICATION_TIME = "zero_notification_time";
     private final int IDD_THREE_BUTTONS = 13;
-    long TIME_INTERVAL = AlarmManager.INTERVAL_DAY;
-    TimePicker mTimePicker;
+    private long TIME_INTERVAL = AlarmManager.INTERVAL_DAY;
+    private TimePicker mTimePicker;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

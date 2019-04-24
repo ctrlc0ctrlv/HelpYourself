@@ -1,5 +1,6 @@
 package com.easyege.examhelper;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,15 +19,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipInputStream;
 
 public class ThreadActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String DB_NAME = "default (3).db";
-    InputStream is;
-    String DB_PATH;
-    OutputStream myOutput;
-    ZipInputStream zis;
+    private InputStream is;
+    private OutputStream myOutput;
+    private ZipInputStream zis;
     private TextView mInfoTextView;
     private Button mOKButton;
     private ProgressBar mHorizontalProgressBar;
@@ -38,20 +37,15 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_thread);
 
         mInfoTextView = findViewById(R.id.textViewInfo);
-
         mOKButton = findViewById(R.id.buttonOK);
         mOKButton.setOnClickListener(this);
         mOKButton.setVisibility(View.INVISIBLE);
-
         mHorizontalProgressBar = findViewById(R.id.progressBar2);
-
         mProgressBar = findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         boolean done = sharedPreferences.getBoolean("done_copying", false);
-
         if (!done) {
             CatTask catTask = new CatTask();
             catTask.execute();
@@ -69,11 +63,12 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
         Log.d("myLogs", "merging databases...");
         is = this.getResources().openRawResource(R.raw.def);
 
-        DB_PATH = this.getDatabasePath(DB_NAME).getPath();
+        String DB_PATH = this.getDatabasePath(DB_NAME).getPath();
         myOutput = new FileOutputStream(DB_PATH);
         zis = new ZipInputStream(new BufferedInputStream(is));
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CatTask extends AsyncTask<String, Integer, Integer> {
         @Override
         protected void onPreExecute() {
@@ -104,13 +99,14 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
                             baos.write(buffer, 0, count);
                             i++;
                             publishProgress(i);
-                            TimeUnit.MILLISECONDS.sleep(25);
+                            //TimeUnit.MILLISECONDS.sleep(10);
                         }
                         baos.writeTo(myOutput);
                         int len = baos.toByteArray().length;
+                        Log.d("myLogs", "Длина массива" + len);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                /*} catch (InterruptedException e) {
+                    e.printStackTrace();*/
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } finally {
@@ -128,6 +124,8 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
+            Log.d("myLogs", "onPostExecute");
+
             mInfoTextView.setText("");
             mInfoTextView.append(getString(R.string.success));
             mInfoTextView.append(" ");

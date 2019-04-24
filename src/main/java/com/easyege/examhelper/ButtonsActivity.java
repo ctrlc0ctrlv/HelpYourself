@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class ButtonsActivity extends AppCompatActivity implements View.OnClickListener {
-    int NUM;
-    Bundle arguments;
+    private int NUM;
+    private Bundle arguments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

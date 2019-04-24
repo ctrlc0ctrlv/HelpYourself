@@ -1,5 +1,6 @@
 package com.easyege.examhelper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,25 +32,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Test_AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TEST_PROGRESS = "my_test";
-    public static final String TEST_PROGRESS_ANSWER = "my_test_answer";
-    final String DayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
-    final String NightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
-    String Url;
-    WebView webView;
+    private static final String TEST_PROGRESS = "my_test";
+    private static final String TEST_PROGRESS_ANSWER = "my_test_answer";
+    private String Url;
+    private WebView webView;
     //TextView textView;
-    TextView textView3;
-    TextView textView4;
-    TextInputEditText textInputEditText;
-    Button enterBtn;
-    Button goBtn;
-    Bundle arguments;
-    AlertDialog.Builder ad;
-    String SUBJECT_TABLE_NAME;
-    int TASK_NUM;
-    int[] base_ids;
+    private TextView textView3;
+    private TextView textView4;
+    private TextInputEditText textInputEditText;
+    private Bundle arguments;
+    private AlertDialog.Builder ad;
+    private String SUBJECT_TABLE_NAME;
+    private int TASK_NUM;
+    private int[] base_ids;
     private SQLiteDatabase tryDB;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +73,14 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String night = sharedPreferences.getString("night_mode", "Нет");
         assert night != null;
+        String nightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
+        String dayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
         switch (night) {
             case ("Да"):
-                Url = NightUrl;
+                Url = nightUrl;
                 break;
             case ("Нет"):
-                Url = DayUrl;
+                Url = dayUrl;
                 break;
         }
 
@@ -89,10 +89,10 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         textView4 = findViewById(R.id.textView4);
         textInputEditText = findViewById(R.id.textInputEditText);
         //инициализируем кнопки
-        enterBtn = findViewById(R.id.enterBtn);
+        Button enterBtn = findViewById(R.id.enterBtn);
         enterBtn.setText("Назад");
         enterBtn.setOnClickListener(this);
-        goBtn = findViewById(R.id.goBtn);
+        Button goBtn = findViewById(R.id.goBtn);
         goBtn.setOnClickListener(this);
         //инициализируем переменные
         TryingDBHelper tryDBHelper = new TryingDBHelper(this);
@@ -133,13 +133,13 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         setUp();
     }
 
-    void set_And_fin() {
+    private void set_And_fin() {
         setResult(666);
         //Log.d("myLogs","result set successfully");
         finish();
     }
 
-    void setUp() {
+    private void setUp() {
         textView3.setText("");
         textView3.append(String.valueOf(TASK_NUM));
         textView3.append("/");
@@ -191,7 +191,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         }
     }
 
-    void setUpWebView(int n) {
+    private void setUpWebView(int n) {
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageResource(0);
         imageView.setMinimumHeight(0);
@@ -224,7 +224,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         }
     }
 
-    void re_create(int n) {
+    private void re_create(int n) {
         Editable ans = textInputEditText.getText();
         assert ans != null;
 
@@ -236,7 +236,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         setUp();
     }
 
-    public String giveUsl(final int n) {
+    private String giveUsl(final int n) {
         //достает из базы данных условие задания с указанным номером
         ///tryDB = tryDBHelper.getReadableDatabase();
         /*try {
@@ -301,7 +301,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         tryDB.close();
     }
 
-    void setUpTable(int n) {
+    private void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
         allowed_table.add("8");
@@ -330,7 +330,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         }
     }
 
-    String giveTable(int n) {
+    private String giveTable(int n) {
         ///tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
 
@@ -342,7 +342,7 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         return raw_elements;
     }
 
-    void createTable(int height, int width, String[] ids) {
+    private void createTable(int height, int width, String[] ids) {
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         //tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);

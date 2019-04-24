@@ -218,7 +218,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         Log.d("myLogs", "onResume");
     }
 
-    String[] getAnswers() {
+    private String[] getAnswers() {
         String[] curr_answers = new String[NUM_OF_TASKS + 1];
         for (int i = 1; i <= NUM_OF_TASKS; i++) {
             SharedPreferences activityPreferences = getSharedPreferences(TEST_PROGRESS, Context.MODE_PRIVATE);
@@ -227,7 +227,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         return curr_answers;
     }
 
-    String[] getAnswersFromBase() {
+    private String[] getAnswersFromBase() {
         String[] curr_base_answers = new String[NUM_OF_TASKS + 1];
 
         tryDB = tryDBHelper.getReadableDatabase();
@@ -244,7 +244,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         return curr_base_answers;
     }
 
-    void initialise_items(boolean checked) {
+    private void initialise_items(boolean checked) {
         items.clear();
         HashMap<String, Object> map;
 
@@ -279,7 +279,7 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    void return_base_ids() {
+    private void return_base_ids() {
         base_ids = new int[NUM_OF_TASKS + 1];
 
         tryDB = tryDBHelper.getReadableDatabase();

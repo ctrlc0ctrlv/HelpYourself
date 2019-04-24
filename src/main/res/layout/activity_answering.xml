@@ -123,7 +123,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/scrollView3"
                 app:layout_constraintTop_toBottomOf="@+id/scrollView3"
-                app:layout_constraintVertical_bias="0.0"></TableLayout>
+                app:layout_constraintVertical_bias="0.0" />
 
             <TableLayout
                 android:id="@+id/prices_black"
@@ -135,7 +135,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/scrollView3"
                 app:layout_constraintTop_toBottomOf="@+id/scrollView3"
-                app:layout_constraintVertical_bias="0.0"></TableLayout>
+                app:layout_constraintVertical_bias="0.0" />
 
         </LinearLayout>
 

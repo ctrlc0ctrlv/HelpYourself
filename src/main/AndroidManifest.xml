@@ -46,9 +46,6 @@
             android:name=".AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MathActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ThreadActivity"
             android:screenOrientation="portrait" />
 

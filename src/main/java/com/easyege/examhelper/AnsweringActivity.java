@@ -1,5 +1,6 @@
 package com.easyege.examhelper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,38 +46,35 @@ import java.util.Set;
 
 public class AnsweringActivity extends AppCompatActivity implements View.OnClickListener {
     //настройки (в частности, прогресса)
-    public static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
-    public static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
-    public static final String APP_PREFERENCES_PROGRESS_BASE_NUM = "progress_base_num";
-    public static final String APP_PROGRESS = "my_progress";
-    public int BASE_NUM = 0;
-    public Set<Integer> TASKS = new HashSet<>();
-    public Set<Integer> MISTAKES = new HashSet<>();
-
-    final String DayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
-    final String NightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
-    String Url;
+    private static final String APP_PREFERENCES_PROGRESS_COUNTER = "progress_counter";
+    private static final String APP_PREFERENCES_PROGRESS_LVL = "progress_lvl";
+    private static final String APP_PREFERENCES_PROGRESS_BASE_NUM = "progress_base_num";
+    private static final String APP_PROGRESS = "my_progress";
+    private final Set<Integer> TASKS = new HashSet<>();
+    private final Set<Integer> MISTAKES = new HashSet<>();
     //экземпляр класса Task
-    Task Task1 = new Task();
+    private final Task Task1 = new Task();
+    private int BASE_NUM = 0;
+    private String Url;
     //уведомления
-    AlertDialog.Builder ad;
-    AlertDialog.Builder ad_delete;
-    AlertDialog.Builder ad_reload_task;
-    AlertDialog.Builder ad_exception;
+    private AlertDialog.Builder ad;
+    private AlertDialog.Builder ad_delete;
+    private AlertDialog.Builder ad_reload_task;
+    private AlertDialog.Builder ad_exception;
     //компоненты разметки экрана
-    WebView webView;
+    private WebView webView;
     //TextView textView;
-    TextView textView2;
-    TextView textView3;
-    TextView textView4;
-    TextInputEditText textInputEditText;
-    Button enterBtn;
-    Button goBtn;
+    private TextView textView2;
+    private TextView textView3;
+    private TextView textView4;
+    private TextInputEditText textInputEditText;
+    private Button enterBtn;
     //другие часто используемые переменные
-    Bundle arguments;
-    String SUBJECT_TABLE_NAME;
+    private Bundle arguments;
+    private String SUBJECT_TABLE_NAME;
     private SQLiteDatabase tryDB;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,12 +97,14 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String night = sharedPreferences.getString("night_mode", "Нет");
         assert night != null;
+        String nightUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px; color: white\" align=\"justify\">" + "<span >";
+        String dayUrl = "</style>" + "<script type='text/x-mathjax-config'>" + " MathJax.Hub.Config({" + " showMathMenu: false," + " jax: ['input/TeX','output/HTML-CSS']," + " extensions: ['tex2jax.js','MathMenu.js','MathZoom.js']," + " tex2jax: { inlineMath: [ ['$','$'] ], processEscapes: true }," + " TeX: {" + " extensions:['AMSmath.js','AMSsymbols.js'," + " 'noUndefined.js']" + " }" + " });" + "</script>" + "<script type='text/javascript' src='file:///android_asset/MathJax/MathJax.js'>" + "</script>" + "<p style=\"line-height:1,5; padding: 0 0; font-size: 16px\" align=\"justify\">" + "<span >";
         switch (night) {
             case ("Да"):
-                Url = NightUrl;
+                Url = nightUrl;
                 break;
             case ("Нет"):
-                Url = DayUrl;
+                Url = dayUrl;
                 break;
         }
 
@@ -128,7 +128,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         textView4 = findViewById(R.id.textView4);
         textInputEditText = findViewById(R.id.textInputEditText);
         enterBtn = findViewById(R.id.enterBtn);
-        goBtn = findViewById(R.id.goBtn);
+        Button goBtn = findViewById(R.id.goBtn);
         //инициализация переменных
         arguments = getIntent().getExtras();
         assert arguments != null;
@@ -340,6 +340,8 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
             Log.d("myLogs", e.toString());
         }
 
+        assert statement != null;
+
         tryDB.beginTransaction();
         try {
             ccursor.moveToFirst();
@@ -471,7 +473,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         return ans;
     }
 
-    void setUp() {
+    private void setUp() {
         //устанавливает условие на экран пользователя
         int n = Task1.getHashNum();
         String url = Url + giveUsl(n).replace("\n", "<br/>");
@@ -491,7 +493,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void setUp(int num) {
+    private void setUp(int num) {
         //устанавливает условие на экран пользователя
         String url = Url + giveUsl(num).replace("\n", "<br/>");
         webView.loadDataWithBaseURL("http://bar", url, "text/html", "utf-8", "");
@@ -510,7 +512,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void setUpTable(int n) {
+    private void setUpTable(int n) {
         ArrayList<String> allowed_table = new ArrayList<>();
         allowed_table.add("3");
         allowed_table.add("8");
@@ -540,7 +542,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void setUpWebView(int n) {
+    private void setUpWebView(int n) {
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageResource(0);
         imageView.setMinimumHeight(0);
@@ -573,7 +575,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    String giveTable(int n) {
+    private String giveTable(int n) {
         //tryDB = tryDBHelper.getReadableDatabase();
         String raw = "SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE _id ==" + n;
 
@@ -597,7 +599,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         return raw_elements;
     }
 
-    int GetTaskNum() {
+    private int GetTaskNum() {
         //возвращает номер задания, сохраненный в Extras
         return arguments.getInt("number");
     }
@@ -734,7 +736,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
         tryDB.close();
     }
 
-    void createTable(int height, int width, String[] ids) {
+    private void createTable(int height, int width, String[] ids) {
         //TableLayout tableLayout_auto = findViewById(R.id.prices_auto);
         //tableLayout_auto.removeAllViews();
         TableLayout tableLayout_black = findViewById(R.id.prices_black);

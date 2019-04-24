@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Информатика"
+                android:text="@string/informatics"
                 android:textSize="20sp" />
 
             <RadioButton
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Русский язык"
+                android:text="@string/russian"
                 android:textSize="20sp" />
 
             <RadioButton
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Математика (база)"
+                android:text="@string/maths"
                 android:textSize="20sp" />
         </RadioGroup>
 
@@ -70,14 +70,14 @@
                 android:id="@+id/radioButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Решать задания"
+                android:text="@string/solving"
                 android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/radioButton5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Создать тест"
+                android:text="@string/create_test"
                 android:textSize="20sp" />
         </RadioGroup>
     </LinearLayout>
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Добро пожаловать в приложение HelpYourself!"
+            android:text="@string/hello"
             android:textSize="20sp"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/button"

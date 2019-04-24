@@ -19,13 +19,12 @@ import android.widget.Toast;
 import com.easyege.examhelper.data.CustomDbHelper;
 
 public class DataBaseActivity extends AppCompatActivity implements View.OnClickListener {
-    int Level = 1;
-    CustomDbHelper cDbHelper;
-    SQLiteDatabase cDb;
+    private int Level = 1;
+    private SQLiteDatabase cDb;
     private Spinner spinner;
-    TextInputEditText TextInputEditText;
-    TextInputEditText TextInputEditText2;
-    TextInputEditText TextInputEditText3;
+    private TextInputEditText TextInputEditText;
+    private TextInputEditText TextInputEditText2;
+    private TextInputEditText TextInputEditText3;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +44,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
 
-        cDbHelper = new CustomDbHelper(this);
+        CustomDbHelper cDbHelper = new CustomDbHelper(this);
         cDb = cDbHelper.getWritableDatabase();
 
         Bundle arguments = getIntent().getExtras();
@@ -73,7 +72,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setupSpinner() {
-        ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.levels, android.R.layout.simple_spinner_item);
+        ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.levels, R.layout.spinner_item);
         genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(genderSpinnerAdapter);
         spinner.setSelection(0);
@@ -91,7 +90,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    public void insertTask() {
+    private void insertTask() {
         // Считываем данные из текстовых полей
         Editable uslovie = TextInputEditText.getText();
         assert uslovie != null;
@@ -129,7 +128,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void changeTask() {
+    private void changeTask() {
         // Считываем данные из текстовых полей
         Editable uslovie = TextInputEditText.getText();
         assert uslovie != null;
@@ -169,7 +168,7 @@ public class DataBaseActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void deleteTask() {
+    private void deleteTask() {
         // Считываем данные из текстовых полей
         Editable id = TextInputEditText3.getText();
         assert id != null;

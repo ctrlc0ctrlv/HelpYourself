@@ -10,9 +10,9 @@
             android:title="@string/action_settings"
             app:showAsAction="never" />
         <item
-        android:id="@+id/action_reload_task"
-        android:orderInCategory="100"
-            android:title="Начать задание заново"
+            android:id="@+id/action_reload_task"
+            android:orderInCategory="100"
+            android:title="@string/restart"
             app:showAsAction="never" />
         <item
             android:id="@+id/action_delete_progress"
@@ -22,7 +22,7 @@
     <item
         android:id="@+id/action_clear_database"
         android:orderInCategory="100"
-        android:title="Удалить все задания" />
+        android:title="@string/delete_all" />
 
 
 </menu>

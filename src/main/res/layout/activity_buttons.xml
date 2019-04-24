@@ -30,11 +30,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_1"
                 android:textAllCaps="false"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice2"
@@ -42,10 +38,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_2"
                 android:textAllCaps="false"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonChoice1" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice3"
@@ -53,10 +46,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_3"
                 android:textAllCaps="false"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonChoice2" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice4"
@@ -64,13 +54,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_4"
                 android:textAllCaps="false"
-                android:textSize="26sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonChoice3"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice5"
@@ -78,7 +62,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_5"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice6"
@@ -86,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_6"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice7"
@@ -94,7 +78,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_7"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice8"
@@ -102,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_8"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice9"
@@ -110,7 +94,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_9"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice10"
@@ -118,7 +102,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_10"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice11"
@@ -126,7 +110,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_11"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice12"
@@ -134,7 +118,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_12"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice13"
@@ -142,7 +126,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_13"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice14"
@@ -150,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_14"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice15"
@@ -158,7 +142,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_15"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice16"
@@ -166,7 +150,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_16"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice17"
@@ -174,7 +158,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_17"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice18"
@@ -182,7 +166,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_18"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice19"
@@ -190,7 +174,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_19"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice20"
@@ -198,7 +182,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_20"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice21"
@@ -206,7 +190,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_21"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice22"
@@ -214,7 +198,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_22"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice23"
@@ -222,7 +206,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_23"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice24"
@@ -230,7 +214,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_24"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice25"
@@ -238,7 +222,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_25"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonChoice26"
@@ -246,7 +230,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/_26"
                 android:textAllCaps="false"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>

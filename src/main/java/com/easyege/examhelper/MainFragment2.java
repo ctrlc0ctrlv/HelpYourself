@@ -20,9 +20,9 @@ import android.widget.TextView;
 import com.easyege.examhelper.data.CustomDbHelper;
 
 public class MainFragment2 extends Fragment {
-    int Number = 1;
-    String TABLE_SUBJECT_NAME = "informatics";
-    TextView text_view_info;
+    private int Number = 1;
+    private String TABLE_SUBJECT_NAME = "informatics";
+    private TextView text_view_info;
     private SQLiteDatabase cDb;
 
     @Nullable
@@ -33,7 +33,6 @@ public class MainFragment2 extends Fragment {
         CustomDbHelper cDBHelper = new CustomDbHelper(getActivity());
         cDb = cDBHelper.getReadableDatabase();
         cDBHelper.onCreate(cDb);
-
 
         FloatingActionButton fab = rootView.findViewById(R.id.fab);
         //button6.setOnClickListener(this);
@@ -52,7 +51,7 @@ public class MainFragment2 extends Fragment {
         });
 
         Spinner spinner4 = rootView.findViewById(R.id.spinner4);
-        ArrayAdapter genderSpinnerAdapter1 = ArrayAdapter.createFromResource(getActivity(), R.array.subjects, android.R.layout.simple_spinner_item);
+        ArrayAdapter genderSpinnerAdapter1 = ArrayAdapter.createFromResource(getActivity(), R.array.subjects, R.layout.spinner_item);
         genderSpinnerAdapter1.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner4.setAdapter(genderSpinnerAdapter1);
         spinner4.setSelection(0);
@@ -63,15 +62,15 @@ public class MainFragment2 extends Fragment {
                 switch (position) {
                     case 0:
                         TABLE_SUBJECT_NAME = "informatics";
-                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.informatics, android.R.layout.simple_spinner_item);
+                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.informatics, R.layout.spinner_item);
                         break;
                     case 1:
                         TABLE_SUBJECT_NAME = "russian";
-                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.russian, android.R.layout.simple_spinner_item);
+                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.russian, R.layout.spinner_item);
                         break;
                     case 2:
                         TABLE_SUBJECT_NAME = "maths_base";
-                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.maths_base, android.R.layout.simple_spinner_item);
+                        genderSpinnerAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.maths_base, R.layout.spinner_item);
                         break;
                 }
                 assert genderSpinnerAdapter2 != null;
@@ -84,23 +83,19 @@ public class MainFragment2 extends Fragment {
                         Number = position + 1;
                         showTasks(TABLE_SUBJECT_NAME, Number);
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
-
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
         text_view_info = rootView.findViewById(R.id.text_view_info);
         return rootView;
     }
 
-    void showTasks(String TABLE_SUBJECT_NAME, int Number) {
+    private void showTasks(String TABLE_SUBJECT_NAME, int Number) {
         Log.d("myLogs", "showing tasks...");
         String product = "";
         StringBuilder productBuilder1 = new StringBuilder(product);

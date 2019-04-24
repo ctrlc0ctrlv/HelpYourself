@@ -66,11 +66,4 @@ public class CustomDbHelper extends SQLiteOpenHelper {
         // Создаём новую таблицу
         onCreate(db);
     }
-
-    /*Вызывается при удалении базы данных*/
-    public void onDelete(SQLiteDatabase db) {
-        //db.delete(CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME, null, null);
-        db.execSQL("DROP TABLE IF EXISTS " + CustomDataContract.CustomTasks.TABLE_INFORMATICS_NAME);
-        onCreate(db);
-    }
 }

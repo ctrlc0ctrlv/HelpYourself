@@ -15,7 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainFragment1 extends Fragment {
-    Intent intent;
+    private Intent intent;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

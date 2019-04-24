@@ -18,7 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 public class FragmentsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    final static double epsilon = 0.00001;
+    private final static double epsilon = 0.00001;
     private final static String TAG_1 = "FRAGMENT_1";
     private final static String TAG_2 = "FRAGMENT_2";
     private final static String TAG_3 = "FRAGMENT_3";

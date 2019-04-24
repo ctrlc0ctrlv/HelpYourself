@@ -9,28 +9,17 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.zip.ZipInputStream;
 
-public class TryingDBHelper extends SQLiteOpenHelper {
+class TryingDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "default (3).db";
-    private static final String CUSTOM_NAME = "custom1.db";
-    private final Context fContext;
-    private String DB_PATH = "/data/data/com.example.examhelper/databases/";
+    private String DB_PATH = "";
     private SQLiteDatabase dataBase;
 
     TryingDBHelper(Context context) {
         super(context, DB_NAME, null, 19);
-        this.fContext = context;
         Log.d("myLogs", DB_PATH);
-        Log.d("myLogs", DB_PATH = fContext.getDatabasePath(DB_NAME).getPath());
+        Log.d("myLogs", DB_PATH = context.getDatabasePath(DB_NAME).getPath());
     }
 
         /*void createDataBase() throws IOException {
@@ -61,7 +50,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         return checkDB != null;
     }
 
-    private void copyDataBase() throws IOException {
+    /*private void copyDataBase() throws IOException {
         Log.d("myLogs", "Coping custom data...");
         InputStream input = new FileInputStream(fContext.getDatabasePath(CUSTOM_NAME));
 
@@ -74,7 +63,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         output.flush();
         output.close();
         input.close();
-    }
+    }*/
 
     /*private void massCopy() throws IOException {
         Log.d("myLogs", "merging databases...");
@@ -100,7 +89,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
         }
     }*/
 
-    private void copyFromZipFile() throws IOException {
+    /*private void copyFromZipFile() throws IOException {
         InputStream is = fContext.getResources().openRawResource(R.raw.def);
         OutputStream myOutput = new FileOutputStream(DB_PATH);
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
@@ -121,7 +110,7 @@ public class TryingDBHelper extends SQLiteOpenHelper {
             myOutput.close();
             is.close();
         }
-    }
+    }*/
 
     private void openDataBase() throws SQLException {
         Log.d("myLogs", "Opening database...");

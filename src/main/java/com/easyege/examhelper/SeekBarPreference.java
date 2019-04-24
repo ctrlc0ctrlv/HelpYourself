@@ -1,6 +1,7 @@
 package com.easyege.examhelper;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -48,7 +49,7 @@ public final class SeekBarPreference extends DialogPreference implements SeekBar
 
         // Inflate layout
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.dialog_slider, null, false);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_slider, null, false);
 
         // Setup minimum and maximum text labels
         ((TextView) view.findViewById(R.id.min_value)).setText(String.format(Locale.ENGLISH, "%d", mMinValue));
