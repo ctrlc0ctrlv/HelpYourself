@@ -196,21 +196,14 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
         imageView.setImageResource(0);
         imageView.setMinimumHeight(0);
 
-        int[] allowed_picture = new int[]{185, 186, 187, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 283, 284, 294, 430, 431, 432, 451, 452, 453, 454, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495};
+        int[] allowed_picture = new int[]{185, 186, 187, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 230, 231, 232, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 283, 284, 294, 430, 431, 432, 451, 452, 453, 454, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 606};
         ArrayList<Integer> pic = new ArrayList<>();
         for (int a : allowed_picture) {
             pic.add(a);
         }
 
         if (SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") || SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
-            if ((TASK_NUM == 13 || TASK_NUM == 14 || TASK_NUM == 15 || TASK_NUM == 3 || TASK_NUM == 12) && pic.contains(n)) {
-                /*String url = "file:///android_asset/informatics/";
-                url += String.valueOf(n);
-                url += ".jpg";
-                //webView.loadUrl(url);
-                //imageView.setImageURI(Uri.parse(url));
-                //imageView.setImageResource(R.drawable.i_have_done);*/
-
+            if (pic.contains(n)) {
                 try {
                     // получаем входной поток
                     String uri = "informatics/";
@@ -307,31 +300,27 @@ public class Test_AnsweringActivity extends AppCompatActivity implements View.On
     }
 
     private void setUpTable(int n) {
-        ArrayList<String> allowed_table = new ArrayList<>();
-        allowed_table.add("3");
-        allowed_table.add("8");
-        allowed_table.add("17");
-        allowed_table.add("19");
-        allowed_table.add("20");
-        allowed_table.add("21");
-        String curr = String.valueOf(TASK_NUM);
-        Log.d("myLogs", "containing: " + allowed_table.contains(curr));
         TableLayout tableLayout_black = findViewById(R.id.prices_black);
         tableLayout_black.removeAllViews();
         TableLayout tableLayout = findViewById(R.id.prices);
         tableLayout.removeAllViews();
-        if ((SUBJECT_TABLE_NAME.equalsIgnoreCase("informatics") && allowed_table.contains(curr)) || (SUBJECT_TABLE_NAME.equalsIgnoreCase("russian") && TASK_NUM == 8)) {
-            String raw_table = giveTable(n);
-            if (raw_table != null) {
-                char height = raw_table.charAt(0);
-                char width = raw_table.charAt(2);
-                String[] ids;
+
+        String raw_table = giveTable(n);
+        String[] ids;
+        if (raw_table != null) {
+            String height = raw_table.split("\n")[0].split(" ")[0];
+            String width = raw_table.split("\n")[0].split(" ")[1];
+
+            if (Integer.parseInt(height) > 9) {
+                ids = raw_table.substring(5).split("\\$");
+            } else {
                 ids = raw_table.substring(4).split("\\$");
-                for (int i = 0; i < ids.length; i++) {
-                    ids[i] = ids[i].trim();
-                }
-                createTable(Integer.parseInt(Character.toString(height)), Integer.parseInt(Character.toString(width)), ids);
             }
+
+            for (int i = 0; i < ids.length; i++) {
+                ids[i] = ids[i].trim();
+            }
+            createTable(Integer.parseInt(height), Integer.parseInt(width), ids);
         }
     }
 

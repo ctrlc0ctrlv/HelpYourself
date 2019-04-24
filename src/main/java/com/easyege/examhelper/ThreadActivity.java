@@ -61,7 +61,8 @@ public class ThreadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void massCopy() throws IOException {
         Log.d("myLogs", "merging databases...");
-        is = this.getResources().openRawResource(R.raw.def);
+        //is = this.getResources().openRawResource(R.raw.def);
+        is = this.getResources().openRawResource(R.raw.testdef);
 
         String DB_PATH = this.getDatabasePath(DB_NAME).getPath();
         myOutput = new FileOutputStream(DB_PATH);
