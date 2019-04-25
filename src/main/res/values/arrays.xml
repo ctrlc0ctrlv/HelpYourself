@@ -1,83 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="text_style">
-        <item>Обычный</item>
-        <item>Полужирный</item>
-        <item>Курсив</item>
-        <item>Полужирный и Курсив</item>
-    </string-array>
 
     <string-array name="levels">
-        <item>Level1</item>
-        <item>Level2</item>
-        <item>Level3</item>
+        <item>Уровень 1</item>
+        <item>Уровень 2</item>
+        <item>Уровень 3</item>
     </string-array>
 
-    <string-array name="task1_level1">
-        <item>task1</item>
-        <item>task2</item>
-        <item>task3</item>
-        <item>task4</item>
-        <item>task5</item>
-        <item>task6</item>
+    <string-array name="night_modes">
+        <item>Да</item>
+        <item>Нет</item>
     </string-array>
 
-    <integer-array name="task1_level1_solved">
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-    </integer-array>
-
-    <string-array name="task1_level2">
-        <item>task1</item>
-        <item>task2</item>
-        <item>task3</item>
-        <item>task4</item>
-        <item>task5</item>
-        <item>task6</item>
-        <item>task7</item>
-        <item>task8</item>
-        <item>task9</item>
-        <item>task10</item>
-        <item>task11</item>
-        <item>task12</item>
-        <item>task13</item>
-        <item>task14</item>
-        <item>task15</item>
-        <item>task16</item>
-        <item>task17</item>
-        <item>task18</item>
-        <item>task19</item>
-        <item>task20</item>
-        <item>task21</item>
+    <string-array name="subjects">
+        <item>Информатика</item>
+        <item>Русский язык</item>
+        <item>Математика (базовый уровень)</item>
     </string-array>
 
-    <string-array name="task1_level3">
-        <item>task1</item>
-        <item>task2</item>
-        <item>task3</item>
-        <item>task4</item>
-        <item>task5</item>
-        <item>task6</item>
-        <item>task7</item>
-        <item>task8</item>
-        <item>task9</item>
-        <item>task10</item>
-        <item>task11</item>
-        <item>task12</item>
-        <item>task13</item>
-        <item>task14</item>
-        <item>task15</item>
-        <item>task16</item>
-        <item>task17</item>
-        <item>task18</item>
-        <item>task19</item>
-        <item>task20</item>
-        <item>task21</item>
-        <item>task22</item>
-        <item>task23</item>
+    <string-array name="maths_base">
+        <item>1. Вычисления</item>
+        <item>2. Вычисления</item>
+        <item>3. Текстовые задачи</item>
+        <item>4. Преобразования</item>
+        <item>5. Вычисления и преобразования</item>
+        <item>6. Текстовые задачи</item>
+        <item>7. Уравнения</item>
+        <item>8. Прикладная геометрия</item>
+        <item>9. Размеры и единицы измерения</item>
+        <item>10. Теория вероятностей</item>
+        <item>11. Графики и диаграммы</item>
+        <item>12. Оптимальный вариант</item>
+        <item>13. Стереометрия</item>
+        <item>14. Графики и диаграммы</item>
+        <item>15. Планиметрия</item>
+        <item>16. Стереометрия</item>
+        <item>17. Неравенства</item>
+        <item>18. Анализ утверждений</item>
+        <item>19. Числа и их свойства</item>
+        <item>20. Задачи на смекалку</item>
     </string-array>
+
+    <string-array name="russian">
+        <item>1. Главная информация текста</item>
+        <item>2. Средства связи предложений в тексте</item>
+        <item>3. Лексическое значение слова</item>
+        <item>4. Ударение</item>
+        <item>5. Паронимы</item>
+        <item>6. Лексические нормы</item>
+        <item>7. Морфологические нормы</item>
+        <item>8. Синтаксические нормы</item>
+        <item>9. Правописание корней</item>
+        <item>10. Правописание приставок</item>
+        <item>11. Правописание суффиксов</item>
+        <item>12. Правописание глаголов и причастий</item>
+        <item>13. Правописание НЕ- и НИ-</item>
+        <item>14. Слитное и раздельное написание слов</item>
+        <item>15. Правописание -Н- и -НН-</item>
+        <item>16. Знаки препинания в сложносочиненных предложениях и при однородных членах</item>
+        <item>17. Знаки препинания при обособленных членах предложения</item>
+        <item>18. Знаки препинания при вводных словах и обращениях</item>
+        <item>19. Знаки препинания в сложноподчиненном предложении</item>
+        <item>20. Знаки препинания при разных видах связи</item>
+        <item>21. Знаки препинания в различных случаях</item>
+        <item>22. Смысловая и композиционная целостность текста</item>
+        <item>23. Типы речи</item>
+        <item>24. Лексическое значение слова</item>
+        <item>25. Средства связи предложений в тексте</item>
+        <item>26. Средства языковой выразительности</item>
+    </string-array>
+
+    <string-array name="informatics">
+        <item>1. Системы счисления</item>
+        <item>2. Логические выражения</item>
+        <item>3. Информационные модели</item>
+        <item>4. Базы данных и файловые системы</item>
+        <item>5. Кодирование и декодирование</item>
+        <item>6. Алгоритмы для исполнителей</item>
+        <item>7. Диаграммы и электронные таблицы</item>
+        <item>8. Программы</item>
+        <item>9. Передача информации</item>
+        <item>10. Перебор слов и системы счисления</item>
+        <item>11. Рекурсивные алгоритмы</item>
+        <item>12. Адресация</item>
+        <item>13. Количество информации</item>
+        <item>14. Алгоритмы для исполнителя Робот</item>
+        <item>15. Поиск путей в графе</item>
+        <item>16. Кодирование чисел</item>
+        <item>17. Поисковые сети и логические выражения</item>
+        <item>18. Логические выражения</item>
+        <item>19. Массивы и матрицы</item>
+        <item>20. Программы с циклами и условными операторами</item>
+        <item>21. Программы с циклами и подпрограммами</item>
+        <item>22. Оператор присваивания и ветвления</item>
+        <item>23. Логические уравнения</item>
+    </string-array>
+
 </resources>

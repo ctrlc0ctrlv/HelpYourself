@@ -1,7 +1,8 @@
 <resources>
     <!--Базовые ресурсы приложения-->
     <string name="app_name">HelpYourself</string>
-    <string name="welcome_to_the_club_buddy">Welcome to the club, buddy!</string>
+
+    <!--Ресурсы для MainActivity-->
     <string name="let_s_start">Начать работу</string>
 
     <!--Ресурсы для ButtonsActivity-->
@@ -38,37 +39,56 @@
     <string name="otvet">Введите ответ</string>
     <string name="go">Далее</string>
     <string name="current_level">Уровень: 1</string>
-    <string name="hint">Введите ответ</string>
+    <string name="current_num">Номер задания в базе:</string>
+    <string name="zero_progress">0/10</string>
+
+    <!--Ресурсы для Test_CreatingActivity-->
+    <string name="check_test">Проверить тест</string>
+
+    <!--Ресурсы для MainFragment2-->
+    <string name="level"><b>Уровень</b></string>
+
+    <!--Ресурсы для DataBaseActivity-->
+    <string name="advise">Подсказка: номер задания для изменения или удаления можно посмотреть нажав на кнопку \"Мои задания\"</string>
+    <string name="data_hint">Введите номер задания, которое хотите изменить или удалить.</string>
+    <string name="create_task">Создать задание</string>
+    <string name="remake_task">Редактировать задание</string>
+    <string name="delete_task">Удалить задание</string>
 
     <!--Ресурсы для ChooseSubActivity-->
-    <string name="choose_sub">Выберите предмет:</string>
     <string name="informatics">Информатика</string>
-    <string name="maths">Математика (базовый уровень)</string>
+    <string name="maths">Математика (база)</string>
     <string name="russian">Русский язык</string>
 
     <!--Ресурсы для ChooseIntentActivity-->
-    <string name="label_question">Чем займемся сегодня?</string>
     <string name="solving">Решать задания</string>
-    <string name="adding">Добавить задания</string>
-    <string name="create_test">Составить тест</string>
-    <string name="calendar">Изменить режим тренировок</string>
+    <string name="create_test">Создать тест</string>
 
     <!--Ресурсы для SettingsActivity-->
     <string name="action_settings">Настройки</string>
-    <string name="pref_color">Цвет текста</string>
-    <string name="pref_color_black">Черный цвет</string>
-    <string name="pref_color_red">Красный цвет</string>
-    <string name="pref_color_green">Зеленый цвет</string>
-    <string name="pref_color_blue">Синий цвет</string>
-    <string name="pref_size">Размер текста</string>
-    <string name="pref_style">Стиль текста</string>
-    <string name="pref_style_regular">Нормальный</string>
-    <string name="pref_style_bold">Полужирный</string>
-    <string name="pref_style_italic">Курсив</string>
-    <string name="pref_open_mode">Режим открытия</string>
+    <string name="action_delete_progress">Сбросить прогресс</string>
+    <string name="pref_notifications">Уведомления</string>
 
-    <string name="Level1">Level 1</string>
-    <string name="Level2">Level 2</string>
-    <string name="Level3">Level 3</string>
+    <!--Ресурсы для SeekBarPreference-->
+    <string name="dialog_title">Изменение размера шрифта</string>
+    <string name="dialog_summary">Устанавливает новый размер шрифта</string>
+
+    <!--Ресурсы для TimeActivity-->
+    <string name="set_notification">Настроить уведомление</string>
+    <string name="delete_notification">Удалить уведомление</string>
+
+    <!--Ресурсы для AboutActivity-->
+    <string name="about">
+        Приложение для успешной подготовки к ЕГЭ HelpYourself\nРазработано командой МАОУ Лицея №180 \"Полифорум\" при поддержке образовательной программы ЮнIT-Урал 2018-2019\n\nСлужба технической поддержки: sup.helpyourself@gmail.com
+    </string>
+
+    <!--Ресурсы для ThreadActivity-->
+    <string name="kb"> КБ</string>
+    <string name="progress">Прогресс: </string>
+    <string name="success">Копирование базы заданий завершено. Скопировано: </string>
+
+    <string name="hello">Добро пожаловать в приложение HelpYourself!</string>
+    <string name="restart">Начать задание заново</string>
+    <string name="delete_all">Удалить все задания</string>
 
 </resources>

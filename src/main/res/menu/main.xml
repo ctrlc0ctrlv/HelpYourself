@@ -7,7 +7,22 @@
         <item
             android:id="@+id/action_settings"
             android:orderInCategory="100"
-            app:showAsAction="never"
-            android:title="@string/action_settings"/>
+            android:title="@string/action_settings"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_reload_task"
+            android:orderInCategory="100"
+            android:title="@string/restart"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_delete_progress"
+            android:orderInCategory="100"
+            android:title="@string/action_delete_progress"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_clear_database"
+            android:orderInCategory="100"
+            android:title="@string/delete_all" />
+
 
     </menu>

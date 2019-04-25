@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.examhelper">
+    package="com.easyege.examhelper">
 
     <application>
-        <activity android:name="com.easyege.examhelper.ButtonsActivity"></activity>
+        <activity android:name="com.easyege.examhelper.ButtonsActivity" />
     </application>
 </manifest>

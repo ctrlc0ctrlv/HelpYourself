@@ -1,19 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/app_name"
+    android:title="@string/app_name">
+    <PreferenceCategory android:title="Шрифт">
+        <com.easyege.examhelper.SeekBarPreference xmlns:example="http://schemas.android.com/apk/res/com.easyege.examhelper"
+            android:defaultValue="25"
+            android:dialogTitle="@string/dialog_title"
+            android:key="seekBarPreference"
+            android:persistent="true"
+            android:summary="@string/dialog_summary"
+            android:title="@string/dialog_title"
+            example:maxValue="50"
+            example:minValue="0" />
 
-    <EditTextPreference
-        android:defaultValue="14"
-        android:dialogTitle="Введите размер шрифта (от 10 до 32)"
-        android:key="@string/pref_size"
-        android:summary="Устанавливает новый размер шрифта"
-        android:title="Размер шрифта" />
+    </PreferenceCategory>
 
-    <ListPreference
-        android:key="@string/pref_style"
-        android:title="Стиль для шрифта"
-        android:summary="Устанавливает стиль для шрифта"
-        android:defaultValue="1"
-        android:entries="@array/text_style"
-        android:entryValues="@array/text_style"
-        android:dialogTitle="Выберите стиль для шрифта" />
+    <PreferenceCategory android:title="Прогресс">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="save_progress"
+            android:summary="Возможность сохранять прогресс после выхода из приложения"
+            android:title="Сохранение прогресса" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Внешний вид">
+        <ListPreference
+            android:defaultValue="Нет"
+            android:dialogTitle="Включить ночной режим?"
+            android:entries="@array/night_modes"
+            android:entryValues="@array/night_modes"
+            android:key="night_mode"
+            android:summary="Изменение цветовой схемы для лучшего отображения в темноте"
+            android:title="Ночной режим" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_notifications">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="check_box_preference_1"
+            android:title="Включить уведомления" />
+        <PreferenceScreen
+            android:dependency="check_box_preference_1"
+            android:key="change_notifications"
+            android:summary="Настройка интервала между уведомлениями"
+            android:title="Настроить уведомления" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="О программе">
+        <PreferenceScreen
+            android:key="about"
+            android:summary="Основная информация о приложении"
+            android:title="О приложении" />
+    </PreferenceCategory>
 </PreferenceScreen>
