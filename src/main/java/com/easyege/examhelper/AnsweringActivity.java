@@ -74,6 +74,7 @@ public class AnsweringActivity extends AppCompatActivity implements View.OnClick
     private String SUBJECT_TABLE_NAME;
     private SQLiteDatabase tryDB;
 
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
