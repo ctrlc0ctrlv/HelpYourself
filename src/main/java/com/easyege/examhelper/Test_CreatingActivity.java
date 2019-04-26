@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.easyege.examhelper.data.CustomDbHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -214,8 +217,80 @@ public class Test_CreatingActivity extends AppCompatActivity implements View.OnC
             button.setEnabled(false);
             poses = arguments.getBooleanArray("solved");
         }
+
+        insertRecords();
+
         initialise_items(checked);
         Log.d("myLogs", "onResume");
+    }
+
+    private void insertRecords() {
+        tryDB = tryDBHelper.getWritableDatabase();
+        CustomDbHelper cDBHelper = new CustomDbHelper(this);
+        SQLiteDatabase cDb = cDBHelper.getReadableDatabase();
+        cDBHelper.onCreate(cDb);
+
+        Cursor ccursor = cDb.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME + " WHERE level ==1", null);
+        Cursor cursor = null;
+        boolean err = false;
+        try {
+            cursor = tryDB.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME, null);
+        } catch (SQLiteException e) {
+            Log.d("myLogs", e.toString());
+            err = true;
+        }
+
+        if (err) {
+            Toast.makeText(this, "База данных копируется, попробуйте еще раз", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+        String sql = "INSERT INTO " + SUBJECT_TABLE_NAME + " VALUES(?,?,?,?,?,?)";
+
+        SQLiteStatement statement = null;
+        int i = 0;
+        int count = 0;
+
+
+        try {
+            statement = tryDB.compileStatement(sql);
+            assert cursor != null;
+            cursor.moveToLast();
+            i = cursor.getInt(0) + 1;
+            cursor.close();
+        } catch (SQLiteException e) {
+            Log.d("myLogs", e.toString());
+        }
+
+        assert statement != null;
+
+        tryDB.beginTransaction();
+        try {
+            ccursor.moveToFirst();
+            while (!ccursor.isAfterLast()) {
+                statement.clearBindings();
+                statement.bindLong(1, i);
+                statement.bindString(2, ccursor.getString(1));
+                statement.bindString(3, ccursor.getString(2));
+                statement.bindLong(4, ccursor.getInt(3));
+                statement.bindLong(5, ccursor.getInt(4));
+                if (!SUBJECT_TABLE_NAME.equalsIgnoreCase("maths_base")) {
+                    statement.bindString(6, "");
+                }
+                statement.execute();
+                Log.d("myLogs", "row " + i);
+                i += 1;
+                count += 1;
+                ccursor.moveToNext();
+            }
+            tryDB.setTransactionSuccessful();
+            Log.d("myLogs", "transaction success: " + count + " rows copied");
+        } finally {
+            tryDB.endTransaction();
+        }
+        ccursor.close();
+        cDb.close();
+        tryDB.close();
     }
 
     private String[] getAnswers() {

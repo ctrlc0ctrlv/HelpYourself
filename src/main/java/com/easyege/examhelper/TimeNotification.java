@@ -39,7 +39,7 @@ public class TimeNotification extends BroadcastReceiver {
 
             builder.setContentIntent(contentIntent);
             // обязательные настройки
-            builder.setSmallIcon(R.mipmap.logo_3);
+            builder.setSmallIcon(R.mipmap.new_logo);
             builder.setContentTitle("Напоминание");
             builder.setContentText("Пора заняться чем-то полезным. Например зайти в приложение HelpYourself и начать готовиться к ЕГЭ =)");// Текст уведомления
             builder.setTicker("ЕГЭ уже не за горами!");
