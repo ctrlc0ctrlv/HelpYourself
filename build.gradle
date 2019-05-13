@@ -43,4 +43,9 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
 
     implementation 'org.apache.pdfbox:pdfbox:2.0.15'
+    implementation 'org.apache.pdfbox:fontbox:2.0.15'
+    implementation 'org.apache.pdfbox:jempbox:1.8.11'
+    implementation 'org.apache.pdfbox:xmpbox:2.0.15'
+    implementation 'org.apache.pdfbox:preflight:2.0.15'
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.15'
 }
